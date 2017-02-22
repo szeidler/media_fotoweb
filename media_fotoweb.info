@@ -1,0 +1,14 @@
+name = Media Fotoweb
+description = Integrates media with the digital asset management from fotoware.com
+core = 7.x
+package = Media
+
+dependencies[] = media
+
+files[] = includes/FotowebAPI/FotowebLoginTokenGenerator.inc
+
+files[] = includes/FotowebAPI/FotowebBase.inc
+files[] = includes/FotowebStreamWrapper.inc
+files[] = includes/FotowebBrowser.inc
+
+configure = admin/config/media/fotoweb

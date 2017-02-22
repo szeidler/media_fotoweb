@@ -1,0 +1,16 @@
+{
+  "name": "drupal/media_fotoweb",
+  "description": "Utilizes Guzzle for all media_fotoweb HTTP requests.",
+  "type": "drupal-module",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "Stephan Zeidler",
+      "homepage": "http://ramsalt.com"
+    }
+  ],
+  "require": {
+    "drupal/media": "~2.0",
+    "guzzlehttp/guzzle": "~6.0"
+  }
+}

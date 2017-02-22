@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * Implements hook_stream_wrappers().
+ */
+function media_fotoweb_stream_wrappers() {
+  return array(
+    'fotoweb' => array(
+      'name' => t('Fotoweb assets'),
+      'class' => 'FotowebStreamWrapper',
+      'description' => t('Assets provided by Fotoweb.'),
+      'type' => STREAM_WRAPPERS_READ_VISIBLE,
+    ),
+  );
+}
+
+/**
+ * Implements hook_file_mimetype_mapping_alter().
+ */
+function media_fotoweb_file_mimetype_mapping_alter(&$mapping) {
+  $mapping['mimetypes'][] = 'image/fotoweb';
+}
+
+/**
+ * Implements hook_file_default_types_alter().
+ */
+function media_fotoweb_file_default_types_alter(&$types) {
+  $types['image']->mimetypes[] = 'image/fotoweb';
+}
+
+/**
+ * Implements hook_media_browser_plugin_info().
+ */
+function media_fotoweb_media_browser_plugin_info() {
+  $info = array(
+    'fotoweb' => array(
+      'title' => t('Fotoweb search'),
+      'class' => 'FotowebBrowser',
+      'weight' => 50,
+    ),
+  );
+  return $info;
+}
