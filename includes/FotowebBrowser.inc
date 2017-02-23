@@ -20,6 +20,15 @@ class FotowebBrowser extends MediaBrowserPlugin {
       '#attached' => array(
         'js' => array(
           drupal_get_path('module', 'media_fotoweb') . '/js/media_fotoweb.js',
+          array(
+            'data' => array(
+              'media_fotoweb' => array(
+                'fotoweb_host' => variable_get('media_fotoweb_server', ''),
+                'assetAddAjaxUrl' => base_path() . 'media-fotoweb/add/asset',
+              ),
+            ),
+            'type' => 'setting',
+          )
         ),
       ),
     );

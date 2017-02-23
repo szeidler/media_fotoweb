@@ -8,6 +8,7 @@ dependencies[] = media
 files[] = includes/FotowebAPI/FotowebLoginTokenGenerator.inc
 
 files[] = includes/FotowebAPI/FotowebBase.inc
+files[] = includes/FotowebHandler.inc
 files[] = includes/FotowebStreamWrapper.inc
 files[] = includes/FotowebBrowser.inc
 

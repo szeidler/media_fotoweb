@@ -1,6 +1,23 @@
 <?php
 
 /**
+ * Implements hook_menu().
+ */
+function media_fotoweb_menu() {
+  $items = array();
+
+  $items['media-fotoweb/add/asset'] = array(
+    'page callback' => '_media_fotoweb_add_asset_from_fotoweb',
+    'access arguments' => array('create files'),
+    'type' => MENU_CALLBACK,
+    'file' => 'media_fotoweb.asset.inc',
+    'file path' => drupal_get_path('module', 'media_fotoweb') . '/includes',
+  );
+
+  return $items;
+}
+
+/**
  * Implements hook_stream_wrappers().
  */
 function media_fotoweb_stream_wrappers() {
