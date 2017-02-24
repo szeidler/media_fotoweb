@@ -5,7 +5,6 @@ class FotowebLoginTokenGenerator {
   private $_useForWidgets;
   private $_es;
 
-
   public function __construct($encryption_secret, $useForWidgets) {
     $this->_useForWidgets = $useForWidgets;
     $this->_es = $encryption_secret;
@@ -26,4 +25,5 @@ class FotowebLoginTokenGenerator {
     $mac = md5($dataAsUtf8, TRUE);
     return base64_encode($mac);
   }
+
 }

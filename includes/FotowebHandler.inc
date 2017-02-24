@@ -29,7 +29,7 @@ class FotowebHandler {
       $path = $fotowebResource;
     }
 
-    //@todo: check if it is a valid fotoweb resource.
+    // TODO check if it is a valid fotoweb resource.
     if (!$this->isValid) {
 
     }

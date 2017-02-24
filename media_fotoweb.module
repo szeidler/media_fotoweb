@@ -46,6 +46,32 @@ function media_fotoweb_file_default_types_alter(&$types) {
 }
 
 /**
+ * Implements hook_file_metadata_info().
+ */
+function media_fotoweb_file_metadata_info() {
+  $info = array(
+    'created' => array(
+      'label' => t('Created'),
+      'type' => 'integer',
+    ),
+    'changed' => array(
+      'label' => t('Changed'),
+      'type' => 'integer',
+    ),
+    'asset_resource' => array(
+      'label' => t('Asset resource'),
+      'type' => 'string',
+    ),
+    'asset_metadata' => array(
+      'label' => t('Metadata'),
+      'type' => 'array',
+    ),
+  );
+
+  return $info;
+}
+
+/**
  * Implements hook_media_browser_plugin_info().
  */
 function media_fotoweb_media_browser_plugin_info() {
@@ -57,4 +83,12 @@ function media_fotoweb_media_browser_plugin_info() {
     ),
   );
   return $info;
+}
+
+/**
+ * Implements hook_media_parse().
+ */
+function media_fotoweb_media_parse($fotoweb_resource) {
+  $handler = new FotowebHandler($fotoweb_resource);
+  return $handler->parse($fotoweb_resource);
 }

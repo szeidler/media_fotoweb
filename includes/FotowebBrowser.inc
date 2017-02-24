@@ -37,19 +37,27 @@ class FotowebBrowser extends MediaBrowserPlugin {
 
   protected function buildEmbeddedSelectionWidget() {
     $fotoweb_host = variable_get('media_fotoweb_server', '');
-    $user_login_token = $this->getUserLoginToken();
+    $widget_url = $fotoweb_host . '/fotoweb/widgets/selection';
 
-    $build = format_string('<iframe src="@fotoweb_host/fotoweb/widgets/selection?lt=@login_token" width="100%" height="500" />', array(
-      '@fotoweb_host' => $fotoweb_host,
-      '@login_token' => $user_login_token
+    // Generate user login token and append it to widget url, when using SSO.
+    if (variable_get('media_fotoweb_selection_widget_use_sso', FALSE)) {
+      if ($user_login_token = $this->getUserLoginToken()) {
+        $widget_url .= '?lt=' . $user_login_token;
+      }
+    }
+
+    // Create the widget using an <iframe>.
+    $build = format_string('<iframe src="@widget_url" width="100%" height="500" />', array(
+      '@widget_url' => $widget_url,
     ));
 
     return $build;
   }
 
   protected function getUserLoginToken() {
-    $fotoweb_full_api_token = variable_get('media_fotoweb_full_api_token', '');
-    $tokenGenerator = new FotowebLoginTokenGenerator($fotoweb_full_api_token, TRUE);
+    $fotoweb_encryption_secret = variable_get('media_fotoweb_encryption_secret', '');
+    $tokenGenerator = new FotowebLoginTokenGenerator($fotoweb_encryption_secret, TRUE);
+    // TODO implement strategy for fotoweb username matching.
     return $tokenGenerator->CreateLoginToken('apiramsalt');
   }
 

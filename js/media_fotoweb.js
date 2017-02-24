@@ -19,7 +19,6 @@
             data: {asset: data},
             dataType: '',
             success: function (data) {
-              $('#ajax-result').html(data);
             }
           });
         }
