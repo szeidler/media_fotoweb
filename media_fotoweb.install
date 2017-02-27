@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function media_fotoweb_install() {
+  if (!field_info_field('media_fotoweb_username')) {
+    $field = array(
+      'field_name' => 'media_fotoweb_username',
+      'type' => 'text',
+    );
+    field_create_field($field);
+
+    $instance = array(
+      'field_name' => $field['field_name'],
+      'entity_type' => 'user',
+      'bundle' => 'user',
+      'label' => 'Fotoweb username',
+      'description' => 'Type in your Fotoweb username for being automatically logged in into your Fotoweb application (Single Sign-on)',
+      'widget' => array(
+        'type' => 'textfield',
+      ),
+    );
+    field_create_instance($instance);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function media_fotoweb_uninstall() {
+  // Delete module fields.
+  $instance = array(
+    'field_name' => 'media_fotoweb_username',
+    'entity_type' => 'user',
+    'bundle' => 'user',
+  );
+  field_delete_instance($instance);
+  field_delete_field($instance['field_name']);
+
+  // Delete module variables.
+  variable_del('media_fotoweb_server');
+  variable_del('media_fotoweb_full_api_token');
+  variable_del('media_fotoweb_selection_widget_use_sso');
+  variable_del('media_fotoweb_encryption_secret');
+}
