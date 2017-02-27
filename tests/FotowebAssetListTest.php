@@ -15,7 +15,7 @@ class FotowebAssetListTest extends FotowebTestWrapper {
    * Tests to fetch an assetlist from a fixed asset resource.
    */
   public function testFetchSpecificAssetList() {
-    $response = $this->fotowebAssetList->initiateRequest('/fotoweb/data/a/5000.fMRICEsZB2hL-r4J5Efx3Q/');
+    $response = $this->fotowebAssetList->initiateRequest('fotoweb/data/a/5000.fMRICEsZB2hL-r4J5Efx3Q/');
     $this->assertEquals(200, $response->getStatusCode(), 'Response was not 200.');
     $this->assertNotEmpty((string) $response->getBody(), 'Response body was empty.');
 
@@ -29,7 +29,7 @@ class FotowebAssetListTest extends FotowebTestWrapper {
    */
   public function testFetchAssetListFromArchiveTraversal() {
     $fotowebArchive = new FotowebArchives($this->fotowebBase);
-    $response = $fotowebArchive->initiateRequest('archives/');
+    $response = $fotowebArchive->initiateRequest('fotoweb/me/archives/');
     $data = json_decode($response->getBody(TRUE), TRUE);
     $this->assertGreaterThan(0, count($data['data']), 'Response misses data items.');
 

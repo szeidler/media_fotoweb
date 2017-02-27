@@ -12,7 +12,7 @@ class FotowebArchivesTest extends FotowebTestWrapper {
   }
 
   public function testFetchArchives() {
-    $response = $this->fotowebArchives->initiateRequest('archives/');
+    $response = $this->fotowebArchives->initiateRequest('fotoweb/me/archives/');
     $this->assertEquals(200, $response->getStatusCode(), 'Response was not 200.');
     $this->assertNotEmpty((string) $response->getBody(), 'Response body was empty.');
 

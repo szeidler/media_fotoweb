@@ -39,7 +39,7 @@ class FotowebBase {
     $this->entryPoint = FOTOWEB_PRIVATE_ENTRY_POINT;
 
     // Initialize Guzzle
-    $base_uri = $this->server . $this->entryPoint;
+    $base_uri = $this->server;
     $this->client = new GuzzleHttp\Client(array(
       'base_uri' => $base_uri,
       'proxy' => 'socks5://10.254.254.254:8123',
@@ -106,7 +106,11 @@ class FotowebBase {
   }
 
   public function resourceUrlToUrl($resourceUrl) {
-    $url = $this->server . $this->entryPoint . $resourceUrl;
+    // Ensure, that we use a proper resourceUrl path.
+    if (substr($resourceUrl, 0, 1) !== '/') {
+      $resourceUrl = '/' . $resourceUrl;
+    }
+    $url = $this->server . $resourceUrl;
     return $url;
   }
 
