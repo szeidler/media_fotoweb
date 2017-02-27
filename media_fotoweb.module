@@ -92,3 +92,13 @@ function media_fotoweb_media_parse($fotoweb_resource) {
   $handler = new FotowebHandler($fotoweb_resource);
   return $handler->parse($fotoweb_resource);
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function media_fotoweb_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
+  // Hide the fotoweb username field in user profile, when not using SSO.
+  if (!variable_get('', FALSE)) {
+    $form['media_fotoweb_selection_widget_use_sso']['#access'] = FALSE;
+  }
+}
