@@ -16,9 +16,10 @@ function media_fotoweb_install() {
       'entity_type' => 'user',
       'bundle' => 'user',
       'label' => 'Fotoweb username',
-      'description' => 'Type in your Fotoweb username for being automatically logged in into your Fotoweb application (Single Sign-on)',
+      'description' => 'Type in your Fotoweb username for being automatically logged in into your Fotoweb application (Single Sign-on).',
       'widget' => array(
         'type' => 'textfield',
+        'weight' => 5,
       ),
     );
     field_create_instance($instance);
