@@ -1,5 +1,8 @@
 <?php
 
+// Load media_fotoweb file formatters.
+require_once dirname(__FILE__) . '/includes/media_fotoweb.formatters.inc';
+
 /**
  * Implements hook_menu().
  */
@@ -91,6 +94,15 @@ function media_fotoweb_media_browser_plugin_info() {
 function media_fotoweb_media_parse($fotoweb_resource) {
   $handler = new FotowebHandler($fotoweb_resource);
   return $handler->parse($fotoweb_resource);
+}
+
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function media_fotoweb_ctools_plugin_api($module, $api) {
+  if ($module == 'file_entity' && $api == 'file_default_displays') {
+    return array('version' => 1);
+  }
 }
 
 /**
