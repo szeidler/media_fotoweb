@@ -41,7 +41,9 @@ class FotowebBrowser extends MediaBrowserPlugin {
 
     // Generate user login token and append it to widget url, when using SSO.
     if (variable_get('media_fotoweb_selection_widget_use_sso', FALSE)) {
-      if ($user_login_token = $this->getUserLoginToken()) {
+      module_load_include('inc', 'media_fotoweb', '/includes/media_fotoweb.helper');
+      $fotoweb_username = _media_fotoweb_get_fotoweb_username();
+      if (!empty($fotoweb_username) && $user_login_token = $this->getUserLoginToken($fotoweb_username)) {
         $widget_url .= '?lt=' . $user_login_token;
       }
     }
@@ -54,11 +56,10 @@ class FotowebBrowser extends MediaBrowserPlugin {
     return $build;
   }
 
-  protected function getUserLoginToken() {
+  protected function getUserLoginToken($fotoweb_username) {
     $fotoweb_encryption_secret = variable_get('media_fotoweb_encryption_secret', '');
-    $tokenGenerator = new FotowebLoginTokenGenerator($fotoweb_encryption_secret, TRUE);
-    // TODO implement strategy for fotoweb username matching.
-    return $tokenGenerator->CreateLoginToken('apiramsalt');
+    $token_generator = new FotowebLoginTokenGenerator($fotoweb_encryption_secret, TRUE);
+    return $token_generator->CreateLoginToken($fotoweb_username);
   }
 
 }
