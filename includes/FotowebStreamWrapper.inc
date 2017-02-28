@@ -25,22 +25,30 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
       // If we have no parts, or an odd number of parts, it's malformed.
       return FALSE;
     }
+    // Prepend exploded slash to keep Fotoweb resourceUrl intact.
+    if (substr($parts[1], 0, 1) !== '/') {
+      $parts[1] = '/' . $parts[1];
+    }
     $params = array($parts[0] => $parts[1]);
     return $params;
   }
 
+  /**
+   * Use a hashed filename to avoid filename collisions of flattended folder
+   * structure.
+   *
+   * @param $resourceUrl
+   *
+   * @return string
+   */
   function getLocalFileName($resourceUrl) {
-    $parts = explode('/', check_plain($resourceUrl));
-    $filename = array_pop($parts);
-
-    // Remove .info suffix.
-    $filename = str_replace('.info', '', $filename);
+    $filename = hash('sha256', $resourceUrl);
     return $filename;
   }
 
-  function getThumbnailPath() {
+  function getImagePath() {
     $parameters = $this->get_parameters();
-    $local_path = file_default_scheme() . '://media-fotoweb/thumbnails/' . $this->getLocalFileName($parameters['a']);
+    $local_path = file_default_scheme() . '://media-fotoweb/images/' . $this->getLocalFileName($parameters['a']) . '.jpg';
 
     if (!file_exists($local_path)) {
       try {
@@ -49,9 +57,9 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
 
         $fotoweb = new FotowebBase();
         $fotowebAsset = new FotowebAsset($fotoweb);
-        $thumbnailImage = $fotowebAsset->getAssetThumbnailFromResource($parameters['a']);
-        if (!empty($thumbnailImage)) {
-          file_unmanaged_save_data($thumbnailImage, $local_path, TRUE);
+        $image = $fotowebAsset->getAssetImageFromResource($parameters['a']);
+        if (!empty($image)) {
+          file_unmanaged_save_data($image, $local_path, FILE_EXISTS_REPLACE);
         }
       } catch (Exception $e) {
         // TODO proper exception handling.
