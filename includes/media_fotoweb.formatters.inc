@@ -32,7 +32,7 @@ function media_fotoweb_file_formatter_media_fotoweb_view($file, $display, $langc
     if (empty($image_style) || !isset($valid_image_styles[$image_style])) {
       $element = array(
         '#theme' => 'image',
-        '#path' => str_replace('http:', '', $wrapper->getImagePath()),
+        '#path' => str_replace('http:', '', $wrapper->getLocalImagePath()),
         '#alt' => isset($file->override['attributes']['alt']) ? $file->override['attributes']['alt'] : $file->filename,
       );
     }
@@ -40,7 +40,7 @@ function media_fotoweb_file_formatter_media_fotoweb_view($file, $display, $langc
       $element = array(
         '#theme' => 'image_style',
         '#style_name' => $image_style,
-        '#path' => $wrapper->getImagePath(),
+        '#path' => $wrapper->getLocalImagePath(),
         '#alt' => isset($file->override['attributes']['alt']) ? $file->override['attributes']['alt'] : $file->filename,
       );
     }

@@ -6,6 +6,14 @@
  */
 class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
 
+  protected $base_url;
+  protected $current_image_style = NULL;
+
+  public function __construct() {
+    $this->base_url = variable_get('media_fotoweb_server', '');
+  }
+
+
   /**
    * @inheritdoc
    */
@@ -16,20 +24,51 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   /**
    * @inheritdoc
    */
+  public function interpolateUrl() {
+    // If we have stored a current image style, return its derivate.
+    if (!empty($this->current_image_style)) {
+      $local_path = $this->getLocalImagePath();
+      $derivative_uri = image_style_url($this->current_image_style, $local_path);
+      image_style_create_derivative(image_style_load($this->current_image_style), $local_path, $derivative_uri);
+      return $derivative_uri;
+    }
+    if ($parameters = $this->get_parameters()) {
+      if (isset($parameters['a'])) {
+        return $this->base_url . $parameters['a'];
+      }
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
   protected function _parse_url($url) {
     // Fotoweb uses relative paths as identifier, so we need to split only the first parameter.
     $path = explode('://', $url);
-    $parts = explode('/', $path[1], 2);
-    $total = count($parts);
-    if (!$total || ($total % 2)) {
-      // If we have no parts, or an odd number of parts, it's malformed.
-      return FALSE;
+    $parts = explode('/', $path[1]);
+    if ($parts[0] == 'styles') {
+      $this->current_image_style = $parts[1];
+      unset($parts[0]);
+      unset($parts[1]);
+      unset($parts[2]);
+      if ($parts[3] === 'a') {
+        unset($parts[3]);
+        $params = array('a' => '/' . implode('/', $parts));
+      }
     }
-    // Prepend exploded slash to keep Fotoweb resourceUrl intact.
-    if (substr($parts[1], 0, 1) !== '/') {
-      $parts[1] = '/' . $parts[1];
+    else {
+      $parts = explode('/', $path[1], 2);
+      $total = count($parts);
+      if (!$total || ($total % 2)) {
+        // If we have no parts, or an odd number of parts, it's malformed.
+        return FALSE;
+      }
+      // Prepend exploded slash to keep Fotoweb resourceUrl intact.
+      if (substr($parts[1], 0, 1) !== '/') {
+        $parts[1] = '/' . $parts[1];
+      }
+      $params = array($parts[0] => $parts[1]);
     }
-    $params = array($parts[0] => $parts[1]);
     return $params;
   }
 
@@ -41,12 +80,12 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *
    * @return string
    */
-  function getLocalFileName($resourceUrl) {
+  protected function getLocalFileName($resourceUrl) {
     $filename = hash('sha256', $resourceUrl);
     return $filename;
   }
 
-  function getImagePath() {
+  public function getLocalImagePath() {
     $parameters = $this->get_parameters();
     $local_path = file_default_scheme() . '://media-fotoweb/images/' . $this->getLocalFileName($parameters['a']) . '.jpg';
 
@@ -55,11 +94,9 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
         $dirname = drupal_dirname($local_path);
         file_prepare_directory($dirname, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 
-        $fotoweb = new FotowebBase();
-        $fotowebAsset = new FotowebAsset($fotoweb);
-        $image = $fotowebAsset->getAssetImageFromResource($parameters['a']);
-        if (!empty($image)) {
-          file_unmanaged_save_data($image, $local_path, FILE_EXISTS_REPLACE);
+        $response = $this->getOriginalImagePath();
+        if ($response->getStatusCode() == 200) {
+          file_unmanaged_save_data($response->getBody(), $local_path, TRUE);
         }
       } catch (Exception $e) {
         // TODO proper exception handling.
@@ -69,4 +106,15 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     return $local_path;
   }
 
+  protected function getOriginalImagePath() {
+    $parts = $this->get_parameters();
+    $uri = file_stream_wrapper_uri_normalize('fotoweb://a' . check_plain($parts['a']));
+    $resourceUrl = file_create_url($uri);
+
+    $fotoweb = new FotowebBase();
+    $fotowebAsset = new FotowebAsset($fotoweb);
+    $response = $fotowebAsset->getAssetImageFromResource($resourceUrl);
+    return $response;
+  }
 }
+

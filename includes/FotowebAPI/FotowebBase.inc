@@ -106,7 +106,7 @@ class FotowebBase {
   }
 
   public function resourceUrlToUrl($resourceUrl) {
-    // Ensure, that we use a proper resourceUrl path.
+    // Ensure, that we use a proper resourceUrl relative path.
     if (substr($resourceUrl, 0, 1) !== '/') {
       $resourceUrl = '/' . $resourceUrl;
     }

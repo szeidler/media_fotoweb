@@ -56,8 +56,8 @@ class FotowebAsset implements FotowebRepresentationInterface {
   public function getAssetImageFromResource($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
     $this->data = drupal_json_decode($response->getBody(TRUE), TRUE);
-    $image = $this->getAssetImageFromAsset();
-    return $image;
+    $response = $this->getAssetImageFromAsset();
+    return $response;
   }
 
   private function getAssetImageFromAsset() {
@@ -74,7 +74,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
       // Request the designated preview image.
       $request = new GuzzleHttp\Psr7\Request('GET', $best_fit_image['href']);
       $response = $this->fotoweb->request($request);
-      return $response->getBody();
+      return $response;
     }
 
     return NULL;
