@@ -6,14 +6,14 @@
 function media_fotoweb_file_formatter_info() {
   $formatters = array();
 
-  $formatters['media_fotoweb_preview'] = array(
-    'label' => t('Fotoweb preview image'),
+  $formatters['media_fotoweb_image'] = array(
+    'label' => t('Fotoweb image'),
     'file types' => array('image'),
     'default settings' => array(
       'image_style' => '',
     ),
-    'view callback' => 'media_fotoweb_file_formatter_media_fotoweb_preview_view',
-    'settings callback' => 'media_fotoweb_file_formatter_media_fotoweb_preview_settings',
+    'view callback' => 'media_fotoweb_file_formatter_media_fotoweb_view',
+    'settings callback' => 'media_fotoweb_file_formatter_media_fotoweb_settings',
   );
 
   return $formatters;
@@ -22,7 +22,7 @@ function media_fotoweb_file_formatter_info() {
 /**
  * Implements hook_file_formatter_FORMATTER_view().
  */
-function media_fotoweb_file_formatter_media_fotoweb_preview_view($file, $display, $langcode) {
+function media_fotoweb_file_formatter_media_fotoweb_view($file, $display, $langcode) {
   $scheme = file_uri_scheme($file->uri);
   if ($scheme == 'fotoweb') {
     $wrapper = file_stream_wrapper_get_instance_by_uri($file->uri);
@@ -32,7 +32,7 @@ function media_fotoweb_file_formatter_media_fotoweb_preview_view($file, $display
     if (empty($image_style) || !isset($valid_image_styles[$image_style])) {
       $element = array(
         '#theme' => 'image',
-        '#path' => str_replace('http:', '', $wrapper->getThumbnailPath()),
+        '#path' => str_replace('http:', '', $wrapper->getImagePath()),
         '#alt' => isset($file->override['attributes']['alt']) ? $file->override['attributes']['alt'] : $file->filename,
       );
     }
@@ -40,7 +40,7 @@ function media_fotoweb_file_formatter_media_fotoweb_preview_view($file, $display
       $element = array(
         '#theme' => 'image_style',
         '#style_name' => $image_style,
-        '#path' => $wrapper->getThumbnailPath(),
+        '#path' => $wrapper->getImagePath(),
         '#alt' => isset($file->override['attributes']['alt']) ? $file->override['attributes']['alt'] : $file->filename,
       );
     }
@@ -52,7 +52,7 @@ function media_fotoweb_file_formatter_media_fotoweb_preview_view($file, $display
 /**
  * Implements hook_file_formatter_FORMATTER_settings().
  */
-function media_fotoweb_file_formatter_media_fotoweb_preview_settings($form, &$form_state, $settings) {
+function media_fotoweb_file_formatter_media_fotoweb_settings($form, &$form_state, $settings) {
   $element = array();
 
   $element['image_style'] = array(

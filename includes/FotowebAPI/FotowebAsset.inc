@@ -37,15 +37,42 @@ class FotowebAsset implements FotowebRepresentationInterface {
   private function getAssetThumbnailFromAsset() {
     // Iterate over previews and use the largest cropped square image.
     if (!empty($this->data['previews'])) {
-      $largest_preview_image = NULL;
+      $best_fit_image = NULL;
       foreach ($this->data['previews'] as $previewImage) {
-        if ($previewImage['square'] && (!$largest_preview_image || $previewImage['size'] > $largest_preview_image['size'])) {
-          $largest_preview_image = $previewImage;
+        if ($previewImage['square'] && (!$best_fit_image || $previewImage['size'] > $best_fit_image['size'])) {
+          $best_fit_image = $previewImage;
         }
       }
 
       // Request the designated preview image.
-      $request = new GuzzleHttp\Psr7\Request('GET', $previewImage['href']);
+      $request = new GuzzleHttp\Psr7\Request('GET', $best_fit_image['href']);
+      $response = $this->fotoweb->request($request);
+      return $response->getBody();
+    }
+
+    return NULL;
+  }
+
+  public function getAssetImageFromResource($resourceUrl) {
+    $response = $this->initiateRequest($resourceUrl);
+    $this->data = drupal_json_decode($response->getBody(TRUE), TRUE);
+    $image = $this->getAssetImageFromAsset();
+    return $image;
+  }
+
+  private function getAssetImageFromAsset() {
+    // Iterate over previews and use the largest preview image.
+    // TODO see, for a way to retrieve the original image for those who need it.
+    if (!empty($this->data['previews'])) {
+      $best_fit_image = NULL;
+      foreach ($this->data['previews'] as $previewImage) {
+        if (!$previewImage['square'] && (!$best_fit_image || $previewImage['size'] > $best_fit_image['size'])) {
+          $best_fit_image = $previewImage;
+        }
+      }
+
+      // Request the designated preview image.
+      $request = new GuzzleHttp\Psr7\Request('GET', $best_fit_image['href']);
       $response = $this->fotoweb->request($request);
       return $response->getBody();
     }
