@@ -17,8 +17,14 @@
             url: Drupal.settings.media_fotoweb.assetAddAjaxUrl,
             type: 'POST',
             data: {asset: data},
-            dataType: '',
+            dataType: 'json',
             success: function (data) {
+              if ('fid' in data) {
+                // Naively reloading the media browser with attached file id.
+                // That will trigger the file to be further processed.
+                // @see media_browser()
+                window.location = settings.base_path + 'media/browser/?fid=' + data.fid;
+              }
             }
           });
         }

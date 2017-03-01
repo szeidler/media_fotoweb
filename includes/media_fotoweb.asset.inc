@@ -6,7 +6,8 @@
 function _media_fotoweb_add_asset_from_fotoweb() {
   if (!empty($_POST['asset'])) {
     $asset = $_POST['asset'];
-    _media_fotoweb_file_save($asset);
+    $file = _media_fotoweb_file_save($asset);
+    drupal_json_output($file);
   }
 }
 
