@@ -25,9 +25,13 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * @inheritdoc
    */
   public function interpolateUrl() {
-    // If we have stored a current image style, return its derivate.
+    // If we have stored a current image style, return its derivative.
     if (!empty($this->current_image_style)) {
-      return image_style_url($this->current_image_style, $this->getUri());
+      $derivative_uri = image_style_path($this->current_image_style, $this->getUri());
+      // Force the image derivative to be created, because remote stream wrappers, are not returning valid tokens.
+      // @see https://www.drupal.org/node/2791283
+      image_style_create_derivative(image_style_load($this->current_image_style), $this->getUri(), $derivative_uri);
+      return file_create_url($derivative_uri);
     }
     if ($parameters = $this->get_parameters()) {
       if (isset($parameters['a'])) {
