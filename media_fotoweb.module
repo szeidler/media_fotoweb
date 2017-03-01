@@ -29,7 +29,7 @@ function media_fotoweb_stream_wrappers() {
       'name' => t('Fotoweb assets'),
       'class' => 'FotowebStreamWrapper',
       'description' => t('Assets provided by Fotoweb.'),
-      'type' => STREAM_WRAPPERS_READ_VISIBLE,
+      'type' => STREAM_WRAPPERS_WRITE_VISIBLE,
     ),
   );
 }

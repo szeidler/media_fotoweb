@@ -9,11 +9,13 @@ class FotowebAsset implements FotowebRepresentationInterface {
 
   protected $fotoweb;
   protected $data;
+  protected $localFileThreshold;
 
   const headerAccept = 'application/vnd.fotoware.asset+json';
 
-  public function __construct(FotowebBase $fotoweb) {
+  public function __construct(FotowebBase $fotoweb, $localFileThreshold = NULL) {
     $this->fotoweb = $fotoweb;
+    $this->localFileThreshold = $localFileThreshold;
   }
 
 
@@ -27,32 +29,6 @@ class FotowebAsset implements FotowebRepresentationInterface {
     return $this->fotoweb->request($request);
   }
 
-  public function getAssetThumbnailFromResource($resourceUrl) {
-    $response = $this->initiateRequest($resourceUrl);
-    $this->data = drupal_json_decode($response->getBody(TRUE), TRUE);
-    $thumbnail = $this->getAssetThumbnailFromAsset();
-    return $thumbnail;
-  }
-
-  private function getAssetThumbnailFromAsset() {
-    // Iterate over previews and use the largest cropped square image.
-    if (!empty($this->data['previews'])) {
-      $best_fit_image = NULL;
-      foreach ($this->data['previews'] as $previewImage) {
-        if ($previewImage['square'] && (!$best_fit_image || $previewImage['size'] > $best_fit_image['size'])) {
-          $best_fit_image = $previewImage;
-        }
-      }
-
-      // Request the designated preview image.
-      $request = new GuzzleHttp\Psr7\Request('GET', $best_fit_image['href']);
-      $response = $this->fotoweb->request($request);
-      return $response->getBody();
-    }
-
-    return NULL;
-  }
-
   public function getAssetImageFromResource($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
     $this->data = drupal_json_decode($response->getBody(TRUE), TRUE);
@@ -64,19 +40,31 @@ class FotowebAsset implements FotowebRepresentationInterface {
     // Iterate over previews and use the largest preview image.
     // TODO see, for a way to retrieve the original image for those who need it.
     if (!empty($this->data['previews'])) {
-      $best_fit_image = NULL;
-      foreach ($this->data['previews'] as $previewImage) {
-        if (!$previewImage['square'] && (!$best_fit_image || $previewImage['size'] > $best_fit_image['size'])) {
-          $best_fit_image = $previewImage;
+      $bestFitImage = array('size' => 0);
+      foreach ($this->data['previews'] as $currentPreviewImage) {
+        if (!$currentPreviewImage['square'] && $this->isBestFitImage($currentPreviewImage, $bestFitImage)) {
+          $bestFitImage = $currentPreviewImage;
         }
       }
 
       // Request the designated preview image.
-      $request = new GuzzleHttp\Psr7\Request('GET', $best_fit_image['href']);
+      $request = new GuzzleHttp\Psr7\Request('GET', $bestFitImage['href']);
       $response = $this->fotoweb->request($request);
       return $response;
     }
 
     return NULL;
+  }
+
+  private function isBestFitImage($currentImage, $bestFitImage) {
+    // The current image is the bestFit, when there the image is smaller than
+    // the threshold and larger than the current bestFit.
+    if ($this->localFileThreshold) {
+      return ($currentImage['size'] < $this->localFileThreshold && $currentImage['size'] > $bestFitImage['size']);
+    }
+    // When no threshold was set, use the largest one.
+    else {
+      return ($currentImage['size'] > $bestFitImage['size']);
+    }
   }
 }

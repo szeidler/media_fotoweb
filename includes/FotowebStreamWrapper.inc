@@ -27,15 +27,30 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   public function interpolateUrl() {
     // If we have stored a current image style, return its derivate.
     if (!empty($this->current_image_style)) {
-      $local_path = $this->getLocalImagePath();
-      $derivative_uri = image_style_url($this->current_image_style, $local_path);
-      image_style_create_derivative(image_style_load($this->current_image_style), $local_path, $derivative_uri);
-      return $derivative_uri;
+      return image_style_url($this->current_image_style, $this->getUri());
     }
     if ($parameters = $this->get_parameters()) {
       if (isset($parameters['a'])) {
         return $this->base_url . $parameters['a'];
       }
+    }
+  }
+
+  public function setUri($uri) {
+    $this->uri = $uri;
+    $this->parameters = $this->_parse_url($uri);
+
+    if ($this->isImageStyle()) {
+      $this->uri = $this->getLocalImagePath();
+    }
+  }
+
+  function isImageStyle() {
+    if (($target = file_uri_target($this->getUri())) && strpos($target, 'styles/') === 0) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
     }
   }
 
@@ -112,7 +127,8 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     $resourceUrl = file_create_url($uri);
 
     $fotoweb = new FotowebBase();
-    $fotowebAsset = new FotowebAsset($fotoweb);
+    $localFileThreshold = variable_get('media_fotoweb_local_file_threshold', NULL);
+    $fotowebAsset = new FotowebAsset($fotoweb, $localFileThreshold);
     $response = $fotowebAsset->getAssetImageFromResource($resourceUrl);
     return $response;
   }
