@@ -9,6 +9,14 @@ require_once dirname(__FILE__) . '/includes/media_fotoweb.formatters.inc';
 function media_fotoweb_menu() {
   $items = array();
 
+  $items['admin/config/media/fotoweb'] = array(
+    'title' => 'Media Fotoweb settings',
+    'description' => 'Configure the Media Fotoweb settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('media_fotoweb_admin_settings'),
+    'access arguments' => array('administer media_fotoweb settings'),
+    'file' => 'includes/media_fotoweb.admin.inc',
+  );
   $items['media-fotoweb/add/asset'] = array(
     'page callback' => '_media_fotoweb_add_asset_from_fotoweb',
     'access arguments' => array('create files'),
