@@ -17,9 +17,9 @@ class FotowebBase {
   protected $server;
   protected $client;
   protected $entryPoint;
-  protected $fullApiToken;
+  protected $fullApiKey;
 
-  public function __construct($server = NULL, $fullApiToken = NULL) {
+  public function __construct($server = NULL, $fullApiKey = NULL) {
     if (empty($server)) {
       $this->server = variable_get('media_fotoweb_server', '');
     }
@@ -27,11 +27,11 @@ class FotowebBase {
       $this->server = $server;
     }
 
-    if (empty($fullApiToken)) {
-      $this->fullApiToken = variable_get('media_fotoweb_full_api_token');
+    if (empty($fullApiKey)) {
+      $this->fullApiKey = variable_get('media_fotoweb_full_api_key');
     }
     else {
-      $this->fullApiToken = $fullApiToken;
+      $this->fullApiKey = $fullApiKey;
     }
 
     // For now we only support the private entry point.
@@ -62,12 +62,12 @@ class FotowebBase {
     }*/
   }
 
-  public function setFullApiToken($fullApiToken) {
-    $this->fullApiToken = $fullApiToken;
+  public function setFullApiKey($fullApiKey) {
+    $this->fullApiKey = $fullApiKey;
   }
 
   public function getApiToken() {
-    return $this->fullApiToken;
+    return $this->fullApiKey;
   }
 
   public function initiateRequestByMethod($method) {

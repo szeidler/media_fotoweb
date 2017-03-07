@@ -65,7 +65,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     // Fotoweb uses relative paths as identifier, so we need to split only the first parameter.
     $path = explode('://', $url);
     $parts = explode('/', $path[1]);
-    if ($parts[0] == 'styles') {
+    if ($this->isImageStyle()) {
       $this->current_image_style = $parts[1];
       unset($parts[0]);
       unset($parts[1]);

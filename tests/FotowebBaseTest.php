@@ -17,7 +17,7 @@ class FotowebBaseTest extends FotowebTestWrapper {
    * Assure, that an invalid token will not return a 200 response.
    */
   public function testInvalidToken() {
-    $this->fotowebBase->setFullApiToken('xxx');
+    $this->fotowebBase->setFullApiKey('xxx');
     $response = $this->fotowebBase->authenticate();
     $this->assertNotEquals(200, $response->getStatusCode(), 'Response was 200, although we used an invalid token.');
   }
