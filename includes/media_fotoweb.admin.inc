@@ -1,5 +1,16 @@
 <?php
 
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\RequestException;
+
+/**
+ * Builds the Media Fotoweb admin settings form.
+ *
+ * @param $form
+ * @param $form_state
+ *
+ * @return mixed
+ */
 function media_fotoweb_admin_settings($form, &$form_state) {
   $form['media_fotoweb_server'] = array(
     '#type' => 'textfield',
@@ -39,10 +50,46 @@ function media_fotoweb_admin_settings($form, &$form_state) {
   return system_settings_form($form);
 }
 
+/**
+ * Validate settings form and test successful authentication to the Fotoware API
+ * endpoint.
+ *
+ * @param $form
+ * @param $form_state
+ */
 function media_fotoweb_admin_settings_validate($form, $form_state) {
+  // Make the encryption secret field required, when having SSO enabled.
   if (!empty($form_state['values']['media_fotoweb_selection_widget_use_sso']) && empty($form_state['values']['media_fotoweb_encryption_secret'])) {
     form_error($form['media_fotoweb_encryption_secret'], t('@field_name field is required.', array(
       '@field_name' => $form['media_fotoweb_encryption_secret']['#title'],
     )));
+  }
+
+  // Test, that Fotoweb Endpoint is accessible with the saved configuration.
+  $server = $form_state['values']['media_fotoweb_server'];
+  $full_api_key = $form_state['values']['media_fotoweb_full_api_key'];
+  $fotoweb = new FotowebBase($server, $full_api_key);
+
+  // Perform authentication and validate its response.
+  try {
+    $response = $fotoweb->authenticate();
+    // No errors and exceptions. Display a success message.
+    drupal_set_message(t('The connection to the Fotoweb endpoint was established succesfully.'));
+  } catch (RequestException $e) {
+    if ($e->hasResponse()) {
+      $error_message = (string) Psr7\str($e->getResponse());
+    }
+    else {
+      $error_message = $e->getMessage();
+    }
+    form_error($form['media_fotoweb_server'], t('There was an networking error: @error_message', array('@error_message' => $error_message)));
+  } catch (Exception $e) {
+    $error_message = $e->getMessage();
+    if ($e->getCode() === 403) {
+      form_error($form['media_fotoweb_full_api_key'], t('There was an error: @error_message', array('@error_message' => $error_message)));
+    }
+    else {
+      form_error($form['media_fotoweb_server'], t('There was an error: @error_message', array('@error_message' => $error_message)));
+    }
   }
 }

@@ -50,6 +50,9 @@ class FotowebBase {
 
   public function authenticate() {
     $response = $this->initiateRequestByMethod('authenticate');
+    if ($response->getStatusCode() !== 200) {
+      throw new Exception('Authentication was not successful.', 403);
+    }
     return $response;
   }
 
