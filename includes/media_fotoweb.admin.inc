@@ -29,7 +29,7 @@ function media_fotoweb_admin_settings($form, &$form_state) {
   $form['media_fotoweb_selection_widget_use_sso'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use SSO for the asset selection widget?'),
-    '#description' => t('Enable this, when you want to use the <a href="@documentation_url" target="_blank">Single Sign-on</a> function to automatically authenticate your Drupal user to the Fotoweb widget.', array('@documentation_url' => 'https://learn.fotoware.com/02_FotoWeb_8.0/Integrating_FotoWeb_with_third-party_systems/User_Authentication_for_Embeddable_Widgets#Single_Sign_On_(SSO)_for_Widgets')),
+    '#description' => t('Enable this, when you want to use the <a href="@documentation_url" target="_blank">Single Sign-on</a> function to automatically authenticate your Drupal user to the Fotoweb widget. Users need to set their Fotoweb username in their Drupal user profile, to make the Single Sign-on work.', array('@documentation_url' => 'https://learn.fotoware.com/02_FotoWeb_8.0/Integrating_FotoWeb_with_third-party_systems/User_Authentication_for_Embeddable_Widgets#Single_Sign_On_(SSO)_for_Widgets')),
     '#default_value' => variable_get('media_fotoweb_selection_widget_use_sso'),
   );
   $form['media_fotoweb_encryption_secret'] = array(
