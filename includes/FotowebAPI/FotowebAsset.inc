@@ -20,8 +20,6 @@ class FotowebAsset implements FotowebRepresentationInterface {
 
 
   public function initiateRequest($resourceUrl) {
-    $this->fotoweb->ensureAuthentication();
-
     $request = new GuzzleHttp\Psr7\Request('GET', $resourceUrl, [
       'Accept' => static::headerAccept,
     ]);

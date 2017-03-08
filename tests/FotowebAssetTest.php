@@ -66,7 +66,7 @@ class FotowebAssetTest extends FotowebTestWrapper {
     $currentImage = array('size' => 599);
     $bestFitImage = array('size' => 600);
     $this->assertFalse($fotowebAsset->isBestFitImage($currentImage, $bestFitImage));
-    
+
     $currentImage = array('size' => 600);
     $bestFitImage = array('size' => 600);
     $this->assertFalse($fotowebAsset->isBestFitImage($currentImage, $bestFitImage));

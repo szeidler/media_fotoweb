@@ -48,20 +48,11 @@ class FotowebBase {
   }
 
   public function authenticate() {
-    $response = $this->initiateRequestByMethod('authenticate');
+    $response = $this->initiateAuthenticationRequest();
     if ($response->getStatusCode() !== 200) {
       throw new Exception('Authentication was not successful.', 403);
     }
     return $response;
-  }
-
-  public function ensureAuthentication() {
-    /*$tokenExpireTimeStamp = strtotime($_SESSION['FWUserTokenExpire']);
-
-    // When the token is expired, reauthenticate the user.
-    if ($tokenExpireTimeStamp < time()) {
-      $this->authenticate();
-    }*/
   }
 
   public function setFullApiKey($fullApiKey) {
@@ -72,14 +63,9 @@ class FotowebBase {
     return $this->fullApiKey;
   }
 
-  public function initiateRequestByMethod($method) {
-    if ($method !== 'authenticate') {
-      // Make sure, that the user is authenticated before performing each request.
-      $this->ensureAuthentication();
-    }
-
+  public function initiateAuthenticationRequest() {
     $request = new GuzzleHttp\Psr7\Request('GET', '/fotoweb/me', [
-      'Accept' => $this->methodToMediaType($method),
+      'Accept' => 'application/vnd.fotoware.full-api-descriptor+json',
       'FWAPITOKEN' => $this->getApiToken(),
     ]);
 
@@ -94,37 +80,6 @@ class FotowebBase {
   public function request($request) {
     $response = $this->client->send($request);
     return $response;
-  }
-
-  protected function methodToMediaType($method) {
-    switch ($method) {
-      case 'authenticate':
-        $mediaType = 'application/vnd.fotoware.full-api-descriptor+json';
-        break;
-      default:
-        $mediaType = 'application/vnd.fotoware.full-api-descriptor+json';
-    }
-    return $mediaType;
-  }
-
-  public function resourceUrlToUrl($resourceUrl) {
-    // Ensure, that we use a proper resourceUrl relative path.
-    if (substr($resourceUrl, 0, 1) !== '/') {
-      $resourceUrl = '/' . $resourceUrl;
-    }
-    $url = $this->server . $resourceUrl;
-    return $url;
-  }
-
-  protected function methodToUrl($method) {
-    switch ($method) {
-      case 'authenticate':
-        $url = '/fotoweb/me';
-        break;
-      default:
-        $url = $method;
-    }
-    return $url;
   }
 
 }
