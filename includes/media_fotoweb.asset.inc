@@ -27,7 +27,6 @@ function _media_fotoweb_file_save($asset) {
     $file = $handler->getFileObject();
 
     // Inject asset properties to file object.
-    $file->filesize = $asset['filesize'];
     $file->filename = $asset['filename'];
     $file->timestamp = strtotime($asset['modified']);
 
@@ -36,6 +35,10 @@ function _media_fotoweb_file_save($asset) {
     $file->metadata['asset_changed'] = strtotime($asset['modified']);
     $file->metadata['asset_resource'] = $asset['href'];
     $file->metadata['asset_metadata'] = $asset['metadata'];
+
+    // $file->filesize would be overwritten in file_save() and fails with
+    // remote streamwrappers. So save it as a metadata property.
+    $file->metadata['asset_original_filesize'] = $asset['filesize'];
 
     if (empty($file->fid)) {
       file_save($file);

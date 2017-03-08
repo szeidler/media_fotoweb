@@ -83,12 +83,25 @@ function media_fotoweb_file_metadata_info() {
 }
 
 /**
+ * Overwrites the filesize with metadata information, that could not be fetched
+ * automaticalle from a remote streamwrapper using filesize().
+ *
+ * Implements hook_file_presave().
+ */
+function media_fotoweb_file_presave($file) {
+  $scheme = file_uri_scheme($file->uri);
+  if ($scheme == 'fotoweb') {
+    $file->filesize = $file->metadata['asset_original_filesize'];
+  }
+}
+
+/**
  * Implements hook_media_browser_plugin_info().
  */
 function media_fotoweb_media_browser_plugin_info() {
   $info = array(
     'fotoweb' => array(
-      'title' => t('Fotoweb search'),
+      'title' => t('Fotoweb Browser'),
       'class' => 'FotowebBrowser',
       'weight' => 50,
     ),
