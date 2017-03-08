@@ -35,6 +35,11 @@ class FotowebBrowser extends MediaBrowserPlugin {
     return $build;
   }
 
+  /**
+   * Builds the Fotoweb Embedded Selection Widget as an <iframe>.
+   *
+   * @return string
+   */
   protected function buildEmbeddedSelectionWidget() {
     $fotoweb_host = variable_get('media_fotoweb_server', '');
     $widget_url = $fotoweb_host . '/fotoweb/widgets/selection';
@@ -56,6 +61,13 @@ class FotowebBrowser extends MediaBrowserPlugin {
     return $build;
   }
 
+  /**
+   * Returns a login token for the given user for Single Sign-on
+   *
+   * @param $fotoweb_username
+   *
+   * @return string
+   */
   protected function getUserLoginToken($fotoweb_username) {
     $fotoweb_encryption_secret = variable_get('media_fotoweb_encryption_secret', '');
     $token_generator = new FotowebLoginTokenGenerator($fotoweb_encryption_secret, TRUE);

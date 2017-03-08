@@ -36,6 +36,11 @@ class FotowebHandler {
     return file_stream_wrapper_uri_normalize('fotoweb://a' . $path);
   }
 
+  /**
+   * Creates a file object, based on the Fotoweb resource.
+   *
+   * @return bool|object
+   */
   public function getFileObject() {
     $uri = $this->parse($this->fotowebResource);
     $file = file_uri_to_object($uri, TRUE);

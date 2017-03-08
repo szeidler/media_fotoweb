@@ -9,13 +9,13 @@ class FotowebAsset implements FotowebRepresentationInterface {
 
   protected $fotoweb;
   protected $data;
-  protected $localFileThreshold;
+  protected $localFileMaxSize;
 
   const headerAccept = 'application/vnd.fotoware.asset+json';
 
-  public function __construct(FotowebBase $fotoweb, $localFileThreshold = NULL) {
+  public function __construct(FotowebBase $fotoweb, $localFileMaxSize = NULL) {
     $this->fotoweb = $fotoweb;
-    $this->localFileThreshold = $localFileThreshold;
+    $this->localFileMaxSize = $localFileMaxSize;
   }
 
 
@@ -36,6 +36,11 @@ class FotowebAsset implements FotowebRepresentationInterface {
     return $response;
   }
 
+  /**
+   * Return the asset image from a asset resource.
+   *
+   * @return mixed|null|\Psr\Http\Message\ResponseInterface
+   */
   private function getAssetImageFromAsset() {
     // Iterate over previews and use the largest preview image.
     // TODO see, for a way to retrieve the original image for those who need it.
@@ -56,11 +61,20 @@ class FotowebAsset implements FotowebRepresentationInterface {
     return NULL;
   }
 
+  /**
+   * Checks, if the current iterated image, is a better fit, dependent on
+   * maximum local file size.
+   *
+   * @param $currentImage
+   * @param $bestFitImage
+   *
+   * @return bool
+   */
   private function isBestFitImage($currentImage, $bestFitImage) {
     // The current image is the bestFit, when there the image is smaller than
     // the threshold and larger than the current bestFit.
-    if ($this->localFileThreshold) {
-      return ($currentImage['size'] < $this->localFileThreshold && $currentImage['size'] > $bestFitImage['size']);
+    if ($this->localFileMaxSize) {
+      return ($currentImage['size'] < $this->localFileMaxSize && $currentImage['size'] > $bestFitImage['size']);
     }
     // When no threshold was set, use the largest one.
     else {

@@ -40,6 +40,9 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     }
   }
 
+  /**
+   * @inheritdoc
+   */
   public function setUri($uri) {
     $this->uri = $uri;
     $this->parameters = $this->_parse_url($uri);
@@ -49,6 +52,11 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     }
   }
 
+  /**
+   * Checks, if the current file uri is an image style resource.
+   *
+   * @return bool
+   */
   function isImageStyle() {
     if (($target = file_uri_target($this->getUri())) && strpos($target, 'styles/') === 0) {
       return TRUE;
@@ -104,36 +112,48 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     return $filename;
   }
 
+  /**
+   * Returns the local image path and trigger file save, when local file does
+   * not exist.
+   *
+   * @return string
+   */
   public function getLocalImagePath() {
     $parameters = $this->get_parameters();
     $local_path = file_default_scheme() . '://media-fotoweb/images/' . $this->getLocalFileName($parameters['a']) . '.jpg';
 
     if (!file_exists($local_path)) {
-      try {
-        $dirname = drupal_dirname($local_path);
-        file_prepare_directory($dirname, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+      $dirname = drupal_dirname($local_path);
+      file_prepare_directory($dirname, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 
-        $response = $this->getOriginalImagePath();
-        if ($response->getStatusCode() == 200) {
-          file_unmanaged_save_data($response->getBody(), $local_path, TRUE);
-        }
-      } catch (Exception $e) {
-        // TODO proper exception handling.
+      $response = $this->getOriginalImagePath();
+      if ($response && $response->getStatusCode() == 200) {
+        file_unmanaged_save_data($response->getBody(), $local_path, FILE_EXISTS_REPLACE);
       }
     }
 
     return $local_path;
   }
 
+  /**
+   * Returns the original image path from the fotoweb asset resource.
+   *
+   * @return mixed|null|\Psr\Http\Message\ResponseInterface
+   */
   protected function getOriginalImagePath() {
     $parts = $this->get_parameters();
     $uri = file_stream_wrapper_uri_normalize('fotoweb://a' . check_plain($parts['a']));
     $resourceUrl = file_create_url($uri);
 
     $fotoweb = new FotowebBase();
-    $localFileThreshold = variable_get('media_fotoweb_local_file_threshold', NULL);
+    $localFileThreshold = variable_get('media_fotoweb_local_file_max_size', 1920);
     $fotowebAsset = new FotowebAsset($fotoweb, $localFileThreshold);
-    $response = $fotowebAsset->getAssetImageFromResource($resourceUrl);
+    try {
+      $response = $fotowebAsset->getAssetImageFromResource($resourceUrl);
+    } catch (Exception $e) {
+      watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_CRITICAL);
+      return NULL;
+    }
     return $response;
   }
 }
