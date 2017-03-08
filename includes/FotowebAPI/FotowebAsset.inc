@@ -31,7 +31,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
 
   public function getAssetImageFromResource($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
-    $this->data = drupal_json_decode($response->getBody(TRUE), TRUE);
+    $this->data = json_decode($response->getBody(TRUE), TRUE);
     $response = $this->getAssetImageFromAsset();
     return $response;
   }
@@ -70,7 +70,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    *
    * @return bool
    */
-  private function isBestFitImage($currentImage, $bestFitImage) {
+  public function isBestFitImage($currentImage, $bestFitImage) {
     // The current image is the bestFit, when there the image is smaller than
     // the threshold and larger than the current bestFit.
     if ($this->localFileMaxSize) {

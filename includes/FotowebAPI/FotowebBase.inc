@@ -4,7 +4,6 @@ DEFINE('FOTOWEB_PUBLIC_ENTRY_POINT', '/fotoweb');
 DEFINE('FOTOWEB_PRIVATE_ENTRY_POINT', '/fotoweb/me/');
 
 require_once 'FotowebBase.inc';
-require_once 'FotowebCollectionRepresentationInterface.inc';
 require_once 'FotowebRepresentationInterface.inc';
 require_once 'FotowebCollection.inc';
 require_once 'FotowebCollectionList.inc';
