@@ -44,4 +44,6 @@ function media_fotoweb_uninstall() {
   variable_del('media_fotoweb_full_api_key');
   variable_del('media_fotoweb_selection_widget_use_sso');
   variable_del('media_fotoweb_encryption_secret');
+  variable_del('media_fotoweb_file_storage_type');
+  variable_del('media_fotoweb_local_file_max_size');
 }

@@ -46,6 +46,30 @@ function media_fotoweb_admin_settings($form, &$form_state) {
       ),
     ),
   );
+  $form['media_fotoweb_local_file_storage_type'] = array(
+    '#type' => 'select',
+    '#title' => t('File storage type'),
+    '#description' => t('Original images from Fotoweb might be unnecessary big for your website usage. You can either store the original image or a smaller appropriate preview with your desired maximum size.'),
+    '#options' => array(
+      'original' => t('Original image'),
+      'preview' => t('Preview'),
+    ),
+    '#default_value' => variable_get('media_fotoweb_local_file_storage_type', 'preview'),
+  );
+  $form['media_fotoweb_local_file_max_size'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Maximum local file size'),
+    '#description' => t('Define the maximal size for your locally stored images. The module will import the appropriate preview size from Fotoweb.'),
+    '#default_value' => variable_get('media_fotoweb_local_file_max_size', 1920),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="media_fotoweb_local_file_storage_type"]' => array('value' => 'preview'),
+      ),
+      'required' => array(
+        ':input[name="media_fotoweb_local_file_storage_type"]' => array('value' => 'preview'),
+      ),
+    ),
+  );
 
   return system_settings_form($form);
 }
@@ -62,6 +86,12 @@ function media_fotoweb_admin_settings_validate($form, $form_state) {
   if (!empty($form_state['values']['media_fotoweb_selection_widget_use_sso']) && empty($form_state['values']['media_fotoweb_encryption_secret'])) {
     form_error($form['media_fotoweb_encryption_secret'], t('@field_name field is required.', array(
       '@field_name' => $form['media_fotoweb_encryption_secret']['#title'],
+    )));
+  }
+  // Make the maximum local file size field required, when having preview mode enabled.
+  if ($form_state['values']['media_fotoweb_local_file_storage_type'] === 'preview' && empty($form_state['values']['media_fotoweb_local_file_max_size'])) {
+    form_error($form['media_fotoweb_local_file_max_size'], t('@field_name field is required.', array(
+      '@field_name' => $form['media_fotoweb_local_file_max_size']['#title'],
     )));
   }
 
