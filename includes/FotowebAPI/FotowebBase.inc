@@ -39,12 +39,13 @@ class FotowebBase {
 
     // Initialize Guzzle
     $base_uri = $this->server;
-    $this->client = new GuzzleHttp\Client(array(
+    $guzzle_configuration = array(
       'base_uri' => $base_uri,
-      'proxy' => 'socks5://10.254.254.254:8123',
       'allow_redirects' => FALSE,
       'headers' => ['FWAPITOKEN' => $this->getApiToken()],
-    ));
+    );
+    drupal_alter('media_fotoweb_guzzle_configuration', $guzzle_configuration);
+    $this->client = new GuzzleHttp\Client($guzzle_configuration);
   }
 
   public function authenticate() {
