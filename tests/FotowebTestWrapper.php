@@ -12,7 +12,8 @@ abstract class FotowebTestWrapper extends PHPUnit\Framework\TestCase {
 
     $server = getenv('FOTOWEB_SERVER');
     $fullApiKey = getenv('FOTOWEB_FULLAPI_KEY');
-    $this->fotowebBase = new FotowebBase($server, $fullApiKey);
+    $guzzleConfigurator = new FotowebGuzzleTestConfigurator();
+    $this->fotowebBase = new FotowebBase($server, $fullApiKey, $guzzleConfigurator);
   }
 
 }

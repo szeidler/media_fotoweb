@@ -3,6 +3,9 @@
 DEFINE('FOTOWEB_PUBLIC_ENTRY_POINT', '/fotoweb');
 DEFINE('FOTOWEB_PRIVATE_ENTRY_POINT', '/fotoweb/me/');
 
+require_once 'FotowebGuzzleConfiguratorInterface.inc';
+require_once 'FotowebGuzzleConfigurator.inc';
+require_once 'FotowebGuzzleTestConfigurator.inc';
 require_once 'FotowebBase.inc';
 require_once 'FotowebRepresentationInterface.inc';
 require_once 'FotowebCollection.inc';
@@ -18,19 +21,23 @@ class FotowebBase {
   protected $entryPoint;
   protected $fullApiKey;
 
-  public function __construct($server = NULL, $fullApiKey = NULL) {
+  public function __construct($server = NULL, $fullApiKey = NULL, FotowebGuzzleConfiguratorInterface $guzzleConfigurator = NULL) {
     if (empty($server)) {
-      $this->server = variable_get('media_fotoweb_server', '');
+      $this->setServer(variable_get('media_fotoweb_server'));
     }
     else {
-      $this->server = $server;
+      $this->setServer($server);
     }
 
     if (empty($fullApiKey)) {
-      $this->fullApiKey = variable_get('media_fotoweb_full_api_key');
+      $this->setFullApiKey(variable_get('media_fotoweb_full_api_key'));
     }
     else {
-      $this->fullApiKey = $fullApiKey;
+      $this->setFullApiKey($fullApiKey);
+    }
+
+    if (empty($guzzleConfigurator)) {
+      $guzzleConfigurator = new FotowebGuzzleConfigurator();
     }
 
     // For now we only support the private entry point.
@@ -38,22 +45,16 @@ class FotowebBase {
     $this->entryPoint = FOTOWEB_PRIVATE_ENTRY_POINT;
 
     // Initialize Guzzle
-    $base_uri = $this->server;
-    $guzzle_configuration = array(
-      'base_uri' => $base_uri,
-      'allow_redirects' => FALSE,
-      'headers' => ['FWAPITOKEN' => $this->getApiToken()],
-    );
-    drupal_alter('media_fotoweb_guzzle_configuration', $guzzle_configuration);
-    $this->client = new GuzzleHttp\Client($guzzle_configuration);
+    $guzzleConfiguration = $guzzleConfigurator::getConfiguration($this->getServer(), $this->getApiToken());
+    $this->client = new GuzzleHttp\Client($guzzleConfiguration);
   }
 
-  public function authenticate() {
-    $response = $this->initiateAuthenticationRequest();
-    if ($response->getStatusCode() !== 200) {
-      throw new Exception('Authentication was not successful.', 403);
-    }
-    return $response;
+  public function setServer($server) {
+    $this->server = $server;
+  }
+
+  public function getServer() {
+    return $this->server;
   }
 
   public function setFullApiKey($fullApiKey) {
@@ -62,6 +63,14 @@ class FotowebBase {
 
   public function getApiToken() {
     return $this->fullApiKey;
+  }
+
+  public function authenticate() {
+    $response = $this->initiateAuthenticationRequest();
+    if ($response->getStatusCode() !== 200) {
+      throw new Exception('Authentication was not successful.', 403);
+    }
+    return $response;
   }
 
   public function initiateAuthenticationRequest() {
