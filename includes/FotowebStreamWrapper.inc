@@ -22,6 +22,14 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   }
 
   /**
+   * Return local file for realpath(), because modules like ImageMagick expect
+   * realpath() to return a valid file resource, for retrieving filesize().
+   */
+  public function realpath() {
+    return $this->getLocalImagePath();
+  }
+
+  /**
    * @inheritdoc
    */
   public function interpolateUrl() {
