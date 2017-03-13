@@ -57,7 +57,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *
    * @return bool
    */
-  function isImageStyle() {
+  protected function isImageStyle() {
     if (($target = file_uri_target($this->getUri())) && strpos($target, 'styles/') === 0) {
       return TRUE;
     }
