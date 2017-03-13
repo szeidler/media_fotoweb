@@ -23,7 +23,7 @@
                 // Naively reloading the media browser with attached file id.
                 // That will trigger the file to be further processed.
                 // @see media_browser()
-                window.location = settings.base_path + 'media/browser/?fid=' + data.fid;
+                window.location = Drupal.settings.basePath + Drupal.settings.pathPrefix + 'media/browser/?fid=' + data.fid;
               }
             }
           });
