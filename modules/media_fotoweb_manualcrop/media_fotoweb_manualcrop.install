@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function media_fotoweb_manualcrop_install() {
+  // Our hooks should run after the manual crop module.
+  db_query("UPDATE {system} SET weight = 25 WHERE name = 'media_fotoweb_manualcrop'");
+}
