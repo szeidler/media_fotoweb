@@ -27,10 +27,22 @@ class FotowebAsset implements FotowebRepresentationInterface {
     return $this->fotoweb->request($request);
   }
 
-  public function getAssetImageFromResource($resourceUrl) {
+  public function getAssetImagePathFromResource($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
     $this->data = json_decode($response->getBody(TRUE), TRUE);
-    $response = $this->getAssetImageFromAsset();
+    $image = $this->getAssetImageFromAsset();
+    return $image['href'];
+  }
+
+  public function getAssetImageFromResource($resourceUrl) {
+    $imagePath = $this->getAssetImagePathFromResource($resourceUrl);
+    return $this->getAssetImageFromUrl($imagePath);
+  }
+
+  public function getAssetImageFromUrl($imagePath) {
+    // Request the designated preview image.
+    $request = new GuzzleHttp\Psr7\Request('GET', $imagePath);
+    $response = $this->fotoweb->request($request);
     return $response;
   }
 
@@ -49,11 +61,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
           $bestFitImage = $currentPreviewImage;
         }
       }
-
-      // Request the designated preview image.
-      $request = new GuzzleHttp\Psr7\Request('GET', $bestFitImage['href']);
-      $response = $this->fotoweb->request($request);
-      return $response;
+      return $bestFitImage;
     }
 
     return NULL;

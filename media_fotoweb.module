@@ -24,6 +24,15 @@ function media_fotoweb_menu() {
     'file' => 'media_fotoweb.asset.inc',
     'file path' => drupal_get_path('module', 'media_fotoweb') . '/includes',
   );
+  $directory_path = file_stream_wrapper_get_instance_by_scheme('public')->getDirectoryPath();
+  $items[$directory_path . '/media-fotoweb/styles/%image_style'] = array(
+    'title' => 'Generate image style for fotoweb assets',
+    'page callback' => '_media_fotoweb_image_style_deliver',
+    'page arguments' => array(count(explode('/', $directory_path)) + 2),
+    'access callback' => TRUE,
+    'file' => 'media_fotoweb.helper.inc',
+    'file path' => drupal_get_path('module', 'media_fotoweb') . '/includes',
+  );
 
   return $items;
 }
