@@ -101,15 +101,9 @@ function media_fotoweb_file_metadata_info() {
 function media_fotoweb_file_presave($file) {
   $scheme = file_uri_scheme($file->uri);
   if ($scheme == 'fotoweb') {
-    $file->filesize = $file->metadata['asset_original_filesize'];
-
-    // Store the original_uri temporary.
-    $original_uri = $file->uri;
-    $wrapper = file_stream_wrapper_get_instance_by_uri($original_uri);
-
+    $wrapper = file_stream_wrapper_get_instance_by_uri($file->uri);
     // Use the local image path for image dimension update.
-    $file->uri = $wrapper->getLocalImagePath();
-    $image_info = image_get_info($file->uri);
+    $image_info = image_get_info($wrapper->realpath());
     if ($image_info) {
       $file->metadata['width'] = $image_info['width'];
       $file->metadata['height'] = $image_info['height'];
@@ -117,9 +111,6 @@ function media_fotoweb_file_presave($file) {
         $file->filesize = $image_info['filesize'];
       }
     }
-
-    // Reset to original file uri.
-    $file->uri = $original_uri;
   }
 }
 

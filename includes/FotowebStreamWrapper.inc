@@ -29,7 +29,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * realpath() to return a valid file resource, for retrieving filesize().
    */
   public function realpath() {
-    return $this->getLocalImagePath();
+    return drupal_realpath($this->getLocalImagePath());
   }
 
   /**
