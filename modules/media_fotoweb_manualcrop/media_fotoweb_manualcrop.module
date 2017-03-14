@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Alter the file path for manualcrop selection.
+ *
+ * That is needed, because manualcrop settings are stored for $file->uri not,
+ * image style path.
+ *
+ * @param $file
+ */
+function media_fotoweb_manualcrop_load_crop_selection_alter(&$file) {
+  module_load_include('inc', 'media_fotoweb', 'includes/media_fotoweb.helper');
+  $hash = _media_fotoweb_extract_hash_from_uri($file);
+  if ($original_file_uri = _media_fotoweb_find_uri_by_hash($hash)) {
+    $file = $original_file_uri;
+  }
+}
 
 /**
  * Implements hook_field_widget_form_alter().
