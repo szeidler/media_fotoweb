@@ -21,7 +21,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   }
 
   public function getDirectoryPath() {
-    return variable_get('file_public_path', conf_path() . '/files/media-fotoweb');
+    return variable_get('file_public_path', conf_path() . '/files') . '/media-fotoweb';
   }
 
   /**
