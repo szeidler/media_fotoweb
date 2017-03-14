@@ -103,7 +103,7 @@ function _media_fotoweb_image_style_deliver($style, $scheme) {
   }
 
   if ($success) {
-    // Perform a 302 Redirect to the newly-created iamge derivative.
+    // Perform a 302 Redirect to the newly-created image derivative.
     drupal_goto(file_create_url($derivative_uri));
   }
   else {

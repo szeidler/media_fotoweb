@@ -92,8 +92,9 @@ function media_fotoweb_file_metadata_info() {
 }
 
 /**
- * Overwrites the filesize with metadata information, that could not be fetched
- * automaticalle from a remote streamwrapper using filesize().
+ * Overwrites the filesize with metadata and size information, that could not
+ * be fetched automatically from a remote stream wrapper using filesize() and
+ * image_get_info().
  *
  * Implements hook_file_presave().
  */
@@ -101,6 +102,24 @@ function media_fotoweb_file_presave($file) {
   $scheme = file_uri_scheme($file->uri);
   if ($scheme == 'fotoweb') {
     $file->filesize = $file->metadata['asset_original_filesize'];
+
+    // Store the original_uri temporary.
+    $original_uri = $file->uri;
+    $wrapper = file_stream_wrapper_get_instance_by_uri($original_uri);
+
+    // Use the local image path for image dimension update.
+    $file->uri = $wrapper->getLocalImagePath();
+    $image_info = image_get_info($file->uri);
+    if ($image_info) {
+      $file->metadata['width'] = $image_info['width'];
+      $file->metadata['height'] = $image_info['height'];
+      if (!empty($image_info['filesize'])) {
+        $file->filesize = $image_info['filesize'];
+      }
+    }
+
+    // Reset to original file uri.
+    $file->uri = $original_uri;
   }
 }
 
