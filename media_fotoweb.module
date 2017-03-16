@@ -38,6 +38,18 @@ function media_fotoweb_menu() {
 }
 
 /**
+ * Implements hook_permission().
+ */
+function media_fotoweb_permission() {
+  return array(
+    'administer media_fotoweb settings' =>  array(
+      'title' => t('Administer Media Fotoweb'),
+      'description' => t('Access Media Fotoweb settings.'),
+    ),
+  );
+}
+
+/**
  * Implements hook_stream_wrappers().
  */
 function media_fotoweb_stream_wrappers() {
