@@ -54,7 +54,7 @@ class FotowebBrowser extends MediaBrowserPlugin {
     }
 
     // Create the widget using an <iframe>.
-    $build = format_string('<iframe src="@widget_url" width="100%" height="500" />', array(
+    $build = format_string('<iframe src="@widget_url" width="100%" height="500"></iframe>', array(
       '@widget_url' => $widget_url,
     ));
 
