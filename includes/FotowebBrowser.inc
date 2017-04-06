@@ -43,6 +43,7 @@ class FotowebBrowser extends MediaBrowserPlugin {
   protected function buildEmbeddedSelectionWidget() {
     $fotoweb_host = variable_get('media_fotoweb_server', '');
     $widget_url = $fotoweb_host . '/fotoweb/widgets/selection';
+    $widget_height = variable_get('media_fotoweb_selection_widget_height', 500);
 
     // Generate user login token and append it to widget url, when using SSO.
     if (variable_get('media_fotoweb_selection_widget_use_sso', FALSE)) {
@@ -54,8 +55,9 @@ class FotowebBrowser extends MediaBrowserPlugin {
     }
 
     // Create the widget using an <iframe>.
-    $build = format_string('<iframe src="@widget_url" width="100%" height="500"></iframe>', array(
+    $build = format_string('<iframe src="@widget_url" width="100%" height="@widget_height"></iframe>', array(
       '@widget_url' => $widget_url,
+      '@widget_height' => $widget_height,
     ));
 
     return $build;

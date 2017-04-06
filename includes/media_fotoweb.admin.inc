@@ -46,6 +46,12 @@ function media_fotoweb_admin_settings($form, &$form_state) {
       ),
     ),
   );
+  $form['media_fotoweb_selection_widget_height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Selection Widget Height'),
+    '#description' => t('Specify the height of the selection widget in pixels.'),
+    '#default_value' => variable_get('media_fotoweb_selection_widget_height', 500),
+  );
   $form['media_fotoweb_local_file_storage_type'] = array(
     '#type' => 'select',
     '#title' => t('File storage type'),
@@ -88,7 +94,15 @@ function media_fotoweb_admin_settings_validate($form, $form_state) {
       '@field_name' => $form['media_fotoweb_encryption_secret']['#title'],
     )));
   }
+
   // Make the maximum local file size field required, when having preview mode enabled.
+  if (!empty($form_state['values']['media_fotoweb_selection_widget_height']) && !is_numeric($form_state['values']['media_fotoweb_selection_widget_height'])) {
+    form_error($form['media_fotoweb_selection_widget_height'], t('@field_name field must be a numeric pixel value.', array(
+      '@field_name' => $form['media_fotoweb_selection_widget_height']['#title'],
+    )));
+  }
+
+  // The widget height can be only numeric.
   if ($form_state['values']['media_fotoweb_local_file_storage_type'] === 'preview' && empty($form_state['values']['media_fotoweb_local_file_max_size'])) {
     form_error($form['media_fotoweb_local_file_max_size'], t('@field_name field is required.', array(
       '@field_name' => $form['media_fotoweb_local_file_max_size']['#title'],
