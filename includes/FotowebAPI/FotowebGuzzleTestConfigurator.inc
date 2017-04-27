@@ -15,8 +15,10 @@ class FotowebGuzzleTestConfigurator implements FotowebGuzzleConfiguratorInterfac
     $configuration = array(
       'base_uri' => $server,
       'allow_redirects' => FALSE,
-      'headers' => ['FWAPITOKEN' => $token],
     );
+    if (!empty($token)) {
+      $configuration['headers'] = array('FWAPITOKEN' => $token);
+    }
     $proxy = getenv('FOTOWEB_GUZZLE_PROXY');
     if (!empty($proxy)) {
       $configuration['proxy'] = $proxy;

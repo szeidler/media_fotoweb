@@ -15,8 +15,10 @@ class FotowebGuzzleConfigurator implements FotowebGuzzleConfiguratorInterface {
     $configuration = array(
       'base_uri' => $server,
       'allow_redirects' => FALSE,
-      'headers' => ['FWAPITOKEN' => $token],
     );
+    if (!empty($token)) {
+      $configuration['headers'] = array('FWAPITOKEN' => $token);
+    }
     drupal_alter('media_fotoweb_guzzle_configuration', $configuration);
     return $configuration;
   }
