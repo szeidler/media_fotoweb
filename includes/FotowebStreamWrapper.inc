@@ -135,7 +135,15 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
       $dirname = drupal_dirname($local_path);
       file_prepare_directory($dirname, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
 
-      $url = $this->getOriginalImageUrl();
+      // Return the original image url based on the sites storage type selection.
+      $file_storage_type = variable_get('media_fotoweb_file_storage_type', 'original');
+      switch ($file_storage_type) {
+        case 'preview':
+          $url = $this->getPreviewImageUrl();
+          break;
+        default:
+          $url = $this->getOriginalImageUrl();
+      }
 
       $fotoweb = new FotowebBase();
       $request = new GuzzleHttp\Psr7\Request('GET', $url);
@@ -166,6 +174,32 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * @return mixed|null|\Psr\Http\Message\ResponseInterface
    */
   protected function getOriginalImageUrl() {
+    $parts = $this->get_parameters();
+    $resourceUrl = check_plain($parts['a']);
+
+    $fotoweb = new FotowebBase();
+    $fotowebArchiveAgent = new FotowebArchiveAgentBase();
+    // ArchiveAgent requests need to authenticate with the current user.
+    module_load_include('inc', 'media_fotoweb', '/includes/media_fotoweb.helper');
+    $fotowebArchiveAgent->setUsername(_media_fotoweb_get_fotoweb_username());
+
+    $fotowebAsset = new FotowebAsset($fotoweb);
+    $fotowebArchiveAgentOriginalImage = new FotowebArchiveAgentOriginalImage($fotowebArchiveAgent, $fotowebAsset);
+    try {
+      $url = $fotowebArchiveAgentOriginalImage->getOriginalImageDownloadUrlFromResource($resourceUrl);
+    } catch (Exception $e) {
+      watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_CRITICAL);
+      return NULL;
+    }
+    return $url;
+  }
+
+  /**
+   * Returns the preview image url from the fotoweb asset resource.
+   *
+   * @return mixed|null|\Psr\Http\Message\ResponseInterface
+   */
+  protected function getPreviewImageUrl() {
     $parts = $this->get_parameters();
     $resourceUrl = check_plain($parts['a']);
 

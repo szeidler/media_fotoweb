@@ -35,7 +35,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
   public function getAssetImagePathFromResource($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
     $this->data = json_decode($response->getBody(TRUE), TRUE);
-    $image = $this->getAssetImageFromAsset();
+    $image = $this->getAssetPreviewImageFromAsset();
     return $image['href'];
   }
 
@@ -56,7 +56,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    *
    * @return mixed|null|\Psr\Http\Message\ResponseInterface
    */
-  private function getAssetImageFromAsset() {
+  private function getAssetPreviewImageFromAsset() {
     // Iterate over previews and use the largest preview image.
     // TODO see, for a way to retrieve the original image for those who need it.
     if (!empty($this->data['previews'])) {
