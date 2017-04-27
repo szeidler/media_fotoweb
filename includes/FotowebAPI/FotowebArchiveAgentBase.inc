@@ -65,7 +65,10 @@ class FotowebArchiveAgentBase {
 
   public function initiateRequest($url) {
     // Append authentication query parameter to request uri.
-    $url = $this->appendAuthenticationQuery($url);
+    // Only, when we have a proper fotoweb_username specified.
+    if (!empty($this->getUsername())) {
+      $url = $this->appendAuthenticationQuery($url);
+    }
     $request = new GuzzleHttp\Psr7\Request('GET', $url);
     return $this->request($request);
   }
