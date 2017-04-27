@@ -27,6 +27,11 @@ class FotowebAsset implements FotowebRepresentationInterface {
     return $this->fotoweb->request($request);
   }
 
+  public function getAsset($resourceUrl) {
+    $response = $this->initiateRequest($resourceUrl);
+    return json_decode($response->getBody(TRUE), TRUE);
+  }
+
   public function getAssetImagePathFromResource($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
     $this->data = json_decode($response->getBody(TRUE), TRUE);
