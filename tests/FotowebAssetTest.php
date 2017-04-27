@@ -15,7 +15,7 @@ class FotowebAssetTest extends FotowebTestWrapper {
    * Tests to fetch an asset from a fixed asset resource.
    */
   public function testFetchSpecificAsset() {
-    $response = $this->fotowebAsset->initiateRequest('fotoweb/archives/5000-Sykepleien/Sykepleien_indekserte/IMG_2839.JPG.info');
+    $response = $this->fotowebAsset->initiateRequest(getenv('FOTOWEB_TEST_ASSET_HREF'));
     $this->assertEquals(200, $response->getStatusCode(), 'Response was not 200.');
     $this->assertNotEmpty((string) $response->getBody(), 'Response body was empty.');
 
@@ -49,10 +49,18 @@ class FotowebAssetTest extends FotowebTestWrapper {
   }
 
   /**
+   * Tests to fetch an asset from a resource.
+   */
+  public function testGetAsset() {
+    $data = $this->fotowebAsset->getAsset(getenv('FOTOWEB_TEST_ASSET_HREF'));
+    $this->assertNotEmpty($data['filename'], 'Asset has no filename information.');
+  }
+
+  /**
    * Tests to fetch an image from fixed asset.
    */
   public function testGetImageResourceFromAsset() {
-    $response = $this->fotowebAsset->getAssetImageFromResource('fotoweb/archives/5000-Sykepleien/Sykepleien_indekserte/IMG_2839.JPG.info');
+    $response = $this->fotowebAsset->getAssetImageFromResource(getenv('FOTOWEB_TEST_ASSET_HREF'));
     $this->assertEquals('image/jpeg', $response->getHeader('Content-Type')[0], 'Returned content type is not image/jpeg.');
   }
 
