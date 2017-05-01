@@ -1,6 +1,26 @@
 <?php
 
 /**
+ * Implements hook_requirements().
+ */
+function media_fotoweb_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+
+  if (!module_exists('composer_manager') && !class_exists('\GuzzleHttp\Client')) {
+    $requirements['media_fotoweb'] = array(
+      'title' => $t('Guzzle library'),
+      'description' => $t('Media Fotoweb requires the <a href="@library_url">Guzzle</a> library to be installed and autoloaded with composer (e.g. using the <a href="@composer_manager_url">composer_manager</a> module).', array(
+        '@library_url' => 'https://github.com/guzzle/guzzle',
+        '@composer_manager_url' => 'https://www.drupal.org/project/composer_manager'
+      )),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  return $requirements;
+}
+
+/**
  * Implements hook_install().
  */
 function media_fotoweb_install() {
