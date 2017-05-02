@@ -99,12 +99,12 @@ class FotowebAsset implements FotowebRepresentationInterface {
     // The current image is the bestFit, it is smaller or equal than
     // the original image dimensions and bitter than the localFileThreshold.
     if ($this->localFileThreshold) {
-      return ($currentImage['size'] > $this->localFileThreshold && $currentImage['size'] <= $originalImageWidth);
+      return ($currentImage['width'] > $this->localFileThreshold && $currentImage['width'] <= $originalImageWidth);
     }
     // When no threshold was specified, the largest preview, that is not
     // exceeding the original dimensions is the better fit.
     else {
-      return ($currentImage['size'] > $bestFitImage['size'] && $currentImage['size'] <= $originalImageWidth);
+      return ($currentImage['width'] > $bestFitImage['width'] && $currentImage['width'] <= $originalImageWidth);
     }
   }
 
