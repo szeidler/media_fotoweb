@@ -2,9 +2,7 @@
 
 DEFINE('FOTOWEB_AUTHENTICATION_QUERY_KEY', 'lt');
 
-require_once 'FotowebGuzzleConfiguratorInterface.inc';
-require_once 'FotowebGuzzleConfigurator.inc';
-require_once 'FotowebGuzzleTestConfigurator.inc';
+require_once 'FotowebBase.inc';
 
 class FotowebArchiveAgentBase {
 
