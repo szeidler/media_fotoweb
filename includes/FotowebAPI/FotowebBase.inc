@@ -87,12 +87,12 @@ class FotowebBase {
     return $this->initiateRequest($request);
   }
 
-  protected function initiateRequest($request) {
+  public function initiateRequest($request) {
     $response = $this->request($request);
     return $response;
   }
 
-  public function request($request) {
+  protected function request($request) {
     $response = $this->client->send($request);
     return $response;
   }

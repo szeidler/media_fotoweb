@@ -24,7 +24,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
       'Accept' => static::headerAccept,
     ]);
 
-    return $this->fotoweb->request($request);
+    return $this->fotoweb->initiateRequest($request);
   }
 
   public function getAsset($resourceUrl) {
@@ -47,7 +47,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
   public function getAssetImageFromUrl($imagePath) {
     // Request the designated preview image.
     $request = new GuzzleHttp\Psr7\Request('GET', $imagePath);
-    $response = $this->fotoweb->request($request);
+    $response = $this->fotoweb->initiateRequest($request);
     return $response;
   }
 

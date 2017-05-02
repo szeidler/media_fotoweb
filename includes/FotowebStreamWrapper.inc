@@ -140,14 +140,15 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
       switch ($file_storage_type) {
         case 'preview':
           $url = $this->getPreviewImageUrl();
+          $fotoweb = new FotowebBase();
           break;
         default:
+          $fotoweb = new FotowebArchiveAgentBase();
           $url = $this->getOriginalImageUrl();
       }
 
-      $fotoweb = new FotowebBase();
       $request = new GuzzleHttp\Psr7\Request('GET', $url);
-      $response = $fotoweb->request($request);
+      $response = $fotoweb->initiateRequest($request);
 
       if ($response && $response->getStatusCode() == 200) {
         file_unmanaged_save_data($response->getBody(), $local_path, FILE_EXISTS_REPLACE);

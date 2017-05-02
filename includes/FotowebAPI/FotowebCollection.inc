@@ -15,7 +15,7 @@ class FotowebCollection implements FotowebRepresentationInterface {
       'Accept' => static::headerAccept,
     ]);
 
-    return $this->fotoweb->request($request);
+    return $this->fotoweb->initiateRequest($request);
   }
 
 }
