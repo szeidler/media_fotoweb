@@ -23,6 +23,10 @@ class FotowebArchiveAgentOriginalImage {
     return $data;
   }
 
+  public function getFotoweb() {
+    return $this->fotoweb;
+  }
+
   public function getOriginalImageDownloadUrlFromResource($resourceUrl) {
     $assetData = $this->getAssetDataFromResource($resourceUrl);
     $fileId = $this->getFileIdFromAsset($assetData);

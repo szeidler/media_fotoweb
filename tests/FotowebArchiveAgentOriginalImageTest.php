@@ -63,6 +63,11 @@ class FotowebArchiveAgentOriginalImageTest extends FotowebArchiveAgentTestWrappe
 
     $url = $this->originalImage->getOriginalImageDownloadUrlFromResource(getenv('FOTOWEB_TEST_ASSET_HREF'));
     $this->assertNotEmpty($url, 'Download url was empty.');
+
+    $response = $this->originalImage->getFotoweb()->initiateRequest($url);
+    $this->assertEquals(200, $response->getStatusCode(), 'Response was not 200.');
+    $this->assertNotEmpty((string) $response->getBody(), 'Response body was empty.');
+    $this->assertContains('image/', $response->getHeader('Content-Type')[0], 'Returned content type is not image.');
   }
 
 }
