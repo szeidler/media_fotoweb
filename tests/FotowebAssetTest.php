@@ -61,7 +61,7 @@ class FotowebAssetTest extends FotowebTestWrapper {
    */
   public function testGetImageResourceFromAsset() {
     $response = $this->fotowebAsset->getAssetImageFromResource(getenv('FOTOWEB_TEST_ASSET_HREF'));
-    $this->assertEquals('image/jpeg', $response->getHeader('Content-Type')[0], 'Returned content type is not image/jpeg.');
+    $this->assertContains('image/', $response->getHeader('Content-Type')[0], 'Returned content type is not image.');
   }
 
   /**
