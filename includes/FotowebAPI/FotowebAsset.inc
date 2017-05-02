@@ -62,10 +62,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
       $previews = $this->data['previews'];
       $originalImageWidth = $this->data['attributes']['imageattributes']['pixelwidth'];
 
-      // Order the previews in a descendant size order.
-      usort($previews, function ($a, $b) {
-        return strcmp($b['width'], $a['width']);
-      });
+      $previews = $this->orderPreviewsDescendant($previews);
 
       // Set initial bestFitImage
       $bestFitImage = reset($previews);
@@ -83,6 +80,20 @@ class FotowebAsset implements FotowebRepresentationInterface {
   }
 
   /**
+   * Orders the previews in a descendant size order.
+   *
+   * @param $previews
+   *
+   * @return mixed
+   */
+  public function orderPreviewsDescendant($previews) {
+    usort($previews, function ($a, $b) {
+      return strcmp($b['width'], $a['width']);
+    });
+    return $previews;
+  }
+
+  /**
    * Checks, if the current iterated image, is a better fit, dependent on
    * maximum local file size.
    *
@@ -94,7 +105,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    */
   public function isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth) {
     // Square previews cannot be a good fit, we need the original aspect ratio.
-    if ($currentImage['square']) return FALSE;
+    if (isset($currentImage['square']) && $currentImage['square']) return FALSE;
 
     // The current image is the bestFit, it is smaller or equal than
     // the original image dimensions and bitter than the localFileThreshold.

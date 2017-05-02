@@ -65,23 +65,28 @@ class FotowebAssetTest extends FotowebTestWrapper {
   }
 
   /**
-   * Test if the bestFitImage Method actually works as expected.
+   * Test if the isImageABetterFit Method actually works as expected.
    */
-  public function testBestFitImageIntegrity() {
-    $maximum_file_size = 1000;
-    $fotowebAsset = new FotowebAsset($this->fotowebBase, $maximum_file_size);
+  public function testIsImageABetterFitIntegrity() {
+    $originalImageWidth = 1600;
+    $threshold = 1400;
+    $fotowebAsset = new FotowebAsset($this->fotowebBase, $threshold);
 
-    $currentImage = array('size' => 599);
-    $bestFitImage = array('size' => 600);
-    $this->assertFalse($fotowebAsset->isBestFitImage($currentImage, $bestFitImage));
+    $currentImage = array('width' => 1600, 'square' => FALSE);
+    $bestFitImage = array('width' => 1400, 'square' => FALSE);
+    $this->assertTrue($fotowebAsset->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
 
-    $currentImage = array('size' => 600);
-    $bestFitImage = array('size' => 600);
-    $this->assertFalse($fotowebAsset->isBestFitImage($currentImage, $bestFitImage));
+    $currentImage = array('width' => 1601, 'square' => FALSE);
+    $bestFitImage = array('width' => 1400, 'square' => FALSE);
+    $this->assertFalse($fotowebAsset->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
 
-    $currentImage = array('size' => 601);
-    $bestFitImage = array('size' => 600);
-    $this->assertTrue($fotowebAsset->isBestFitImage($currentImage, $bestFitImage));
+    $currentImage = array('width' => 1700, 'square' => FALSE);
+    $bestFitImage = array('width' => 1500, 'square' => FALSE);
+    $this->assertFalse($fotowebAsset->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+
+    $currentImage = array('width' => 1500, 'square' => FALSE);
+    $bestFitImage = array('width' => 1650, 'square' => FALSE);
+    $this->assertTrue($fotowebAsset->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
   }
 
   /**
@@ -89,47 +94,50 @@ class FotowebAssetTest extends FotowebTestWrapper {
    * maximum file size. Uses the $image['square'] = TRUE exclusion.
    */
   public function testBestFitImageFunctional() {
-    $maximum_file_size = 1500;
-    $fotowebAsset = new FotowebAsset($this->fotowebBase, $maximum_file_size);
+    $originalImageWidth = 1600;
+    $threshold = 1400;
+    $fotowebAsset = new FotowebAsset($this->fotowebBase, $threshold);
 
     $mock_previews = array(
       0 => array(
-        'size' => -500,
+        'width' => -500,
         'square' => FALSE,
       ),
       1 => array(
-        'size' => 500,
+        'width' => 500,
         'square' => FALSE,
       ),
       2 => array(
-        'size' => 1600,
+        'width' => 1600,
         'square' => TRUE,
       ),
       3 => array(
-        'size' => 1400,
+        'width' => 1400,
         'square' => TRUE,
       ),
       4 => array(
-        'size' => 1450,
+        'width' => 1450,
         'square' => FALSE,
       ),
       5 => array(
-        'size' => 1800,
+        'width' => 1800,
         'square' => FALSE,
       ),
       6 => array(
-        'size' => 1750,
+        'width' => 1750,
         'square' => FALSE,
       ),
     );
 
-    $bestFitImage = array('size' => 0);
+    $mock_previews = $fotowebAsset->orderPreviewsDescendant($mock_previews);
+
+    $bestFitImage = reset($mock_previews);
     foreach ($mock_previews as $current_image) {
-      if (!$current_image['square'] && $fotowebAsset->isBestFitImage($current_image, $bestFitImage)) {
+      if ($fotowebAsset->isImageABetterFit($current_image, $bestFitImage, $originalImageWidth)) {
         $bestFitImage = $current_image;
       }
     }
-    $this->assertEquals(1450, $bestFitImage['size'], 'Method returned the wrong best fit image.');
+    $this->assertEquals(1450, $bestFitImage['width'], 'Method returned the wrong best fit image.');
   }
 
 }
