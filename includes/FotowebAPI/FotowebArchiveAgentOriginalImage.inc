@@ -80,7 +80,7 @@ class FotowebArchiveAgentOriginalImage {
   }
 
   public function buildOriginalImageDownloadUrl($fileId, $archivePath) {
-    $url = $this->fotoweb->getServer() . '/' . $archivePath . '/Download?Id=' . $fileId;
+    $url = $this->fotoweb->getServer() . '/' . $archivePath . 'Download?Id=' . $fileId;
     return $url;
   }
 
