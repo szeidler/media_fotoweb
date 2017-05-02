@@ -100,7 +100,7 @@ class FotowebArchiveAgentBase {
    * @return string
    */
   protected function getUserLoginToken() {
-    $tokenGenerator = new FotowebLoginTokenGenerator($this->getEncryptionSecret(), TRUE);
+    $tokenGenerator = new FotowebLoginTokenGenerator($this->getEncryptionSecret(), FALSE);
     return $tokenGenerator->CreateLoginToken($this->getUsername());
   }
 
