@@ -62,11 +62,11 @@ function media_fotoweb_admin_settings($form, &$form_state) {
     ),
     '#default_value' => variable_get('media_fotoweb_file_storage_type', 'preview'),
   );
-  $form['media_fotoweb_local_file_max_size'] = array(
+  $form['media_fotoweb_local_file_size_threshold'] = array(
     '#type' => 'textfield',
-    '#title' => t('Maximum local file size'),
-    '#description' => t('Define the maximal size for your locally stored images. The module will import the appropriate preview size from Fotoweb.'),
-    '#default_value' => variable_get('media_fotoweb_local_file_max_size', 1920),
+    '#title' => t('Local file size threshold'),
+    '#description' => t('Define the minimal size for your locally stored images. The module will import the appropriate preview size from Fotoweb using the first preview, that matches the minimum threshold. Beware: The original image (and so the maximum) might be smaller than the threshold.'),
+    '#default_value' => variable_get('media_fotoweb_local_file_size_threshold', 1500),
     '#states' => array(
       'visible' => array(
         ':input[name="media_fotoweb_file_storage_type"]' => array('value' => 'preview'),
@@ -103,9 +103,9 @@ function media_fotoweb_admin_settings_validate($form, $form_state) {
   }
 
   // The widget height can be only numeric.
-  if ($form_state['values']['media_fotoweb_file_storage_type'] === 'preview' && empty($form_state['values']['media_fotoweb_local_file_max_size'])) {
-    form_error($form['media_fotoweb_local_file_max_size'], t('@field_name field is required.', array(
-      '@field_name' => $form['media_fotoweb_local_file_max_size']['#title'],
+  if ($form_state['values']['media_fotoweb_file_storage_type'] === 'preview' && empty($form_state['values']['media_fotoweb_local_file_size_threshold'])) {
+    form_error($form['media_fotoweb_local_file_size_threshold'], t('@field_name field is required.', array(
+      '@field_name' => $form['media_fotoweb_local_file_size_threshold']['#title'],
     )));
   }
 

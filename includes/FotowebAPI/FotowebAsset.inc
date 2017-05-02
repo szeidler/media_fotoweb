@@ -9,13 +9,13 @@ class FotowebAsset implements FotowebRepresentationInterface {
 
   protected $fotoweb;
   protected $data;
-  protected $localFileMaxSize;
+  protected $localFileThreshold;
 
   const headerAccept = 'application/vnd.fotoware.asset+json';
 
-  public function __construct(FotowebBase $fotoweb, $localFileMaxSize = NULL) {
+  public function __construct(FotowebBase $fotoweb, $localFileThreshold = NULL) {
     $this->fotoweb = $fotoweb;
-    $this->localFileMaxSize = $localFileMaxSize;
+    $this->localFileThreshold = $localFileThreshold;
   }
 
 
@@ -57,12 +57,22 @@ class FotowebAsset implements FotowebRepresentationInterface {
    * @return mixed|null|\Psr\Http\Message\ResponseInterface
    */
   private function getAssetPreviewImageFromAsset() {
-    // Iterate over previews and use the largest preview image.
-    // TODO see, for a way to retrieve the original image for those who need it.
+    // Iterate over previews and use the first preview image that matches the specified threshold.
     if (!empty($this->data['previews'])) {
-      $bestFitImage = array('size' => 0);
-      foreach ($this->data['previews'] as $currentPreviewImage) {
-        if (!$currentPreviewImage['square'] && $this->isBestFitImage($currentPreviewImage, $bestFitImage)) {
+      $previews = $this->data['previews'];
+      $originalImageWidth = $this->data['attributes']['imageattributes']['pixelwidth'];
+
+      // Order the previews in a descendant size order.
+      usort($previews, function ($a, $b) {
+        return strcmp($b['width'], $a['width']);
+      });
+
+      // Set initial bestFitImage
+      $bestFitImage = reset($previews);
+
+      // Iterate over previews to find the bestFit.
+      foreach ($previews as $currentPreviewImage) {
+        if ($this->isImageABetterFit($currentPreviewImage, $bestFitImage, $originalImageWidth)) {
           $bestFitImage = $currentPreviewImage;
         }
       }
@@ -78,18 +88,26 @@ class FotowebAsset implements FotowebRepresentationInterface {
    *
    * @param $currentImage
    * @param $bestFitImage
+   * @param $originalImageWidth
    *
    * @return bool
    */
-  public function isBestFitImage($currentImage, $bestFitImage) {
-    // The current image is the bestFit, when there the image is smaller than
-    // the threshold and larger than the current bestFit.
-    if ($this->localFileMaxSize) {
-      return ($currentImage['size'] < $this->localFileMaxSize && $currentImage['size'] > $bestFitImage['size']);
+  public function isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth) {
+    // Square previews cannot be a good fit, we need the original aspect ratio.
+    if ($currentImage['square']) return FALSE;
+
+    // The current image is the bestFit, it is smaller or equal than
+    // the original image dimensions and bitter than the localFileThreshold.
+    if ($this->localFileThreshold) {
+      return ($currentImage['size'] > $this->localFileThreshold && $currentImage['size'] <= $originalImageWidth);
     }
-    // When no threshold was set, use the largest one.
+    // When no threshold was specified, the largest preview, that is not
+    // exceeding the original dimensions is the better fit.
     else {
-      return ($currentImage['size'] > $bestFitImage['size']);
+      return ($currentImage['size'] > $bestFitImage['size'] && $currentImage['size'] <= $originalImageWidth);
     }
   }
+
 }
+
+

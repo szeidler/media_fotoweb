@@ -207,7 +207,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     $resourceUrl = check_plain($parts['a']);
 
     $fotoweb = new FotowebBase();
-    $localFileThreshold = variable_get('media_fotoweb_local_file_max_size', 1920);
+    $localFileThreshold = variable_get('media_fotoweb_local_file_size_threshold', 1500);
     $fotowebAsset = new FotowebAsset($fotoweb, $localFileThreshold);
     try {
       $path = $fotowebAsset->getAssetImagePathFromResource($resourceUrl);

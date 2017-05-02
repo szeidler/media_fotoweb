@@ -47,6 +47,14 @@ function media_fotoweb_install() {
 }
 
 /**
+ * Converts local file max size to a new minimum threshold.
+ */
+function media_fotoweb_update_7000() {
+  variable_set('media_fotoweb_local_file_size_threshold', variable_get('media_fotoweb_local_file_max_size'));
+  variable_del('media_fotoweb_local_file_max_size');
+}
+
+/**
  * Implements hook_uninstall().
  */
 function media_fotoweb_uninstall() {
@@ -66,5 +74,5 @@ function media_fotoweb_uninstall() {
   variable_del('media_fotoweb_selection_widget_height');
   variable_del('media_fotoweb_encryption_secret');
   variable_del('media_fotoweb_file_storage_type');
-  variable_del('media_fotoweb_local_file_max_size');
+  variable_del('media_fotoweb_local_file_size_threshold');
 }
