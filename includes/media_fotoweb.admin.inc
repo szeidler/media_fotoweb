@@ -52,7 +52,7 @@ function media_fotoweb_admin_settings($form, &$form_state) {
     '#description' => t('Specify the height of the selection widget in pixels.'),
     '#default_value' => variable_get('media_fotoweb_selection_widget_height', 500),
   );
-  $form['media_fotoweb_local_file_storage_type'] = array(
+  $form['media_fotoweb_file_storage_type'] = array(
     '#type' => 'select',
     '#title' => t('File storage type'),
     '#description' => t('Original images from Fotoweb might be unnecessary big for your website usage. You can either store the original image or a smaller appropriate preview with your desired maximum size.'),
@@ -60,7 +60,7 @@ function media_fotoweb_admin_settings($form, &$form_state) {
       'original' => t('Original image'),
       'preview' => t('Preview'),
     ),
-    '#default_value' => variable_get('media_fotoweb_local_file_storage_type', 'preview'),
+    '#default_value' => variable_get('media_fotoweb_file_storage_type', 'preview'),
   );
   $form['media_fotoweb_local_file_max_size'] = array(
     '#type' => 'textfield',
@@ -69,10 +69,10 @@ function media_fotoweb_admin_settings($form, &$form_state) {
     '#default_value' => variable_get('media_fotoweb_local_file_max_size', 1920),
     '#states' => array(
       'visible' => array(
-        ':input[name="media_fotoweb_local_file_storage_type"]' => array('value' => 'preview'),
+        ':input[name="media_fotoweb_file_storage_type"]' => array('value' => 'preview'),
       ),
       'required' => array(
-        ':input[name="media_fotoweb_local_file_storage_type"]' => array('value' => 'preview'),
+        ':input[name="media_fotoweb_file_storage_type"]' => array('value' => 'preview'),
       ),
     ),
   );
@@ -103,7 +103,7 @@ function media_fotoweb_admin_settings_validate($form, $form_state) {
   }
 
   // The widget height can be only numeric.
-  if ($form_state['values']['media_fotoweb_local_file_storage_type'] === 'preview' && empty($form_state['values']['media_fotoweb_local_file_max_size'])) {
+  if ($form_state['values']['media_fotoweb_file_storage_type'] === 'preview' && empty($form_state['values']['media_fotoweb_local_file_max_size'])) {
     form_error($form['media_fotoweb_local_file_max_size'], t('@field_name field is required.', array(
       '@field_name' => $form['media_fotoweb_local_file_max_size']['#title'],
     )));
