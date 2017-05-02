@@ -88,6 +88,10 @@ class FotowebBase {
   }
 
   public function initiateRequest($request) {
+    // Create a fallback, when only the url as a string was provided.
+    if (is_string($request)) {
+      $request = new GuzzleHttp\Psr7\Request('GET', $request);
+    }
     $response = $this->request($request);
     return $response;
   }

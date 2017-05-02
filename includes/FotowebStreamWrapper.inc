@@ -144,11 +144,13 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
           break;
         default:
           $fotoweb = new FotowebArchiveAgentBase();
+          // ArchiveAgent requests need to authenticate with the current user.
+          module_load_include('inc', 'media_fotoweb', '/includes/media_fotoweb.helper');
+          $fotoweb->setUsername(_media_fotoweb_get_fotoweb_username());
           $url = $this->getOriginalImageUrl();
       }
 
-      $request = new GuzzleHttp\Psr7\Request('GET', $url);
-      $response = $fotoweb->initiateRequest($request);
+      $response = $fotoweb->initiateRequest($url);
 
       if ($response && $response->getStatusCode() == 200) {
         file_unmanaged_save_data($response->getBody(), $local_path, FILE_EXISTS_REPLACE);
