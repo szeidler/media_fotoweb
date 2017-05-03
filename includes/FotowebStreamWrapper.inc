@@ -176,7 +176,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *
    * @return mixed|null|\Psr\Http\Message\ResponseInterface
    */
-  protected function getOriginalImageUrl() {
+  public function getOriginalImageUrl() {
     $parts = $this->get_parameters();
     $resourceUrl = check_plain($parts['a']);
 
@@ -202,7 +202,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *
    * @return mixed|null|\Psr\Http\Message\ResponseInterface
    */
-  protected function getPreviewImageUrl() {
+  public function getPreviewImageUrl() {
     $parts = $this->get_parameters();
     $resourceUrl = check_plain($parts['a']);
 
