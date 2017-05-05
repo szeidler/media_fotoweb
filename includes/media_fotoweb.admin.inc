@@ -76,6 +76,17 @@ function media_fotoweb_admin_settings($form, &$form_state) {
       ),
     ),
   );
+  $form['media_fotoweb_asset_update_trigger'] = array(
+    '#type' => 'select',
+    '#title' => t('When should the asset be updated.'),
+    '#description' => t('Define, when the asset metadata should imported. <br><em>On new created assets:</em> Only when the asset was used the first time the metadata will be imported. <br><em>On every asset selection:</em> Whenever an user selects an asset the metadata will be updated. This option can have implications (changed metadata) on old articles, that are using the same asset.'),
+    '#default_value' => variable_get('media_fotoweb_asset_update_trigger', 'new'),
+    '#options' => array(
+      'new' => t('On new created assets'),
+      'reused' => t('On every asset selection'),
+    ),
+    '#required' => TRUE,
+  );
 
   return system_settings_form($form);
 }

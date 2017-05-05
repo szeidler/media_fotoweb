@@ -40,11 +40,10 @@ function _media_fotoweb_file_save($asset) {
     // remote streamwrappers. So save it as a metadata property.
     $file->metadata['asset_original_filesize'] = $asset['filesize'];
 
-    if (empty($file->fid)) {
+    // Update the files metadata when it should be updated on every selection
+    // or when it's a new asset.
+    if (variable_get('media_fotoweb_asset_update_trigger') === 'reused' || empty($file->fid)) {
       file_save($file);
-    }
-    else {
-      // TODO Update metadata for existing file.
     }
 
     return $file;
