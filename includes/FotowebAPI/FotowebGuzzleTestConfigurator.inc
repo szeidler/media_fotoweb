@@ -6,7 +6,7 @@
  * Handles the Guzzle client configuration for the modules unit tests.
  *
  */
-class FotowebGuzzleTestConfigurator implements FotowebGuzzleConfiguratorInterface {
+class FotowebGuzzleTestConfigurator extends FotowebGuzzleConfigurator {
 
   /**
    * @inheritdoc
@@ -23,6 +23,7 @@ class FotowebGuzzleTestConfigurator implements FotowebGuzzleConfiguratorInterfac
     if (!empty($proxy)) {
       $configuration['proxy'] = $proxy;
     }
+    $configuration = self::addRetryHandler($configuration);
     return $configuration;
   }
 

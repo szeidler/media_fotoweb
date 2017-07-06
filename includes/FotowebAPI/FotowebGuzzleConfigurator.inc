@@ -19,7 +19,35 @@ class FotowebGuzzleConfigurator implements FotowebGuzzleConfiguratorInterface {
     if (!empty($token)) {
       $configuration['headers'] = array('FWAPITOKEN' => $token);
     }
+    $configuration = self::addRetryHandler($configuration);
     drupal_alter('media_fotoweb_guzzle_configuration', $configuration);
+    return $configuration;
+  }
+
+  /**
+   * Adds a retry handler stack, that repeats the request on failure.
+   *
+   * @see http://dawehner.github.io/php,/guzzle/2017/05/19/guzzle-retry.html
+   *
+   * @param $configuration
+   *   Guzzle initial client configuration.
+   *
+   * @return mixed
+   *   Guzzle initial client configuration.
+   */
+  protected static function addRetryHandler($configuration) {
+    $handler_stack = \GuzzleHttp\HandlerStack::create();
+    $handler_stack->push(\GuzzleHttp\Middleware::retry(function($retry, $request, $value, $reason) {
+      // If we have a value already, we should be able to proceed quickly.
+      if ($value !== NULL) {
+        return FALSE;
+      }
+
+      // Reject after 10 retries.
+      return $retry < 10;
+    }));
+
+    $configuration['handler'] = $handler_stack;
     return $configuration;
   }
 
