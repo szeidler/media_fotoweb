@@ -103,8 +103,8 @@ function _media_fotoweb_image_style_deliver($style, $scheme) {
   }
 
   if ($success) {
-    // Perform a 302 Redirect to the newly-created image derivative.
-    drupal_goto(file_create_url($derivative_uri));
+    $image = image_load($derivative_uri);
+    file_transfer($image->source, array('Content-Type' => $image->info['mime_type'], 'Content-Length' => $image->info['file_size']));
   }
   else {
     watchdog('image', 'Unable to generate the derived image located at %path.', array('%path' => $derivative_uri));
