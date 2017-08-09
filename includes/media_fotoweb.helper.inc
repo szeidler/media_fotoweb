@@ -113,3 +113,17 @@ function _media_fotoweb_image_style_deliver($style, $scheme) {
     drupal_exit();
   }
 }
+
+/**
+ * Copy of image_style_path() for use with fotoweb images.
+ **
+ * @param $style_name
+ * @param $uri
+ *
+ * @return string
+ */
+function _media_fotoweb_image_style_path($style_name, $uri) {
+  // Force the image style to be returned with the default file scheme, but
+  // with the file's original scheme in the path.
+  return file_default_scheme() . '://styles/' . $style_name . '/' . file_default_scheme() . '/' . file_uri_target($uri);
+}
