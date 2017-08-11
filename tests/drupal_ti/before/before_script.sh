@@ -10,6 +10,10 @@ set -e $DRUPAL_TI_DEBUG
 # Note: This function is re-entrant.
 drupal_ti_ensure_drupal
 
+# Install module dependencies, to make PHPUnit work.
+echo "install module dependencies"
+composer install
+
 # Change to the Drupal directory
 cd "$DRUPAL_TI_DRUPAL_DIR"
 
