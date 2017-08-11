@@ -15,29 +15,6 @@ function media_fotoweb_file_operations() {
 }
 
 /**
- * Overwrites the filesize with metadata and size information, that could not
- * be fetched automatically from a remote stream wrapper using filesize() and
- * image_get_info().
- *
- * Implements hook_file_presave().
- */
-function media_fotoweb_file_presave($file) {
-  $scheme = file_uri_scheme($file->uri);
-  if ($scheme === 'fotoweb') {
-    $wrapper = file_stream_wrapper_get_instance_by_uri($file->uri);
-    // Use the local image path for image dimension update.
-    $image_info = image_get_info($wrapper->realpath());
-    if ($image_info) {
-      $file->metadata['width'] = $image_info['width'];
-      $file->metadata['height'] = $image_info['height'];
-      if (!empty($image_info['filesize'])) {
-        $file->filesize = $image_info['filesize'];
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_file_delete().
  */
 function media_fotoweb_file_delete($file) {
