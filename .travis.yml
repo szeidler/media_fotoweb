@@ -113,6 +113,8 @@ install:
   - drupal-ti install
 
 before_script:
+  - composer install
+  - cd ./tests
   - drupal-ti --include drupal_ti/before/before_script.sh
   - drupal-ti before_script
 
