@@ -12,8 +12,6 @@ drupal_ti_ensure_drupal
 
 # Change to the Drupal directory
 cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH/composer_manager"
-echo "running composer manager init script"
-php scripts/init.php
 
 cd "$DRUPAL_TI_DRUPAL_DIR"
 # list out commands for debugging
