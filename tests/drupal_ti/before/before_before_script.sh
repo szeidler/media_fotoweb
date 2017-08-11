@@ -28,7 +28,8 @@ drush en composer_manager -y
 # Note: This function is re-entrant.
 drupal_ti_ensure_module_linked
 
+drush composer-json-rebuild
+
 # Update composer
 cd "$DRUPAL_TI_DRUPAL_DIR"
-composer drupal-rebuild
-composer install --prefer-source
+composer install
