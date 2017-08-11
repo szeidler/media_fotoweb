@@ -20,6 +20,12 @@ mkdir -p "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 
 # Enable composer module
+echo "DRUPAL TI - Download Composer module and enable"
+drush dl composer-8.x-1.x
+echo "DRUPAL TI - Clear Drush cache"
+drush cc drush
+drush cc all
+echo "DRUPAL TI - Delete cache dir"
 rm -f "$DRUPAL_TI_CACHE_DIR"/HOME/.drush/cache
 
 # Download required modules.
