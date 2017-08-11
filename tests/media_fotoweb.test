@@ -28,7 +28,7 @@ class MediaFotowebAdminSettingsTestCase extends DrupalWebTestCase {
     $this->assertFieldByXpath("//form[@id='media-fotoweb-admin-settings']//input[@name='media_fotoweb_selection_widget_use_sso']", '', 'Full API Key field is present.');
     $this->assertFieldByXpath("//form[@id='media-fotoweb-admin-settings']//input[@name='media_fotoweb_encryption_secret']", '', 'Encryption secret field is present.');
     $this->assertFieldByXpath("//form[@id='media-fotoweb-admin-settings']//input[@name='media_fotoweb_selection_widget_height']", '500', 'Widget height field is present.');
-    $this->assertFieldByXpath("//form[@id='media-fotoweb-admin-settings']//select[@name='media_fotoweb_local_file_storage_type']", 'preview', 'Storage selection field is present.');
+    $this->assertFieldByXpath("//form[@id='media-fotoweb-admin-settings']//select[@name='media_fotoweb_file_storage_type']", 'preview', 'Storage selection field is present.');
     $this->assertFieldByXpath("//form[@id='media-fotoweb-admin-settings']//input[@name='media_fotoweb_local_file_size_threshold']", '1500', 'File size threshold field is present.');
     $this->assertFieldByXpath("//form[@id='media-fotoweb-admin-settings']//select[@name='media_fotoweb_asset_update_trigger']", 'new', 'Asset update trigger field is present.');
   }
