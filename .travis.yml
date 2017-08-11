@@ -113,7 +113,10 @@ install:
   - drupal-ti install
 
 before_script:
+  - cd ./tests
+  - drupal-ti --include drupal_ti/before/before_before_script.sh
   - drupal-ti before_script
+  - drupal-ti --include drupal_ti/before/after_before_script.sh
 
 script:
   - drupal-ti script
