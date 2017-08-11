@@ -1,6 +1,5 @@
 <?php
 
-require_once '../../../../../../vendor/autoload.php';
 require_once 'includes/FotowebAPI/FotowebBase.inc';
 
 class FotowebTestWrapper extends PHPUnit\Framework\TestCase {
