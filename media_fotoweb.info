@@ -13,4 +13,6 @@ files[] = includes/FotowebHandler.inc
 files[] = includes/FotowebStreamWrapper.inc
 files[] = includes/FotowebBrowser.inc
 
+files[] = tests/media_fotoweb.test
+
 configure = admin/config/media/fotoweb
