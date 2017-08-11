@@ -42,6 +42,4 @@ drush composer-json-rebuild
 # Note: This function is re-entrant.
 drupal_ti_ensure_module_linked
 
-# Update composer
-cd "$DRUPAL_TI_DRUPAL_DIR"
-drush composer-manager install
+cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH/$DRUPAL_TI_MODULE_NAME/test"
