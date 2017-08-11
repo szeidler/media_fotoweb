@@ -19,10 +19,19 @@ cd "$DRUPAL_TI_DRUPAL_DIR"
 mkdir -p "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 
-# Manually clone the dependencies
-git clone --depth 1 --branch 7.x-1.x http://git.drupal.org/project/composer_manager.git
+# Enable composer module
+echo "DRUPAL TI - Download Composer module and enable"
+drush dl composer-8.x-1.x
+echo "DRUPAL TI - Clear Drush cache"
+drush cc drush
+drush cc all
+echo "DRUPAL TI - Delete cache dir"
+rm -f "$DRUPAL_TI_CACHE_DIR"/HOME/.drush/cache
 
-drush en composer_manager -y
+# Download required modules.
+drush dl composer_manager
+drush en -y composer_manager
+drush dl -y composer-8.x-1.x
 
 # Ensure the module is linked into the code base and enabled.
 # Note: This function is re-entrant.
