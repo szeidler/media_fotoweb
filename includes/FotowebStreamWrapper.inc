@@ -8,6 +8,9 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
 
   protected $base_url;
   protected $current_image_style = NULL;
+  protected $stream_content = NULL;
+  protected $stream_pointer;
+
 
   public function __construct() {
     $this->base_url = variable_get('media_fotoweb_server', '');
@@ -130,11 +133,9 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    */
   public function getLocalImageUri() {
     $local_path = $this->getLocalImagePath();
-
     if (!file_exists($local_path)) {
       $dirname = drupal_dirname($local_path);
       file_prepare_directory($dirname, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-
       // Return the original image url based on the sites storage type selection.
       $file_storage_type = variable_get('media_fotoweb_file_storage_type', 'original');
       switch ($file_storage_type) {
@@ -150,14 +151,40 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
           $url = $this->getOriginalImageUrl();
       }
 
-      $response = $fotoweb->initiateRequest($url);
-
-      if ($response && $response->getStatusCode() == 200) {
-        file_unmanaged_save_data($response->getBody(), $local_path, FILE_EXISTS_REPLACE);
+      // Request and store the fotoweb image.
+      // If it fails return NULL.
+      if (!$this->storeImage($fotoweb, $url, $local_path)) {
+        return NULL;
       }
     }
 
     return $local_path;
+  }
+
+  /**
+   * Fetches the fotoweb image and store it on the disk.
+   *
+   * @param $fotoweb
+   *   Fotoweb Handler.
+   * @param $url
+   *   Remote URL of the fotoweb image.
+   * @param $local_path
+   *   Local path, where the image should be stored.
+   *
+   * @return bool
+   *   Status of the process was successful.
+   */
+  protected function storeImage($fotoweb, $url, $local_path) {
+    if (empty($url)) return FALSE;
+
+    $response = $fotoweb->initiateRequest($url);
+
+    if ($response && $response->getStatusCode() == 200) {
+      $this->stream_content = (string) $response->getBody();
+      if (!file_unmanaged_save_data($response->getBody(), $local_path, FILE_EXISTS_REPLACE)) {
+        return FALSE;
+      }
+    }
   }
 
   /**
@@ -217,6 +244,262 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
       return NULL;
     }
     return $url;
+  }
+
+  /**
+   * Support for fopen(), file_get_contents(), file_put_contents() etc.
+   *
+   * @param $uri
+   *   A string containing the URI to the file to open.
+   * @param $mode
+   *   The file mode ("r", "wb" etc.).
+   * @param $options
+   *   A bit mask of STREAM_USE_PATH and STREAM_REPORT_ERRORS.
+   * @param &$opened_path
+   *   A string containing the path actually opened.
+   *
+   * @return
+   *   Returns TRUE if file was opened successfully.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-open.php
+   */
+  public function stream_open($uri, $mode, $options, &$opened_path) {
+    $this->setUri($uri);
+
+    $allowed_modes = array('r', 'rb');
+    if (!in_array($mode, $allowed_modes)) {
+      return FALSE;
+    }
+
+    // Attempt to fetch the URL's data.
+    if (!$this->getStreamContent()) {
+      return FALSE;
+    }
+
+    // Reset the stream pointer since this is an open.
+    $this->stream_pointer = 0;
+    return TRUE;
+  }
+
+  /**
+   * Support for flock().
+   *
+   * @param $operation
+   *   One of the following:
+   *   - LOCK_SH to acquire a shared lock (reader).
+   *   - LOCK_EX to acquire an exclusive lock (writer).
+   *   - LOCK_UN to release a lock (shared or exclusive).
+   *   - LOCK_NB if you don't want flock() to block while locking (not
+   *     supported on Windows).
+   *
+   * @return
+   *   Always returns TRUE at the present time.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-lock.php
+   */
+  public function stream_lock($operation) {
+    return TRUE;
+  }
+
+  /**
+   * Support for fread(), file_get_contents() etc.
+   *
+   * @param $count
+   *   Maximum number of bytes to be read.
+   *
+   * @return
+   *   The string that was read, or FALSE in case of an error.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-read.php
+   */
+  public function stream_read($count) {
+    if (is_string($this->stream_content)) {
+      $remaining_chars = strlen($this->stream_content) - $this->stream_pointer;
+      $number_to_read = min($count, $remaining_chars);
+      if ($remaining_chars > 0) {
+        $buffer = substr($this->stream_content, $this->stream_pointer, $number_to_read);
+        $this->stream_pointer += $number_to_read;
+        return $buffer;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Support for fwrite(), file_put_contents() etc.
+   *
+   * @param $data
+   *   The string to be written.
+   *
+   * @return
+   *   The number of bytes written (integer).
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-write.php
+   */
+  public function stream_write($data) {
+    return FALSE;
+  }
+
+  /**
+   * Support for feof().
+   *
+   * @return
+   *   TRUE if end-of-file has been reached.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-eof.php
+   */
+  public function stream_eof() {
+    return $this->stream_pointer == strlen($this->stream_content);
+  }
+
+  /**
+   * Support for fseek().
+   *
+   * @param $offset
+   *   The byte offset to got to.
+   * @param $whence
+   *   SEEK_SET, SEEK_CUR, or SEEK_END.
+   *
+   * @return
+   *   TRUE on success.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-seek.php
+   */
+  public function stream_seek($offset, $whence) {
+    if (strlen($this->stream_content) >= $offset) {
+      $this->stream_pointer = $offset;
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+  /**
+   * Support for fflush().
+   *
+   * @return
+   *   TRUE if data was successfully stored (or there was no data to store).
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-flush.php
+   */
+  public function stream_flush() {
+    return TRUE;
+  }
+
+  /**
+   * Support for ftell().
+   *
+   * @return
+   *   The current offset in bytes from the beginning of file.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-tell.php
+   */
+  public function stream_tell() {
+    return $this->stream_pointer;
+  }
+
+  /**
+   * Support for fstat().
+   *
+   * @return
+   *   An array with file status, or FALSE in case of an error - see fstat()
+   *   for a description of this array.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-stat.php
+   */
+  public function stream_stat() {
+    $stat = array();
+    $this->parameters = $this->_parse_url($this->getUri());
+    if ($size = strlen($this->getStreamContent())) {
+      $stat['size'] = $size;
+    }
+
+    return !empty($stat) ? $this->getStat($stat) : FALSE;
+  }
+
+  /**
+   * Support for fclose().
+   *
+   * @return
+   *   TRUE if stream was successfully closed.
+   *
+   * @see http://php.net/manual/en/streamwrapper.stream-close.php
+   */
+  public function stream_close() {
+    $this->stream_pointer = 0;
+    $this->stream_content = NULL;
+    return TRUE;
+  }
+
+  /**
+   * Support for stat().
+   *
+   * @param $uri
+   *   A string containing the URI to get information about.
+   * @param $flags
+   *   A bit mask of STREAM_URL_STAT_LINK and STREAM_URL_STAT_QUIET.
+   *
+   * @return
+   *   An array with file status, or FALSE in case of an error - see fstat()
+   *   for a description of this array.
+   *
+   * @see http://php.net/manual/en/streamwrapper.url-stat.php
+   */
+  public function url_stat($uri, $flags) {
+    $this->uri = $uri;
+    if ($flags & STREAM_URL_STAT_QUIET) {
+      return @$this->stream_stat();
+    }
+    else {
+      return $this->stream_stat();
+    }
+  }
+
+  /**
+   * Helper function to return a full array for stat functions.
+   *
+   * @param array $stat
+   *   State array to be merged with the default values.
+   *
+   * @return array
+   *   Stat array.
+   */
+  protected function getStat(array $stat = array()) {
+    $defaults = $this->_stat;
+
+    $return = array();
+    foreach (array_keys($defaults) as $index => $key) {
+      if (!isset($stat[$key])) {
+        $return[$index] = $defaults[$key];
+        $return[$key] = $defaults[$key];
+      }
+      else {
+        $return[$index] = $stat[$key];
+        $return[$key] = $stat[$key];
+      }
+    }
+
+    return $return;
+  }
+
+  /**
+   * Fetch the content of the file loading the local file.
+   *
+   * If the local file not yet exists getLocalImageUri() will take care of
+   * its creation.
+   *
+   * @return bool|null|string
+   */
+  protected function getStreamContent() {
+    if (!isset($this->stream_content)) {
+      $this->stream_content = NULL;
+      // $this->getLocalImageUri() sets the stream_content on new file_import,
+      // or we can fetch it from the local file afterwards.
+      if (($localPath = $this->getLocalImageUri()) && empty($this->stream_content)) {
+        $this->stream_content = file_get_contents($localPath);
+      }
+    }
+
+    return $this->stream_content;
   }
 
 }
