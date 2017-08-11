@@ -37,5 +37,3 @@ drush composer-json-rebuild
 # Ensure the module is linked into the code base and enabled.
 # Note: This function is re-entrant.
 drupal_ti_ensure_module_linked
-
-cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH/$DRUPAL_TI_MODULE_NAME/test"
