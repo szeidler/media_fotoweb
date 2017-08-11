@@ -31,13 +31,12 @@ rm -f "$DRUPAL_TI_CACHE_DIR"/HOME/.drush/cache
 # Download required modules.
 drush dl composer_manager
 drush en -y composer_manager
-drush dl -y composer-8.x-1.x
+
+drush composer-json-rebuild
 
 # Ensure the module is linked into the code base and enabled.
 # Note: This function is re-entrant.
 drupal_ti_ensure_module_linked
-
-drush composer-json-rebuild
 
 # Update composer
 cd "$DRUPAL_TI_DRUPAL_DIR"
