@@ -2,8 +2,6 @@
 
 DEFINE('FOTOWEB_AUTHENTICATION_QUERY_KEY', 'lt');
 
-require_once 'FotowebBase.inc';
-
 class FotowebArchiveAgentBase {
 
   protected $server;

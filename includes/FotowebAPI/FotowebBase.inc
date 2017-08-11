@@ -3,22 +3,6 @@
 DEFINE('FOTOWEB_PUBLIC_ENTRY_POINT', '/fotoweb');
 DEFINE('FOTOWEB_PRIVATE_ENTRY_POINT', '/fotoweb/me/');
 
-require_once 'FotowebLoginTokenGenerator.inc';
-
-require_once 'FotowebGuzzleConfiguratorInterface.inc';
-require_once 'FotowebGuzzleConfigurator.inc';
-require_once 'FotowebGuzzleTestConfigurator.inc';
-require_once 'FotowebBase.inc';
-require_once 'FotowebRepresentationInterface.inc';
-require_once 'FotowebCollection.inc';
-require_once 'FotowebCollectionList.inc';
-require_once 'FotowebArchives.inc';
-require_once 'FotowebAssetList.inc';
-require_once 'FotowebAsset.inc';
-
-require_once 'FotowebArchiveAgentBase.inc';
-require_once 'FotowebArchiveAgentOriginalImage.inc';
-
 class FotowebBase {
 
   protected $server;
