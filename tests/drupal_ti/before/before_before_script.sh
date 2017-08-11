@@ -20,4 +20,4 @@ mkdir -p "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
 
 # Manually clone the dependencies
-drush dl composer_manager -y
+drush en composer_manager -y
