@@ -1,6 +1,6 @@
 # Media Fotoweb
 
-[![Build Status](https://travis-ci.org/szeidler/media_fotoweb.svg?branch=master)](https://travis-ci.org/szeidler/media_fotoweb)
+[![Build Status](https://travis-ci.org/szeidler/media_fotoweb.svg?branch=7.x-1.x)](https://travis-ci.org/szeidler/media_fotoweb)
   
 Media: Fotoweb provides an integration with Fotoware's [Fotoweb](http://www.fotoware.com/products/fotoweb) Digital Asset Management System. The module provides Fotoweb's Selection Widget as a Media browser plugin. Once an user selects an asset, the asset will be imported as a managed file entity using its own Drupal file streamwrapper.
 
