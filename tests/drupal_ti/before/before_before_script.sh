@@ -34,4 +34,4 @@ drupal_ti_ensure_module_linked
 
 # Update composer
 cd "$DRUPAL_TI_DRUPAL_DIR"
-composer install
+drush composer-manager install
