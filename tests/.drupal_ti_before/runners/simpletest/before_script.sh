@@ -6,12 +6,6 @@ set -e $DRUPAL_TI_DEBUG
 # Ensure the right Drupal version is installed.
 drupal_ti_ensure_drupal
 
-echo "Test"
-
-# Enable simpletest module.
-cd "$DRUPAL_TI_DRUPAL_DIR"
-drush --yes en simpletest
-
 # Enable composer module
 echo "DRUPAL TI - Download Composer module and enable"
 drush dl composer-8.x-1.x
@@ -26,10 +20,3 @@ drush dl composer_manager
 drush en -y composer_manager
 
 drush composer-json-rebuild
-
-# Ensure the module is linked into the code base and enabled.
-drupal_ti_ensure_module
-
-# Clear caches and run a web server.
-drupal_ti_clear_caches
-drupal_ti_run_server
