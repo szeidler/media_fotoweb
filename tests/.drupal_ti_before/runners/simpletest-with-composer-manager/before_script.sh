@@ -8,9 +8,9 @@ drupal_ti_ensure_drupal
 
 echo "Test"
 
-# Create the the module directory (only necessary for D7)
-mkdir -p "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
-cd "$DRUPAL_TI_DRUPAL_DIR/$DRUPAL_TI_MODULES_PATH"
+# Enable simpletest module.
+cd "$DRUPAL_TI_DRUPAL_DIR"
+drush --yes en simpletest
 
 # Enable composer module
 echo "DRUPAL TI - Download Composer module and enable"
@@ -26,3 +26,10 @@ drush dl composer_manager
 drush en -y composer_manager
 
 drush composer-json-rebuild
+
+# Ensure the module is linked into the code base and enabled.
+drupal_ti_ensure_module
+
+# Clear caches and run a web server.
+drupal_ti_clear_caches
+drupal_ti_run_server
