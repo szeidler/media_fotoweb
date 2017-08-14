@@ -39,6 +39,9 @@ env:
     # main runners / environment vars.
     - DRUPAL_TI_SCRIPT_DIR_BEFORE="./tests/.drupal_ti_before"
 
+    # The environment to use, supported are: drupal-7, drupal-8
+    - DRUPAL_TI_ENVIRONMENT="drupal-7"
+
     # Drupal specific variables.
     - DRUPAL_TI_DB="drupal_travis_db"
     - DRUPAL_TI_DB_URL="mysql://root:@127.0.0.1/drupal_travis_db"
