@@ -140,4 +140,27 @@ class FotowebAssetTest extends FotowebTestWrapper {
     $this->assertEquals(1450, $bestFitImage['width'], 'Method returned the wrong best fit image.');
   }
 
+  /**
+   * Test that the writeback function of asset metadata is working.
+   */
+  public function testWriteBackMetadata() {
+    $resourceUrl = getenv('FOTOWEB_TEST_ASSET_HREF');
+    // Append a random string, to be sure, that metadata is really updated.
+    $randomMetadataString = 'Updated metadata: ' . hash('sha256', time());
+    $metadata = array(40 => array('value' => $randomMetadataString));
+
+    // Update metadata.
+    $response = $this->fotowebAsset->initiateUpdateMetadataRequest($resourceUrl, $metadata);
+    $this->assertEquals(200, $response->getStatusCode(), 'Response was not 200.');
+    $this->assertNotEmpty((string) $response->getBody(), 'Response body was empty.');
+
+    // Check if the metadata was succesfully updated.
+    $response = $this->fotowebAsset->initiateRequest($resourceUrl);
+    $this->assertEquals(200, $response->getStatusCode(), 'Response was not 200.');
+    $this->assertNotEmpty((string) $response->getBody(), 'Response body was empty.');
+
+    $data = json_decode($response->getBody(TRUE), TRUE);
+    $this->assertEquals($randomMetadataString, $data['metadata'][40]['value'], 'Updated metadata does not match the expected result');
+  }
+
 }
