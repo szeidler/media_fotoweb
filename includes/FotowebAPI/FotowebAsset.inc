@@ -19,6 +19,9 @@ class FotowebAsset implements FotowebRepresentationInterface {
   }
 
 
+  /**
+   * @inheritdoc
+   */
   public function initiateRequest($resourceUrl) {
     $request = new GuzzleHttp\Psr7\Request('GET', $resourceUrl, [
       'Accept' => static::headerAccept,
@@ -27,11 +30,29 @@ class FotowebAsset implements FotowebRepresentationInterface {
     return $this->fotoweb->initiateRequest($request);
   }
 
+  /**
+   * Returns the asset for a given Fotoweb ressource.
+   *
+   * @param $resourceUrl
+   *   Url of the asset.
+   *
+   * @return mixed
+   *   Array representation of the asset.
+   */
   public function getAsset($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
     return json_decode($response->getBody(TRUE), TRUE);
   }
 
+  /**
+   * Returns the preview image path for a given Fotoweb resource.
+   *
+   * @param $resourceUrl
+   *   Url of the asset.
+   *
+   * @return mixed
+   *   Image URL.
+   */
   public function getAssetImagePathFromResource($resourceUrl) {
     $response = $this->initiateRequest($resourceUrl);
     $this->data = json_decode($response->getBody(TRUE), TRUE);
@@ -39,11 +60,29 @@ class FotowebAsset implements FotowebRepresentationInterface {
     return $image['href'];
   }
 
+  /**
+   * Returns the preview image for a given Fotoweb resource.
+   *
+   * @param $resourceUrl
+   *   Url of the asset.
+   *
+   * @return mixed|\Psr\Http\Message\ResponseInterface
+   *   HTTP response consisting of the image.
+   */
   public function getAssetImageFromResource($resourceUrl) {
     $imagePath = $this->getAssetImagePathFromResource($resourceUrl);
     return $this->getAssetImageFromUrl($imagePath);
   }
 
+  /**
+   * Requests the image from a given URL.
+   *
+   * @param $imagePath
+   *   Given image url.
+   *
+   * @return mixed|\Psr\Http\Message\ResponseInterface
+   *   HTTP response consisting of the image.
+   */
   public function getAssetImageFromUrl($imagePath) {
     // Request the designated preview image.
     $request = new GuzzleHttp\Psr7\Request('GET', $imagePath);
@@ -55,6 +94,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    * Return the asset image from a asset resource.
    *
    * @return mixed|null|\Psr\Http\Message\ResponseInterface
+   *   HTTP response for the best fitting preview image.
    */
   private function getAssetPreviewImageFromAsset() {
     // Iterate over previews and use the first preview image that matches the specified threshold.
@@ -83,8 +123,10 @@ class FotowebAsset implements FotowebRepresentationInterface {
    * Orders the previews in a descendant size order.
    *
    * @param $previews
+   *   Array of image previews properties.
    *
    * @return mixed
+   *   The descendant ordered image previews.
    */
   public function orderPreviewsDescendant($previews) {
     usort($previews, function ($a, $b) {
@@ -98,10 +140,14 @@ class FotowebAsset implements FotowebRepresentationInterface {
    * maximum local file size.
    *
    * @param $currentImage
+   *   Currently processed image.
    * @param $bestFitImage
+   *   Current best fit image.
    * @param $originalImageWidth
+   *   Width of the original image.
    *
    * @return bool
+   *   True if the current image is a better fit.
    */
   public function isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth) {
     // Square previews cannot be a good fit, we need the original aspect ratio.
@@ -120,5 +166,3 @@ class FotowebAsset implements FotowebRepresentationInterface {
   }
 
 }
-
-
