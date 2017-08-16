@@ -31,6 +31,27 @@ class FotowebAsset implements FotowebRepresentationInterface {
   }
 
   /**
+   * Updates the Fotoweb asset metadata with a PATCH command.
+   *
+   * @param $resourceUrl
+   *   Url of the asset.
+   * @param array $metadata
+   *   Asset metadata properties.
+   *
+   * @return mixed|\Psr\Http\Message\ResponseInterface
+   *   HTTP API response.
+   */
+  public function initiateUpdateMetadataRequest($resourceUrl, array $metadata) {
+    $body = json_encode(array('metadata' => $metadata));
+    $request = new GuzzleHttp\Psr7\Request('PATCH', $resourceUrl, [
+      'Accept' => static::headerAccept,
+      'Content-Type' => 'application/vnd.fotoware.assetupdate+json',
+    ], $body);
+
+    return $this->fotoweb->initiateRequest($request);
+  }
+
+  /**
    * Returns the asset for a given Fotoweb ressource.
    *
    * @param $resourceUrl
