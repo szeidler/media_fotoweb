@@ -186,4 +186,27 @@ class FotowebAsset implements FotowebRepresentationInterface {
     }
   }
 
+  /**
+   * Updates the metadata of a Fotoweb asset.
+   *
+   * @param $resourceUrl
+   *
+   * @param $resourceUrl
+   *   Url of the asset.
+   * @param array $metadata
+   *   Asset metadata properties.
+   *
+   * @return bool
+   *   TRUE, if the metadata was successfully updated. FALSE if not.
+   */
+  public function updateMetadata($resourceUrl, array $metadata) {
+    $response = $this->initiateUpdateMetadataRequest($resourceUrl, $metadata);
+    if ($response->getStatusCode() === 200) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
 }

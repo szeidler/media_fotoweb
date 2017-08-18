@@ -247,6 +247,30 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   }
 
   /**
+   * Write back asset metadata for the current Fotoweb asset.
+   *
+   * @param $metadata
+   *   Asset metadata properties to be updated.
+   *
+   * @return bool
+   *   TRUE, if the metadata was successfully updated. FALSE if not.
+   */
+  public function update_metadata($metadata) {
+    $parts = $this->get_parameters();
+    $resourceUrl = check_plain($parts['a']);
+
+    $fotoweb = new FotowebBase();
+    $fotowebAsset = new FotowebAsset($fotoweb);
+
+    try {
+      return $fotowebAsset->updateMetadata($resourceUrl, $metadata);
+    } catch (Exception $e) {
+      watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_ERROR);
+      return FALSE;
+    }
+  }
+
+  /**
    * Support for fopen(), file_get_contents(), file_put_contents() etc.
    *
    * @param $uri
