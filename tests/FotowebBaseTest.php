@@ -3,7 +3,7 @@
 require_once 'FotowebTestWrapper.php';
 
 /**
- * Test to authenticate with the Fotoweb API
+ * Test to authenticate with the Fotoweb API.
  */
 class FotowebBaseTest extends FotowebTestWrapper {
 

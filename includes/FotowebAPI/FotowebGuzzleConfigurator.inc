@@ -29,10 +29,10 @@ class FotowebGuzzleConfigurator implements FotowebGuzzleConfiguratorInterface {
   /**
    * Adds a retry handler stack, that repeats the request on failure.
    *
-   * @see http://dawehner.github.io/php,/guzzle/2017/05/19/guzzle-retry.html
-   *
    * @param array $configuration
    *   Guzzle initial client configuration.
+   *
+   * @see http://dawehner.github.io/php,/guzzle/2017/05/19/guzzle-retry.html
    *
    * @return mixed
    *   Guzzle initial client configuration.

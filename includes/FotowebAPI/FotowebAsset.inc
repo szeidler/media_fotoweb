@@ -158,7 +158,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    * @param array $previews
    *   Array of image previews properties.
    *
-   * @return array mixed
+   * @return array
    *   The descendant ordered image previews.
    */
   public function orderPreviewsDescendant(array $previews) {

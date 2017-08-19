@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update, and uninstall functions for the Media Fotoweb Manualcrop module.
+ * Primary hook implementations for the Media Fotoweb Manualcrop module.
  */
 
 /**

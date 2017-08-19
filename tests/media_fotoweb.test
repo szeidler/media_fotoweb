@@ -13,7 +13,7 @@ class MediaFotowebAdminSettingsTestCase extends DrupalWebTestCase {
   protected $privilegedUser;
 
   /**
-   * @inheritdoc
+   * Defines the simpletest.
    */
   public static function getInfo() {
     return array(
@@ -24,7 +24,7 @@ class MediaFotowebAdminSettingsTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * @inheritdoc
+   * Sets up the fixture.
    */
   public function setUp() {
     parent::setUp('media_fotoweb');
@@ -61,7 +61,7 @@ class MediaFotowebStreamWrapperTest extends DrupalWebTestCase {
   protected $scheme = 'fotoweb';
 
   /**
-   * @inheritdoc
+   * Defines the Simpletest.
    */
   public static function getInfo() {
     return array(
@@ -72,7 +72,7 @@ class MediaFotowebStreamWrapperTest extends DrupalWebTestCase {
   }
 
   /**
-   * @inheritdoc
+   * Sets up the fixture.
    */
   public function setUp() {
     parent::setUp('media_fotoweb');

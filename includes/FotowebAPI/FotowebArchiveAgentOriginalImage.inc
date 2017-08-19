@@ -1,32 +1,79 @@
 <?php
 
+/**
+ * FotowebArchiveAgentOriginalImage handles the original image retrieval.
+ */
 class FotowebArchiveAgentOriginalImage {
 
   protected $fotoweb;
   protected $asset;
 
+  /**
+   * FotowebArchiveAgentOriginalImage constructor.
+   *
+   * @param FotowebArchiveAgentBase $fotoweb
+   *   Fotoweb ArchiveAgent Base object.
+   * @param FotowebAsset $asset
+   *   Fotoweb asset object.
+   */
   public function __construct(FotowebArchiveAgentBase $fotoweb, FotowebAsset $asset) {
     $this->fotoweb = $fotoweb;
     $this->asset = $asset;
   }
 
+  /**
+   * Returns the asset.
+   *
+   * @return FotowebAsset
+   *   Fotoweb asset.
+   */
   public function getAsset() {
     return $this->asset;
   }
 
+  /**
+   * Sets the asset.
+   *
+   * @param FotowebAsset $asset
+   *   Fotoweb asset.
+   */
   public function setAsset(FotowebAsset $asset) {
     $this->asset = $asset;
   }
 
+  /**
+   * Returns the asset properties from a given resource.
+   *
+   * @param string $resourceUrl
+   *   Url of the asset.
+   *
+   * @return array
+   *   Asset array.
+   */
   public function getAssetDataFromResource($resourceUrl) {
     $data = $this->asset->getAsset($resourceUrl);
     return $data;
   }
 
+  /**
+   * Returns the Fotoweb Base.
+   *
+   * @return FotowebArchiveAgentBase
+   *   Fotoweb Base.
+   */
   public function getFotoweb() {
     return $this->fotoweb;
   }
 
+  /**
+   * Returns the download URL for an original image.
+   *
+   * @param string $resourceUrl
+   *   Url of the asset.
+   *
+   * @return string
+   *   Download url for the original Image.
+   */
   public function getOriginalImageDownloadUrlFromResource($resourceUrl) {
     $assetData = $this->getAssetDataFromResource($resourceUrl);
     $fileId = $this->getFileIdFromAsset($assetData);
@@ -36,12 +83,16 @@ class FotowebArchiveAgentOriginalImage {
   }
 
   /**
+   * Returns the Archive Agent file ID from a given asset.
+   *
    * We assume, that we only get one file result for the ArchiveAgent search
    * request.
    *
-   * @param $assetData
+   * @param array $assetData
+   *   Properties of an asset.
    *
    * @return string
+   *   Archive Agent File Id.
    */
   public function getFileIdFromAsset($assetData) {
     $filename = $assetData['filename'];
@@ -54,6 +105,15 @@ class FotowebArchiveAgentOriginalImage {
   }
 
 
+  /**
+   * Returns the archive path from a given asset.
+   *
+   * @param array $assetData
+   *   Properties of an asset.
+   *
+   * @return string
+   *   Archive path.
+   */
   public function getArchivePath($assetData) {
     $archiveHref = $assetData['archiveHREF'];
     $archiveParts = explode('/archives/', $archiveHref, 2);
@@ -61,7 +121,15 @@ class FotowebArchiveAgentOriginalImage {
     return $archivePath;
   }
 
-
+  /**
+   * Returns the file ID from an Archive Agent XML Result.
+   *
+   * @param string $data
+   *   XML Data.
+   *
+   * @return null|string
+   *   File Id.
+   */
   public function getFileIdFromXmlResult($data) {
     $fileId = NULL;
     libxml_use_internal_errors(TRUE);
@@ -79,6 +147,17 @@ class FotowebArchiveAgentOriginalImage {
     return $fileId;
   }
 
+  /**
+   * Constructs the original image download URL.
+   *
+   * @param $fileId
+   *   Given file Id.
+   * @param $archivePath
+   *   Fotoweb ArchiveAgent archive path.
+   *
+   * @return string
+   *   Original image url.
+   */
   public function buildOriginalImageDownloadUrl($fileId, $archivePath) {
     $url = $this->fotoweb->getServer() . '/' . $archivePath . 'Download?Id=' . $fileId;
     return $url;

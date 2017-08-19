@@ -1,11 +1,13 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 require_once 'includes/FotowebAPI/FotowebBase.inc';
 
 /**
  * Wrapper for RestAPI related tests.
  */
-class FotowebTestWrapper extends PHPUnit\Framework\TestCase {
+class FotowebTestWrapper extends Testcase {
 
   protected $fotowebBase;
 
