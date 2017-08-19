@@ -3,8 +3,6 @@
 require_once 'includes/FotowebAPI/FotowebBase.inc';
 
 /**
- * Class FotowebTestWrapper
- *
  * Wrapper for RestAPI related tests.
  */
 class FotowebTestWrapper extends PHPUnit\Framework\TestCase {

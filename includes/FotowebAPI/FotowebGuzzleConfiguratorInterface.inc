@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Interface FotowebGuzzleConfiguratorInterface
- *
- * Defines the interface for the storing Guzzle configuration.
+ * Interface defines the interface for the storing Guzzle configuration.
  */
 interface FotowebGuzzleConfiguratorInterface {
 

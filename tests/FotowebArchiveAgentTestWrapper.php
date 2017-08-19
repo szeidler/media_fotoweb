@@ -5,8 +5,6 @@ use PHPUnit\Framework\TestCase;
 require_once 'includes/FotowebAPI/FotowebBase.inc';
 
 /**
- * Class FotowebArchiveAgentTestWrapper
- *
  * Wrapper for ArchiveAgent related tests.
  */
 abstract class FotowebArchiveAgentTestWrapper extends TestCase {

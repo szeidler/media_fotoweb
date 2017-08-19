@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Class FotowebGuzzleConfigurator
- *
- * Handles the Guzzle client configuration for the Drupal application.
+ * FotowebGuzzleConfigurator handles the Guzzle client configuration.
  *
  */
 class FotowebGuzzleConfigurator implements FotowebGuzzleConfiguratorInterface {

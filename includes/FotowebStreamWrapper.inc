@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Class FotowebStreamWrapper
- *
- * Custom StreamWrapper as a Bridge to the original Fotoweb assets.
+ * FotowebStreamWrapper is a custom StreamWrapper for Fotoweb assets.
  *
  * Create an instance like this:
  *  $fotoweb = new FotowebStreamWrapper('fotoweb://a/[assetHref]');
@@ -217,7 +215,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   /**
    * Returns the original image url from the fotoweb asset resource.
    *
-   * @return string|NULL
+   * @return string|null
    *   URL the original image can be fetched from.
    */
   public function getOriginalImageUrl() {
@@ -244,7 +242,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   /**
    * Returns the preview image url from the fotoweb asset resource.
    *
-   * @return string|NULL
+   * @return string|null
    *   URL the preview image can be fetched from.
    */
   public function getPreviewImageUrl() {

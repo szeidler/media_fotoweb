@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Class FotowebHandler
- *
- * Handler acts as a bridge between the StreamWrapper and Drupal file objects.
+ * FotowebHandler acts as a bridge between the StreamWrapper and file objects.
  */
 class FotowebHandler {
 

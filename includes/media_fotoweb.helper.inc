@@ -8,7 +8,7 @@
 /**
  * Returns the fotoweb username the from user field.
  *
- * @param StdClass|NULL $account
+ * @param StdClass|null $account
  *   Drupal account object.
  *
  * @return string
@@ -35,7 +35,7 @@ function _media_fotoweb_get_fotoweb_username($account = NULL) {
  * @param $uri
  *   Fotoweb file URI.
  *
- * @return string|NULL
+ * @return string|null
  *   Hash of the Fotoweb URI.
  */
 function _media_fotoweb_extract_hash_from_uri($uri) {
@@ -53,7 +53,7 @@ function _media_fotoweb_extract_hash_from_uri($uri) {
  * @param $hash
  *   Hash of the Fotoweb URI.
  *
- * @return string|NULL
+ * @return string|null
  *   Fotoweb URI returned by the database query.
  */
 function _media_fotoweb_find_uri_by_hash($hash) {

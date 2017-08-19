@@ -7,9 +7,7 @@ define('FOTOWEB_PUBLIC_ENTRY_POINT', '/fotoweb');
 define('FOTOWEB_PRIVATE_ENTRY_POINT', '/fotoweb/me/');
 
 /**
- * Class FotowebBase
- *
- * Base class for working with the Fotoweb RestAPI.
+ * FotowebBase is the base class for working with the Fotoweb RestAPI.
  */
 class FotowebBase {
 
@@ -25,7 +23,7 @@ class FotowebBase {
    *   Fotoweb server url.
    * @param string|null $fullApiKey
    *   API key for authentication.
-   * @param FotowebGuzzleConfiguratorInterface|NULL $guzzleConfigurator
+   * @param FotowebGuzzleConfiguratorInterface|null $guzzleConfigurator
    *   Guzzle Configuration.
    */
   public function __construct($server = NULL, $fullApiKey = NULL, FotowebGuzzleConfiguratorInterface $guzzleConfigurator = NULL) {

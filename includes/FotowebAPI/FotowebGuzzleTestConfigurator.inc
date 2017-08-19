@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Class FotowebGuzzleTestConfigurator
- *
- * Handles the Guzzle client configuration for the modules unit tests.
+ * Class handles the Guzzle client configuration for the modules unit tests.
  *
  */
 class FotowebGuzzleTestConfigurator extends FotowebGuzzleConfigurator {

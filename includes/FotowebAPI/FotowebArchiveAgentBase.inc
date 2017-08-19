@@ -6,9 +6,7 @@ use GuzzleHttp\Psr7\Request;
 define('FOTOWEB_AUTHENTICATION_QUERY_KEY', 'lt');
 
 /**
- * Class FotowebArchiveAgentBase
- *
- * Base class for working with the Fotoweb ArchiveAgent.
+ * FotowebArchiveAgentBase base for working with the Fotoweb ArchiveAgent.
  */
 class FotowebArchiveAgentBase {
 
@@ -26,7 +24,7 @@ class FotowebArchiveAgentBase {
    *   Username used for authentication.
    * @param string|null $encryptionSecret
    *   Encryption secret for authentication.
-   * @param FotowebGuzzleConfiguratorInterface|NULL $guzzleConfigurator
+   * @param FotowebGuzzleConfiguratorInterface|null $guzzleConfigurator
    *   Guzzle Configuration.
    */
   public function __construct($server = NULL, $username = NULL, $encryptionSecret = NULL, FotowebGuzzleConfiguratorInterface $guzzleConfigurator = NULL) {

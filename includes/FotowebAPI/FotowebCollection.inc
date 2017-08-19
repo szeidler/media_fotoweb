@@ -1,9 +1,7 @@
 <?php
 
 /**
- * Class FotowebCollection
- *
- * Handles all interactions with a Fotoweb collection.
+ * FotowebCollection handles all interactions with a Fotoweb collection.
  */
 class FotowebCollection implements FotowebRepresentationInterface {
 

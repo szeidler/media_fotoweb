@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Interface FotowebRepresentationInterface
- *
  * Interface for implementing all kinds of Fotoweb representations.
  */
 interface FotowebRepresentationInterface {

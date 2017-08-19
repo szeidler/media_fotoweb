@@ -3,8 +3,6 @@
 require_once 'FotowebTestWrapper.php';
 
 /**
- * Class FotowebAssetTest
- *
  * Test to fetch specific assets and from archive traversal.
  */
 class FotowebAssetTest extends FotowebTestWrapper {

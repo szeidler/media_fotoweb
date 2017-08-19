@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class FotowebArchives
+ * Class FotowebArchives represents Fotoweb archives.
  *
  * Archives are collections which represent physical folders containing
  * physical files. Every FotoWeb site can have zero or more archives, which can

@@ -6,8 +6,6 @@
  */
 
 /**
- * Class MediaFotowebAdminSettingsTestCase
- *
  * Tests, that the admin settings for the expected configuration are existing.
  */
 class MediaFotowebAdminSettingsTestCase extends DrupalWebTestCase {
@@ -55,8 +53,6 @@ class MediaFotowebAdminSettingsTestCase extends DrupalWebTestCase {
 }
 
 /**
- * Class MediaFotowebStreamWrapperTest
- *
  * Checks the interaction of the StreamWrapper with Drupal helper functions.
  */
 class MediaFotowebStreamWrapperTest extends DrupalWebTestCase {

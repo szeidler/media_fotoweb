@@ -3,8 +3,6 @@
 require_once 'FotowebTestWrapper.php';
 
 /**
- * Class FotowebArchivesTest
- *
  * Test to fetch archive results.
  */
 class FotowebArchivesTest extends FotowebTestWrapper {

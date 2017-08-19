@@ -3,9 +3,7 @@
 use GuzzleHttp\Psr7\Request;
 
 /**
- * Class FotowebAsset
- *
- * Handles all interactions with an actual Fotoweb asset.
+ * FotowebAsset handles all interactions with an actual Fotoweb asset.
  *
  * @see https://learn.fotoware.com/02_FotoWeb_8.0/Developing_with_the_FotoWeb_API/01_The_FotoWeb_RESTful_API/Asset_representation
  */
@@ -22,7 +20,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    *
    * @param FotowebBase $fotoweb
    *   Fotoweb Base object.
-   * @param integer|NULL $localFileThreshold
+   * @param integer|null $localFileThreshold
    *   Local file threshold used, when retrieving preview renditions.
    */
   public function __construct(FotowebBase $fotoweb, $localFileThreshold = NULL) {

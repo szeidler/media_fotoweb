@@ -3,8 +3,6 @@
 require_once 'FotowebArchiveAgentTestWrapper.php';
 
 /**
- * Class FotowebArchiveAgentOriginalImageTest
- *
  * Tests the search and fetch of the original image using the ArchiveAgent API.
  */
 class FotowebArchiveAgentOriginalImageTest extends FotowebArchiveAgentTestWrapper {
