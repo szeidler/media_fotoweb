@@ -32,7 +32,7 @@ function media_fotoweb_file_delete($file) {
 /**
  * Flushes the corresponding image for the fotoweb asset.
  *
- * @param $wrapper
+ * @param DrupalStreamWrapperInterface $wrapper
  *   FotowebStreamWrapper to flush the image from.
  */
 function _media_fotoweb_flush_image($wrapper) {

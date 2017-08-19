@@ -42,7 +42,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
   /**
    * Updates the Fotoweb asset metadata with a PATCH command.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   Url of the asset.
    * @param array $metadata
    *   Asset metadata properties.
@@ -63,10 +63,10 @@ class FotowebAsset implements FotowebRepresentationInterface {
   /**
    * Returns the asset for a given Fotoweb ressource.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   Url of the asset.
    *
-   * @return mixed
+   * @return array
    *   Array representation of the asset.
    */
   public function getAsset($resourceUrl) {
@@ -77,10 +77,10 @@ class FotowebAsset implements FotowebRepresentationInterface {
   /**
    * Returns the preview image path for a given Fotoweb resource.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   Url of the asset.
    *
-   * @return mixed
+   * @return string
    *   Image URL.
    */
   public function getAssetImagePathFromResource($resourceUrl) {
@@ -93,7 +93,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
   /**
    * Returns the preview image for a given Fotoweb resource.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   Url of the asset.
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
@@ -201,7 +201,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
   /**
    * Updates the metadata of a Fotoweb asset.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   Url of the asset.
    * @param array $metadata
    *   Asset metadata properties.

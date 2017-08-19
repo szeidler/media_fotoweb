@@ -26,10 +26,9 @@ class FotowebHandler {
    *
    * @param $fotowebResource
    *   Fotoweb resource as a URI.
-   * @param bool $isValid
-   *   Option to skip resource validation.
    *
    * @return string
+   *   The normalized file uri.
    */
   public function parse($fotowebResource) {
     $components = parse_url($fotowebResource);

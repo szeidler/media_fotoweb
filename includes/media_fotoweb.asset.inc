@@ -25,7 +25,7 @@ function _media_fotoweb_add_asset_from_fotoweb() {
  * @return bool|object
  *   Drupal file object or FALSE on failure.
  */
-function _media_fotoweb_file_save($asset) {
+function _media_fotoweb_file_save(array $asset) {
   if (!empty($asset['href'])) {
     // We assume the resource to be valid, because it's coming from a
     // Fotoweb response.

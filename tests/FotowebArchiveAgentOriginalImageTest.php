@@ -9,6 +9,9 @@ class FotowebArchiveAgentOriginalImageTest extends FotowebArchiveAgentTestWrappe
 
   protected $originalImage;
 
+  /**
+   * @inheritdoc
+   */
   public function setUp() {
     parent::setUp();
     $fotowebTestWrapper = new FotowebTestWrapper();

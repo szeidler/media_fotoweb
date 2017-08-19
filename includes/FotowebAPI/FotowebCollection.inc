@@ -20,13 +20,7 @@ class FotowebCollection implements FotowebRepresentationInterface {
   }
 
   /**
-   * Initiates a HTTP request using Guzzle.
-   *
-   * @param $url
-   *   URL to HTTP request.
-   *
-   * @return mixed|\Psr\Http\Message\ResponseInterface
-   *   HTTP response from the initiated request.
+   * @inheritdoc
    */
   public function initiateRequest($resourceUrl) {
     $request = new GuzzleHttp\Psr7\Request('GET', $resourceUrl, [

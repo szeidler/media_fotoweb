@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 /**
  * FotowebStreamWrapper is a custom StreamWrapper for Fotoweb assets.
  *
@@ -91,7 +93,8 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * @inheritdoc
    */
   protected function _parse_url($url) {
-    // Fotoweb uses relative paths as identifier, so we need to split only the first parameter.
+    // Fotoweb uses relative paths as identifier, so we need to split
+    // only the first parameter.
     $path = explode('://', $url);
     $parts = explode('/', $path[1]);
     if ($this->isImageStyle()) {
@@ -124,7 +127,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * Use a hashed filename to avoid filename collisions of flattened folder
    * structure.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   Fotoweb resource as a URI.
    *
    * @return string
@@ -179,7 +182,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *
    * @param $fotoweb
    *   Fotoweb Handler.
-   * @param $url
+   * @param string $url
    *   Remote URL of the fotoweb image.
    * @param $local_path
    *   Local path, where the image should be stored.

@@ -19,7 +19,7 @@ use GuzzleHttp\Exception\RequestException;
  * @return array
  *   The built form structure.
  */
-function media_fotoweb_admin_settings($form, &$form_state) {
+function media_fotoweb_admin_settings(array $form, array &$form_state) {
   $form['media_fotoweb_server'] = array(
     '#type' => 'textfield',
     '#title' => t('Fotoweb server'),
@@ -108,7 +108,7 @@ function media_fotoweb_admin_settings($form, &$form_state) {
  * @param array $form_state
  *   An associative array containing the current state of the form.
  */
-function media_fotoweb_admin_settings_validate($form, $form_state) {
+function media_fotoweb_admin_settings_validate(array $form, array $form_state) {
   // Make the encryption secret field required, when having SSO enabled.
   if (!empty($form_state['values']['media_fotoweb_selection_widget_use_sso']) && empty($form_state['values']['media_fotoweb_encryption_secret'])) {
     form_error($form['media_fotoweb_encryption_secret'], t('@field_name field is required.', array(

@@ -48,7 +48,7 @@ class FotowebArchiveAgentBase {
       $guzzleConfigurator = new FotowebGuzzleConfigurator();
     }
 
-    // Initialize Guzzle
+    // Initialize Guzzle.
     $guzzleConfiguration = $guzzleConfigurator::getConfiguration($this->getServer(), $this->getEncryptionSecret());
     $this->client = new Client($guzzleConfiguration);
   }
@@ -116,7 +116,7 @@ class FotowebArchiveAgentBase {
   /**
    * Initiates a HTTP request using Guzzle.
    *
-   * @param $url
+   * @param string $url
    *   URL to HTTP request.
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
@@ -135,7 +135,7 @@ class FotowebArchiveAgentBase {
   /**
    * Actually send the prepared HTTP request.
    *
-   * @param Request $request
+   * @param GuzzleHttp\Psr7\Request $request
    *   Guzzle Request object.
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
@@ -149,7 +149,7 @@ class FotowebArchiveAgentBase {
   /**
    * Appends the authentication query parameter to the current request.
    *
-   * @param $url
+   * @param string $url
    *   Url to be requested.
    *
    * @return string

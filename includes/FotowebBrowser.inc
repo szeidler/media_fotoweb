@@ -33,7 +33,7 @@ class FotowebBrowser extends MediaBrowserPlugin {
               ),
             ),
             'type' => 'setting',
-          )
+          ),
         ),
       ),
     );

@@ -14,7 +14,7 @@
  * @param StdClass $file
  *   Drupal file object to be altered.
  */
-function media_fotoweb_manualcrop_load_crop_selection_alter(&$file) {
+function media_fotoweb_manualcrop_load_crop_selection_alter(StdClass &$file) {
   module_load_include('inc', 'media_fotoweb', 'includes/media_fotoweb.helper');
   $hash = _media_fotoweb_extract_hash_from_uri($file);
   if ($original_file_uri = _media_fotoweb_find_uri_by_hash($hash)) {
@@ -45,11 +45,11 @@ function media_fotoweb_manualcrop_field_widget_form_alter(&$element, &$form_stat
  * That is needed because the image_get_info() function is not working properly
  * for custom remote stream wrapper.
  *
- *  @param $element
+ *  @param array $element
  *   The field widget form element as constructed by hook_field_widget_form().
- * @param $form_state
+ * @param array $form_state
  *   An associative array containing the current state of the form.
- * @param $context
+ * @param array $context
  *   An associative array containing the following key-value pairs, matching the
  *   arguments received by hook_field_widget_form():
  *
@@ -58,7 +58,7 @@ function media_fotoweb_manualcrop_field_widget_form_alter(&$element, &$form_stat
  * @return array
  *   The processed widget element.
  */
-function _media_fotoweb_manualcrop_widget_process($element, &$form_state, $form) {
+function _media_fotoweb_manualcrop_widget_process(array $element, array &$form_state, array $form) {
   $dimensions = array('width', 'height');
   if (isset($element['manualcrop_overlay'])) {
     $fid = $element['#file']->fid;

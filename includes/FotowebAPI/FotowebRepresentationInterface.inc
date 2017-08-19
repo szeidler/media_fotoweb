@@ -8,11 +8,11 @@ interface FotowebRepresentationInterface {
   /**
    * Initiates a HTTP request using Guzzle.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   Fotoweb Resource URL to HTTP request.
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
-   * HTTP response from the initiated request.
+   *   HTTP response from the initiated request.
    */
   public function initiateRequest($resourceUrl);
 

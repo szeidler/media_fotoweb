@@ -1,5 +1,8 @@
 <?php
 
+use \GuzzleHttp\HandlerStack;
+use \GuzzleHttp\Middleware;
+
 /**
  * FotowebGuzzleConfigurator handles the Guzzle client configuration.
  *
@@ -34,8 +37,8 @@ class FotowebGuzzleConfigurator implements FotowebGuzzleConfiguratorInterface {
    *   Guzzle initial client configuration.
    */
   protected static function addRetryHandler($configuration) {
-    $handler_stack = \GuzzleHttp\HandlerStack::create();
-    $handler_stack->push(\GuzzleHttp\Middleware::retry(function($retry, $request, $value, $reason) {
+    $handler_stack = HandlerStack::create();
+    $handler_stack->push(Middleware::retry(function ($retry, $request, $value, $reason) {
       // If we have a value already, we should be able to proceed quickly.
       if ($value !== NULL) {
         return FALSE;

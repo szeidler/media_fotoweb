@@ -32,7 +32,7 @@ function _media_fotoweb_get_fotoweb_username($account = NULL) {
 /**
  * Extracts the fotoweb hash from hashed uri.
  *
- * @param $uri
+ * @param string $uri
  *   Fotoweb file URI.
  *
  * @return string|null
@@ -50,7 +50,7 @@ function _media_fotoweb_extract_hash_from_uri($uri) {
 /**
  * Try to find the matching file uri for the provided hash.
  *
- * @param $hash
+ * @param string $hash
  *   Hash of the Fotoweb URI.
  *
  * @return string|null
@@ -134,9 +134,9 @@ function _media_fotoweb_image_style_deliver($style, $scheme) {
 /**
  * Copy of image_style_path() for use with fotoweb images.
  **
- * @param $style_name
+ * @param string $style_name
  *   Image style name.
- * @param $uri
+ * @param string $uri
  *   Drupal file URI.
  *
  * @return string

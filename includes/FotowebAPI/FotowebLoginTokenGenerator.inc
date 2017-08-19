@@ -1,5 +1,7 @@
 <?php
 
+// @codingStandardsIgnoreFile
+
 class FotowebLoginTokenGenerator {
 
   private $_useForWidgets;

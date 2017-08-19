@@ -99,6 +99,7 @@ class FotowebBase {
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
    *   HTTP response.
+   *
    * @throws Exception
    */
   public function authenticate() {
@@ -127,7 +128,7 @@ class FotowebBase {
   /**
    * Initiate an Fotoweb API request.
    *
-   * @param string|Request $request
+   * @param string|GuzzleHttp\Psr7\Request $request
    *   URL string or Guzzle request object.
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
@@ -145,7 +146,7 @@ class FotowebBase {
   /**
    * Performs the actual HTTP request.
    *
-   * @param Request $request
+   * @param GuzzleHttp\Psr7\Request $request
    *   Guzzle request object.
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
