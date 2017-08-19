@@ -94,7 +94,7 @@ class FotowebArchiveAgentOriginalImage {
    * @return string
    *   Archive Agent File Id.
    */
-  public function getFileIdFromAsset($assetData) {
+  public function getFileIdFromAsset(array $assetData) {
     $filename = $assetData['filename'];
     $archivePath = $this->getArchivePath($assetData);
     $url = $this->fotoweb->getServer() . '/' . $archivePath . 'Search?Search=' . $filename;
@@ -103,7 +103,6 @@ class FotowebArchiveAgentOriginalImage {
     $fileId = $this->getFileIdFromXmlResult($data);
     return $fileId;
   }
-
 
   /**
    * Returns the archive path from a given asset.
@@ -114,7 +113,7 @@ class FotowebArchiveAgentOriginalImage {
    * @return string
    *   Archive path.
    */
-  public function getArchivePath($assetData) {
+  public function getArchivePath(array $assetData) {
     $archiveHref = $assetData['archiveHREF'];
     $archiveParts = explode('/archives/', $archiveHref, 2);
     $archivePath = array_pop($archiveParts);
@@ -141,7 +140,8 @@ class FotowebArchiveAgentOriginalImage {
           $fileId = (string) $xml->File[0]['Id'];
         }
       }
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
       throw new InvalidArgumentException($e->getMessage());
     }
     return $fileId;
@@ -150,9 +150,9 @@ class FotowebArchiveAgentOriginalImage {
   /**
    * Constructs the original image download URL.
    *
-   * @param $fileId
+   * @param string $fileId
    *   Given file Id.
-   * @param $archivePath
+   * @param string $archivePath
    *   Fotoweb ArchiveAgent archive path.
    *
    * @return string
