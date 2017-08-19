@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Install, update, and uninstall functions for the Media Fotoweb module.
+ */
+
+/**
  * Implements hook_requirements().
  */
 function media_fotoweb_requirements($phase) {
@@ -12,7 +17,7 @@ function media_fotoweb_requirements($phase) {
       'title' => $t('Guzzle library'),
       'description' => $t('Media Fotoweb requires the <a href="@library_url">Guzzle</a> library to be installed and autoloaded with composer (e.g. using the <a href="@composer_manager_url">composer_manager</a> module).', array(
         '@library_url' => 'https://github.com/guzzle/guzzle',
-        '@composer_manager_url' => 'https://www.drupal.org/project/composer_manager'
+        '@composer_manager_url' => 'https://www.drupal.org/project/composer_manager',
       )),
       'severity' => REQUIREMENT_ERROR,
     );

@@ -49,7 +49,7 @@ class FotowebArchiveAgentOriginalImage {
     $url = $this->fotoweb->getServer() . '/' . $archivePath . 'Search?Search=' . $filename;
     $response = $this->fotoweb->initiateRequest($url);
     $data = (string) $response->getBody();
-    $fileId = $this->getFileIdFromXMLResult($data);
+    $fileId = $this->getFileIdFromXmlResult($data);
     return $fileId;
   }
 
@@ -62,7 +62,7 @@ class FotowebArchiveAgentOriginalImage {
   }
 
 
-  public function getFileIdFromXMLResult($data) {
+  public function getFileIdFromXmlResult($data) {
     $fileId = NULL;
     libxml_use_internal_errors(TRUE);
     try {

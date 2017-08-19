@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Implements formatters for Fotoweb images.
+ */
+
+/**
  * Implements hook_file_formatter_info().
  */
 function media_fotoweb_file_formatter_info() {

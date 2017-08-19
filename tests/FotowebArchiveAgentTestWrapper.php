@@ -1,11 +1,21 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 require_once 'includes/FotowebAPI/FotowebBase.inc';
 
-abstract class FotowebArchiveAgentTestWrapper extends PHPUnit\Framework\TestCase {
+/**
+ * Class FotowebArchiveAgentTestWrapper
+ *
+ * Wrapper for ArchiveAgent related tests.
+ */
+abstract class FotowebArchiveAgentTestWrapper extends TestCase {
 
   protected $fotowebBase;
 
+  /**
+   * @inheritdoc
+   */
   public function setUp() {
     parent::setUp();
 

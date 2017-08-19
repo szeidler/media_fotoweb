@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Handles the asset file save after selecting it in the MediaBrowser.
+ */
+
+/**
  * Create files from Fotoweb assets.
  */
 function _media_fotoweb_add_asset_from_fotoweb() {
@@ -14,9 +19,11 @@ function _media_fotoweb_add_asset_from_fotoweb() {
 /**
  * Prepare the file object and save it.
  *
- * @param $asset
+ * @param array $asset
+ *   Asset array with information from the selection widget.
  *
  * @return bool|object
+ *   Drupal file object or FALSE on failure.
  */
 function _media_fotoweb_file_save($asset) {
   if (!empty($asset['href'])) {

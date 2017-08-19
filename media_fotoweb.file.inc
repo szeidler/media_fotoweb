@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Implements hook_file_* hooks in a separated file.
+ */
+
+/**
  * Implements hook_file_operations().
  */
 function media_fotoweb_file_operations() {
@@ -28,6 +33,7 @@ function media_fotoweb_file_delete($file) {
  * Flushes the corresponding image for the fotoweb asset.
  *
  * @param $wrapper
+ *   FotowebStreamWrapper to flush the image from.
  */
 function _media_fotoweb_flush_image($wrapper) {
   $uri = $wrapper->getLocalImagePath();
@@ -43,6 +49,7 @@ function _media_fotoweb_flush_image($wrapper) {
  * Flushes the generated image derivatives for the fotoweb asset.
  *
  * @param $uri
+ *   Drupal file URI.
  */
 function _media_fotoweb_flush_image_derivative($uri) {
   module_load_include('inc', 'media_fotoweb', 'includes/media_fotoweb.helper');
@@ -57,6 +64,9 @@ function _media_fotoweb_flush_image_derivative($uri) {
 
 /**
  * Clear the cached Fotoweb content for the selected files.
+ *
+ * @param array $fids
+ *   Array of tile ids to clear the cache for.
  */
 function _media_fotoweb_cache_clear($fids) {
   $fids = array_keys($fids);

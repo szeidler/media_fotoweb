@@ -2,10 +2,18 @@
 
 require_once 'FotowebTestWrapper.php';
 
+/**
+ * Class FotowebAssetListTest
+ *
+ * Test to fetch an assetlist from an archive.
+ */
 class FotowebAssetListTest extends FotowebTestWrapper {
 
   protected $fotowebAssetList;
 
+  /**
+   * @inheritdoc
+   */
   public function setUp() {
     parent::setUp();
     $this->fotowebAssetList = new FotowebAssetList($this->fotowebBase);
@@ -39,4 +47,5 @@ class FotowebAssetListTest extends FotowebTestWrapper {
     $this->assertEquals(200, $response->getStatusCode(), 'Response was not 200.');
     $this->assertNotEmpty((string) $response->getBody(), 'Response body was empty.');
   }
+
 }

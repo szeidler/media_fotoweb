@@ -7,6 +7,6 @@
  */
 class FotowebCollectionList extends FotowebCollection {
 
-  const headerAccept = 'application/vnd.fotoware.collectionlist+json';
+  const HEADER_ACCEPT = 'application/vnd.fotoware.collectionlist+json';
 
 }

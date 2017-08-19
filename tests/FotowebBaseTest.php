@@ -2,6 +2,11 @@
 
 require_once 'FotowebTestWrapper.php';
 
+/**
+ * Class FotowebBaseTest
+ *
+ * Test to authenticate with the Fotoweb API
+ */
 class FotowebBaseTest extends FotowebTestWrapper {
 
   /**
@@ -23,4 +28,5 @@ class FotowebBaseTest extends FotowebTestWrapper {
     $this->fotowebBase->setFullApiKey('xxx');
     $this->fotowebBase->authenticate();
   }
+
 }

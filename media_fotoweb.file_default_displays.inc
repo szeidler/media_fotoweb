@@ -1,7 +1,15 @@
 <?php
 
 /**
+ * @file
+ * Provides default configuration for file displays.
+ */
+
+/**
  * Implements hook_file_default_displays().
+ *
+ * @return array
+ *   File display configuration.
  */
 function media_fotoweb_file_default_displays() {
   $file_displays = array();

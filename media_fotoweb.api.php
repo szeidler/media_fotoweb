@@ -1,9 +1,15 @@
 <?php
 
 /**
+ * @file
+ * Provides the Media Fotoweb API Hooks.
+ */
+
+/**
  * Alter guzzle configuration before initializing the client.
  *
- * @param $configuration
+ * @param array $configuration
+ *   Guzzle configuration.
  */
 function hook_media_fotoweb_guzzle_configuration_alter(&$configuration) {
   // For example set a proxy for the Guzzle client.

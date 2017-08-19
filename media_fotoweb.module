@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Primary hook implementations for Media Fotoweb.
+ */
+
 // Load media_fotoweb file formatters.
 require_once dirname(__FILE__) . '/includes/media_fotoweb.formatters.inc';
 
@@ -42,7 +47,7 @@ function media_fotoweb_menu() {
  */
 function media_fotoweb_permission() {
   return array(
-    'administer media_fotoweb settings' =>  array(
+    'administer media_fotoweb settings' => array(
       'title' => t('Administer Media Fotoweb'),
       'description' => t('Access Media Fotoweb settings.'),
     ),

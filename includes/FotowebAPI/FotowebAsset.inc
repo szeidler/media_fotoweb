@@ -1,7 +1,11 @@
 <?php
 
+use GuzzleHttp\Psr7\Request;
+
 /**
  * Class FotowebAsset
+ *
+ * Handles all interactions with an actual Fotoweb asset.
  *
  * @see https://learn.fotoware.com/02_FotoWeb_8.0/Developing_with_the_FotoWeb_API/01_The_FotoWeb_RESTful_API/Asset_representation
  */
@@ -11,20 +15,27 @@ class FotowebAsset implements FotowebRepresentationInterface {
   protected $data;
   protected $localFileThreshold;
 
-  const headerAccept = 'application/vnd.fotoware.asset+json';
+  const HEADER_ACCEPT = 'application/vnd.fotoware.asset+json';
 
+  /**
+   * FotowebAsset constructor.
+   *
+   * @param FotowebBase $fotoweb
+   *   Fotoweb Base object.
+   * @param integer|NULL $localFileThreshold
+   *   Local file threshold used, when retrieving preview renditions.
+   */
   public function __construct(FotowebBase $fotoweb, $localFileThreshold = NULL) {
     $this->fotoweb = $fotoweb;
     $this->localFileThreshold = $localFileThreshold;
   }
 
-
   /**
    * @inheritdoc
    */
   public function initiateRequest($resourceUrl) {
-    $request = new GuzzleHttp\Psr7\Request('GET', $resourceUrl, [
-      'Accept' => static::headerAccept,
+    $request = new Request('GET', $resourceUrl, [
+      'Accept' => static::HEADER_ACCEPT,
     ]);
 
     return $this->fotoweb->initiateRequest($request);
@@ -43,8 +54,8 @@ class FotowebAsset implements FotowebRepresentationInterface {
    */
   public function initiateUpdateMetadataRequest($resourceUrl, array $metadata) {
     $body = json_encode(array('metadata' => $metadata));
-    $request = new GuzzleHttp\Psr7\Request('PATCH', $resourceUrl, [
-      'Accept' => static::headerAccept,
+    $request = new Request('PATCH', $resourceUrl, [
+      'Accept' => static::HEADER_ACCEPT,
       'Content-Type' => 'application/vnd.fotoware.assetupdate+json',
     ], $body);
 
@@ -118,14 +129,15 @@ class FotowebAsset implements FotowebRepresentationInterface {
    *   HTTP response for the best fitting preview image.
    */
   private function getAssetPreviewImageFromAsset() {
-    // Iterate over previews and use the first preview image that matches the specified threshold.
+    // Iterate over previews and use the first preview image that matches
+    // the specified threshold.
     if (!empty($this->data['previews'])) {
       $previews = $this->data['previews'];
       $originalImageWidth = $this->data['attributes']['imageattributes']['pixelwidth'];
 
       $previews = $this->orderPreviewsDescendant($previews);
 
-      // Set initial bestFitImage
+      // Set initial bestFitImage.
       $bestFitImage = reset($previews);
 
       // Iterate over previews to find the bestFit.
@@ -172,7 +184,9 @@ class FotowebAsset implements FotowebRepresentationInterface {
    */
   public function isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth) {
     // Square previews cannot be a good fit, we need the original aspect ratio.
-    if (isset($currentImage['square']) && $currentImage['square']) return FALSE;
+    if (isset($currentImage['square']) && $currentImage['square']) {
+      return FALSE;
+    }
 
     // The current image is the bestFit, it is smaller or equal than
     // the original image dimensions and bitter than the localFileThreshold.
@@ -188,8 +202,6 @@ class FotowebAsset implements FotowebRepresentationInterface {
 
   /**
    * Updates the metadata of a Fotoweb asset.
-   *
-   * @param $resourceUrl
    *
    * @param $resourceUrl
    *   Url of the asset.

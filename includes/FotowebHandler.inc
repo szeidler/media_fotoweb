@@ -1,10 +1,23 @@
 <?php
 
+/**
+ * Class FotowebHandler
+ *
+ * Handler acts as a bridge between the StreamWrapper and Drupal file objects.
+ */
 class FotowebHandler {
 
   protected $fotowebResource;
   protected $isValid;
 
+  /**
+   * FotowebHandler constructor.
+   *
+   * @param string $fotowebResource
+   *   Fotoweb resource as a URI.
+   * @param bool $isValid
+   *   Information about the validity and existing state of a Fotoweb asset.
+   */
   public function __construct($fotowebResource, $isValid = FALSE) {
     $this->fotowebResource = $fotowebResource;
     $this->isValid = $isValid;
@@ -14,9 +27,9 @@ class FotowebHandler {
    * Parse Fotoweb resource to a normalized file stream.
    *
    * @param $fotowebResource
+   *   Fotoweb resource as a URI.
    * @param bool $isValid
-   *   Option to skip resource validation. Use when processing a resource
-   *   coming from a Fotoweb response.
+   *   Option to skip resource validation.
    *
    * @return string
    */
@@ -40,6 +53,7 @@ class FotowebHandler {
    * Creates a file object, based on the Fotoweb resource.
    *
    * @return bool|object
+   *   Drupal file object.
    */
   public function getFileObject() {
     $uri = $this->parse($this->fotowebResource);

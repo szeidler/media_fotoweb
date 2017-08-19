@@ -2,10 +2,18 @@
 
 require_once 'FotowebTestWrapper.php';
 
+/**
+ * Class FotowebAssetTest
+ *
+ * Test to fetch specific assets and from archive traversal.
+ */
 class FotowebAssetTest extends FotowebTestWrapper {
 
   protected $fotowebAsset;
 
+  /**
+   * @inheritdoc
+   */
   public function setUp() {
     parent::setUp();
     $this->fotowebAsset = new FotowebAsset($this->fotowebBase);
@@ -90,8 +98,10 @@ class FotowebAssetTest extends FotowebTestWrapper {
   }
 
   /**
-   * Test, that the bestFitImage returns the appropriate image, based on the
-   * maximum file size. Uses the $image['square'] = TRUE exclusion.
+   * Test, that the bestFitImage returns the appropriate image.
+   *
+   * It is ased on themaximum file size.
+   * Uses the $image['square'] = TRUE exclusion.
    */
   public function testBestFitImageFunctional() {
     $originalImageWidth = 1600;

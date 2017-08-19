@@ -1,15 +1,23 @@
 <?php
 
+/**
+ * @file
+ * Provides the admin configuration page of the Media Fotoweb module.
+ */
+
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\RequestException;
 
 /**
  * Builds the Media Fotoweb admin settings form.
  *
- * @param $form
- * @param $form_state
+ * @param array $form
+ *   An associative array containing the structure of the form.
+ * @param array $form_state
+ *   An associative array containing the current state of the form.
  *
- * @return mixed
+ * @return array
+ *   The built form structure.
  */
 function media_fotoweb_admin_settings($form, &$form_state) {
   $form['media_fotoweb_server'] = array(
@@ -95,8 +103,10 @@ function media_fotoweb_admin_settings($form, &$form_state) {
  * Validate settings form and test successful authentication to the Fotoware API
  * endpoint.
  *
- * @param $form
- * @param $form_state
+ * @param array $form
+ *   An associative array containing the structure of the form.
+ * @param array $form_state
+ *   An associative array containing the current state of the form.
  */
 function media_fotoweb_admin_settings_validate($form, $form_state) {
   // Make the encryption secret field required, when having SSO enabled.

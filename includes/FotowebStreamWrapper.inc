@@ -1,7 +1,11 @@
 <?php
 
 /**
- *  Create an instance like this:
+ * Class FotowebStreamWrapper
+ *
+ * Custom StreamWrapper as a Bridge to the original Fotoweb assets.
+ *
+ * Create an instance like this:
  *  $fotoweb = new FotowebStreamWrapper('fotoweb://a/[assetHref]');
  */
 class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
@@ -12,6 +16,9 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   protected $stream_pointer;
 
 
+  /**
+   * FotowebStreamWrapper constructor.
+   */
   public function __construct() {
     $this->base_url = variable_get('media_fotoweb_server', '');
   }
@@ -23,6 +30,9 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     return 'image/fotoweb';
   }
 
+  /**
+   * @inheritdoc
+   */
   public function getDirectoryPath() {
     return variable_get('file_public_path', conf_path() . '/files') . '/media-fotoweb';
   }
@@ -68,6 +78,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * Checks, if the current file uri is an image style resource.
    *
    * @return bool
+   *   True, if it is a image style request.
    */
   protected function isImageStyle() {
     if (($target = file_uri_target($this->getUri())) && strpos($target, 'styles/') === 0) {
@@ -116,8 +127,10 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * structure.
    *
    * @param $resourceUrl
+   *   Fotoweb resource as a URI.
    *
    * @return string
+   *   Filename used to store the Fotoweb asset.
    */
   public function getLocalFileName($resourceUrl) {
     $uri = 'fotoweb://a' . $resourceUrl;
@@ -126,10 +139,12 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   }
 
   /**
-   * Returns the local image path and trigger file save, when local file does
-   * not exist.
+   * Returns the local image path.
+   *
+   * Triggers also file save, when local file does not already exist.
    *
    * @return string
+   *   Full local URI to store the Fotoweb asset locally.
    */
   public function getLocalImageUri() {
     $local_path = $this->getLocalImagePath();
@@ -191,6 +206,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    * Returns the local image path for the fotoweb asset.
    *
    * @return string
+   *   Complete local image path to store the asset.
    */
   public function getLocalImagePath() {
     $parameters = $this->get_parameters();
@@ -201,7 +217,8 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   /**
    * Returns the original image url from the fotoweb asset resource.
    *
-   * @return mixed|null|\Psr\Http\Message\ResponseInterface
+   * @return string|NULL
+   *   URL the original image can be fetched from.
    */
   public function getOriginalImageUrl() {
     $parts = $this->get_parameters();
@@ -227,7 +244,8 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
   /**
    * Returns the preview image url from the fotoweb asset resource.
    *
-   * @return mixed|null|\Psr\Http\Message\ResponseInterface
+   * @return string|NULL
+   *   URL the preview image can be fetched from.
    */
   public function getPreviewImageUrl() {
     $parts = $this->get_parameters();
