@@ -12,7 +12,7 @@ abstract class FotowebArchiveAgentTestWrapper extends TestCase {
   protected $fotowebBase;
 
   /**
-   * @inheritdoc
+   * Sets up the fixture.
    */
   public function setUp() {
     parent::setUp();

@@ -20,7 +20,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    *
    * @param FotowebBase $fotoweb
    *   Fotoweb Base object.
-   * @param integer|null $localFileThreshold
+   * @param int|null $localFileThreshold
    *   Local file threshold used, when retrieving preview renditions.
    */
   public function __construct(FotowebBase $fotoweb, $localFileThreshold = NULL) {
@@ -29,6 +29,8 @@ class FotowebAsset implements FotowebRepresentationInterface {
   }
 
   /**
+   * Initiates a HTTP request using Guzzle.
+   *
    * @inheritdoc
    */
   public function initiateRequest($resourceUrl) {
@@ -107,7 +109,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
   /**
    * Requests the image from a given URL.
    *
-   * @param $imagePath
+   * @param string $imagePath
    *   Given image url.
    *
    * @return mixed|\Psr\Http\Message\ResponseInterface
@@ -115,7 +117,7 @@ class FotowebAsset implements FotowebRepresentationInterface {
    */
   public function getAssetImageFromUrl($imagePath) {
     // Request the designated preview image.
-    $request = new GuzzleHttp\Psr7\Request('GET', $imagePath);
+    $request = new Request('GET', $imagePath);
     $response = $this->fotoweb->initiateRequest($request);
     return $response;
   }
@@ -153,13 +155,13 @@ class FotowebAsset implements FotowebRepresentationInterface {
   /**
    * Orders the previews in a descendant size order.
    *
-   * @param $previews
+   * @param array $previews
    *   Array of image previews properties.
    *
-   * @return mixed
+   * @return array mixed
    *   The descendant ordered image previews.
    */
-  public function orderPreviewsDescendant($previews) {
+  public function orderPreviewsDescendant(array $previews) {
     usort($previews, function ($a, $b) {
       return strcmp($b['width'], $a['width']);
     });
@@ -167,20 +169,21 @@ class FotowebAsset implements FotowebRepresentationInterface {
   }
 
   /**
-   * Checks, if the current iterated image, is a better fit, dependent on
-   * maximum local file size.
+   * Checks, if the current iterated image, is a better fit.
    *
-   * @param $currentImage
+   * That is dependent on maximum local file size.
+   *
+   * @param array $currentImage
    *   Currently processed image.
-   * @param $bestFitImage
+   * @param array $bestFitImage
    *   Current best fit image.
-   * @param $originalImageWidth
+   * @param int $originalImageWidth
    *   Width of the original image.
    *
    * @return bool
    *   True if the current image is a better fit.
    */
-  public function isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth) {
+  public function isImageABetterFit(array $currentImage, array $bestFitImage, $originalImageWidth) {
     // Square previews cannot be a good fit, we need the original aspect ratio.
     if (isset($currentImage['square']) && $currentImage['square']) {
       return FALSE;

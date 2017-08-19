@@ -76,7 +76,7 @@ class FotowebArchiveAgentBase {
   /**
    * Sets the Fotoweb username.
    *
-   * @param $username
+   * @param string $username
    *   Username used for authentication.
    */
   public function setUsername($username) {
@@ -97,7 +97,7 @@ class FotowebArchiveAgentBase {
    * Sets the Fotoweb encryption secret.
    *
    * @param string $encryptionSecret
-   *  Encryption secret for authentication.
+   *   Encryption secret for authentication.
    */
   public function setEncryptionSecret($encryptionSecret) {
     $this->encryptionSecret = $encryptionSecret;

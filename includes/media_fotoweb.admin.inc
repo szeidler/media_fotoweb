@@ -100,8 +100,7 @@ function media_fotoweb_admin_settings(array $form, array &$form_state) {
 }
 
 /**
- * Validate settings form and test successful authentication to the Fotoware API
- * endpoint.
+ * Validate settings form and test successful authentication API endpoint.
  *
  * @param array $form
  *   An associative array containing the structure of the form.
@@ -116,7 +115,8 @@ function media_fotoweb_admin_settings_validate(array $form, array $form_state) {
     )));
   }
 
-  // Make the maximum local file size field required, when having preview mode enabled.
+  // Make the maximum local file size field required, when having preview
+  // mode enabled.
   if (!empty($form_state['values']['media_fotoweb_selection_widget_height']) && !is_numeric($form_state['values']['media_fotoweb_selection_widget_height'])) {
     form_error($form['media_fotoweb_selection_widget_height'], t('@field_name field must be a numeric pixel value.', array(
       '@field_name' => $form['media_fotoweb_selection_widget_height']['#title'],
@@ -140,7 +140,8 @@ function media_fotoweb_admin_settings_validate(array $form, array $form_state) {
     $response = $fotoweb->authenticate();
     // No errors and exceptions. Display a success message.
     drupal_set_message(t('The connection to the Fotoweb endpoint was established succesfully.'));
-  } catch (RequestException $e) {
+  }
+  catch (RequestException $e) {
     if ($e->hasResponse()) {
       $error_message = (string) Psr7\str($e->getResponse());
     }
@@ -148,7 +149,8 @@ function media_fotoweb_admin_settings_validate(array $form, array $form_state) {
       $error_message = $e->getMessage();
     }
     form_error($form['media_fotoweb_server'], t('There was an networking error: @error_message', array('@error_message' => $error_message)));
-  } catch (Exception $e) {
+  }
+  catch (Exception $e) {
     $error_message = $e->getMessage();
     if ($e->getCode() === 403) {
       form_error($form['media_fotoweb_full_api_key'], t('There was an error: @error_message', array('@error_message' => $error_message)));

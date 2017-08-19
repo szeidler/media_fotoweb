@@ -10,7 +10,7 @@ class FotowebTestWrapper extends PHPUnit\Framework\TestCase {
   protected $fotowebBase;
 
   /**
-   * @inheritdoc
+   * Sets up the fixture.
    */
   public function setUp() {
     parent::setUp();

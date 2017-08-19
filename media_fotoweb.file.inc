@@ -35,7 +35,7 @@ function media_fotoweb_file_delete($file) {
  * @param DrupalStreamWrapperInterface $wrapper
  *   FotowebStreamWrapper to flush the image from.
  */
-function _media_fotoweb_flush_image($wrapper) {
+function _media_fotoweb_flush_image(DrupalStreamWrapperInterface $wrapper) {
   $uri = $wrapper->getLocalImagePath();
 
   // Delete stored original file.
@@ -48,7 +48,7 @@ function _media_fotoweb_flush_image($wrapper) {
 /**
  * Flushes the generated image derivatives for the fotoweb asset.
  *
- * @param $uri
+ * @param string $uri
  *   Drupal file URI.
  */
 function _media_fotoweb_flush_image_derivative($uri) {
@@ -68,7 +68,7 @@ function _media_fotoweb_flush_image_derivative($uri) {
  * @param array $fids
  *   Array of tile ids to clear the cache for.
  */
-function _media_fotoweb_cache_clear($fids) {
+function _media_fotoweb_cache_clear(array $fids) {
   $fids = array_keys($fids);
 
   $query = new EntityFieldQuery();

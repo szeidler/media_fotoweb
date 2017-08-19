@@ -10,7 +10,7 @@ class FotowebAssetTest extends FotowebTestWrapper {
   protected $fotowebAsset;
 
   /**
-   * @inheritdoc
+   * Sets up the fixture.
    */
   public function setUp() {
     parent::setUp();

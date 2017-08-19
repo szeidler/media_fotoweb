@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Install Media Fotoweb Manualcrop module.
+ */
+
+/**
  * Implements hook_install().
  */
 function media_fotoweb_manualcrop_install() {

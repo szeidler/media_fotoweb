@@ -2,11 +2,12 @@
 
 /**
  * Class handles the Guzzle client configuration for the modules unit tests.
- *
  */
 class FotowebGuzzleTestConfigurator extends FotowebGuzzleConfigurator {
 
   /**
+   * Returns the Guzzle client configuration array.
+   *
    * @inheritdoc
    */
   public static function getConfiguration($server, $token) {

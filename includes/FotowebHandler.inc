@@ -24,7 +24,7 @@ class FotowebHandler {
   /**
    * Parse Fotoweb resource to a normalized file stream.
    *
-   * @param $fotowebResource
+   * @param string $fotowebResource
    *   Fotoweb resource as a URI.
    *
    * @return string
@@ -57,4 +57,5 @@ class FotowebHandler {
     $file = file_uri_to_object($uri, TRUE);
     return $file;
   }
+
 }

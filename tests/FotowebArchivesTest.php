@@ -10,7 +10,7 @@ class FotowebArchivesTest extends FotowebTestWrapper {
   protected $fotowebArchives;
 
   /**
-   * @inheritdoc
+   * Sets up the fixture.
    */
   public function setUp() {
     parent::setUp();

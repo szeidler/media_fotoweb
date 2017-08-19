@@ -62,9 +62,10 @@ function _media_fotoweb_find_uri_by_hash($hash) {
 }
 
 /**
- * Overwrite image_style_deliver for fotoweb_media assets, because the common
- * image_style_deliver will always compare invalid tokens (Original uri vs.
- * image style path)
+ * Overwrite image_style_deliver for fotoweb_media assets.
+ *
+ * Needed because,image_style_deliver will always compare invalid tokens
+ * (Original uri vs. image style path)
  *
  * @param string $style
  *   Image style name.
@@ -133,7 +134,7 @@ function _media_fotoweb_image_style_deliver($style, $scheme) {
 
 /**
  * Copy of image_style_path() for use with fotoweb images.
- **
+ *
  * @param string $style_name
  *   Image style name.
  * @param string $uri

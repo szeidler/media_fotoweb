@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Class FotowebBrowser
- *
  * MediaBrowserPlugin to embed the Fotoweb Selection Widget into Media.
  */
 class FotowebBrowser extends MediaBrowserPlugin {
@@ -70,9 +68,9 @@ class FotowebBrowser extends MediaBrowserPlugin {
   }
 
   /**
-   * Returns a login token for the given user for Single Sign-on
+   * Returns a login token for the given user for Single Sign-on.
    *
-   * @param $fotoweb_username
+   * @param string $fotoweb_username
    *   Fotoweb username for authentication.
    *
    * @return string

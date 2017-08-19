@@ -7,9 +7,6 @@
 
 /**
  * Implements hook_file_default_displays().
- *
- * @return array
- *   File display configuration.
  */
 function media_fotoweb_file_default_displays() {
   $file_displays = array();
@@ -17,7 +14,7 @@ function media_fotoweb_file_default_displays() {
   $default_image_styles = array(
     'teaser' => 'medium',
     'preview' => 'media_thumbnail',
-    'default' => ''
+    'default' => '',
   );
 
   foreach ($default_image_styles as $view_mode => $image_style) {

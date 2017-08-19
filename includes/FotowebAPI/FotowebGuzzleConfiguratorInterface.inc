@@ -8,9 +8,9 @@ interface FotowebGuzzleConfiguratorInterface {
   /**
    * Returns the Guzzle client configuration array.
    *
-   * @param $server
+   * @param string $server
    *   Provided Fotoweb server.
-   * @param $token
+   * @param string $token
    *   Provided Fotoweb token.
    *
    * @return array

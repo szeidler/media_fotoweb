@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Psr7\Request;
+
 /**
  * FotowebCollection handles all interactions with a Fotoweb collection.
  */
@@ -20,10 +22,12 @@ class FotowebCollection implements FotowebRepresentationInterface {
   }
 
   /**
+   * Initiates a HTTP request using Guzzle.
+   *
    * @inheritdoc
    */
   public function initiateRequest($resourceUrl) {
-    $request = new GuzzleHttp\Psr7\Request('GET', $resourceUrl, [
+    $request = new Request('GET', $resourceUrl, [
       'Accept' => static::HEADER_ACCEPT,
     ]);
 
