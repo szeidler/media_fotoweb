@@ -5,7 +5,6 @@
  * Provides the admin configuration page of the Media Fotoweb module.
  */
 
-use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\RequestException;
 
 /**
@@ -133,30 +132,26 @@ function media_fotoweb_admin_settings_validate(array $form, array $form_state) {
   // Test, that Fotoweb Endpoint is accessible with the saved configuration.
   $server = $form_state['values']['media_fotoweb_server'];
   $full_api_key = $form_state['values']['media_fotoweb_full_api_key'];
-  $fotoweb = new FotowebBase($server, $full_api_key);
+
+  $client = FotowebClientFactory::create($server, $full_api_key);
 
   // Perform authentication and validate its response.
   try {
-    $response = $fotoweb->authenticate();
+    $response = $client->getApiDescriptor();
     // No errors and exceptions. Display a success message.
-    drupal_set_message(t('The connection to the Fotoweb endpoint was established succesfully.'));
+    drupal_set_message(t('The connection to the Fotoweb endpoint was established successfully.'));
   }
   catch (RequestException $e) {
-    if ($e->hasResponse()) {
-      $error_message = (string) Psr7\str($e->getResponse());
-    }
-    else {
-      $error_message = $e->getMessage();
-    }
+    $error_message = $e->getMessage();
     form_error($form['media_fotoweb_server'], t('There was an networking error: @error_message', array('@error_message' => $error_message)));
   }
   catch (Exception $e) {
     $error_message = $e->getMessage();
     if ($e->getCode() === 403) {
-      form_error($form['media_fotoweb_full_api_key'], t('There was an error: @error_message', array('@error_message' => $error_message)));
+      form_error($form['media_fotoweb_full_api_key'], t('@error_message', array('@error_message' => $error_message)));
     }
     else {
-      form_error($form['media_fotoweb_server'], t('There was an error: @error_message', array('@error_message' => $error_message)));
+      form_error($form['media_fotoweb_server'], t('@error_message', array('@error_message' => $error_message)));
     }
   }
 }
