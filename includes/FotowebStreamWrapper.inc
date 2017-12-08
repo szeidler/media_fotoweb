@@ -246,15 +246,17 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *   URL the preview image can be fetched from.
    */
   public function getPreviewImageUrl($client) {
+    $url = '';
     $parts = $this->get_parameters();
     $resourceUrl = check_plain($parts['a']);
 
     $localFileThreshold = variable_get('media_fotoweb_local_file_size_threshold', 1500);
-    $asset = $client->getAsset(['href' => $resourceUrl]);
-    // TODO: Move preview negotiator into this class.
     try {
-      $path = $fotowebAsset->getAssetImagePathFromResource($resourceUrl);
-      $url = $fotoweb->getServer() . $path;
+      $asset = $client->getAsset(['href' => $resourceUrl]);
+      $previewNegotiator = new FotowebPreviewNegotiator($asset, $localFileThreshold);
+      if ($bestFitImage = $previewNegotiator->getBestFitImagePath()) {
+        $url = $bestFitImage['href'];
+      }
     } catch (Exception $e) {
       watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_CRITICAL);
       return NULL;
