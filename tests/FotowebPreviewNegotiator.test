@@ -1,0 +1,100 @@
+<?php
+
+use Fotoweb\Representation\Asset;
+
+class FotowebPreviewNegotiatorTest extends DrupalUnitTestCase {
+
+  /**
+   * Defines the simpletest.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Media Fotoweb FotowebPreviewNegotiatorTest',
+      'description' => 'Test the FotowebPreviewNegotiatorTest class.',
+      'group' => 'Media Fotoweb',
+    );
+  }
+
+  /**
+   * Test if the isImageABetterFit Method actually works as expected.
+   */
+  public function testIsImageABetterFitIntegrity() {
+    $originalImageWidth = 1600;
+    $threshold = 1400;
+
+    $asset = new Asset();
+    $previewNegotiator = new FotowebPreviewNegotiator($asset, $threshold);
+
+    $currentImage = array('width' => 1600, 'square' => FALSE);
+    $bestFitImage = array('width' => 1400, 'square' => FALSE);
+    $this->assertTrue($previewNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+
+    $currentImage = array('width' => 1601, 'square' => FALSE);
+    $bestFitImage = array('width' => 1400, 'square' => FALSE);
+    $this->assertFalse($previewNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+
+    $currentImage = array('width' => 1700, 'square' => FALSE);
+    $bestFitImage = array('width' => 1500, 'square' => FALSE);
+    $this->assertFalse($previewNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+
+    $currentImage = array('width' => 1500, 'square' => FALSE);
+    $bestFitImage = array('width' => 1650, 'square' => FALSE);
+    $this->assertTrue($previewNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+  }
+
+  /**
+   * Test, that the bestFitImage returns the appropriate image.
+   *
+   * It is ased on themaximum file size.
+   * Uses the $image['square'] = TRUE exclusion.
+   */
+  public function testBestFitImageFunctional() {
+    $originalImageWidth = 1600;
+    $threshold = 1400;
+
+    $asset = new Asset();
+    $previewNegotiator = new FotowebPreviewNegotiator($asset, $threshold);
+
+    $mock_previews = array(
+      0 => array(
+        'width' => -500,
+        'square' => FALSE,
+      ),
+      1 => array(
+        'width' => 500,
+        'square' => FALSE,
+      ),
+      2 => array(
+        'width' => 1600,
+        'square' => TRUE,
+      ),
+      3 => array(
+        'width' => 1400,
+        'square' => TRUE,
+      ),
+      4 => array(
+        'width' => 1450,
+        'square' => FALSE,
+      ),
+      5 => array(
+        'width' => 1800,
+        'square' => FALSE,
+      ),
+      6 => array(
+        'width' => 1750,
+        'square' => FALSE,
+      ),
+    );
+
+    $mock_previews = $previewNegotiator->orderPreviewsDescendant($mock_previews);
+
+    $bestFitImage = reset($mock_previews);
+    foreach ($mock_previews as $current_image) {
+      if ($previewNegotiator->isImageABetterFit($current_image, $bestFitImage, $originalImageWidth)) {
+        $bestFitImage = $current_image;
+      }
+    }
+    $this->assertEqual(1450, $bestFitImage['width'], 'Method returned the wrong best fit image.');
+  }
+
+}

@@ -1,5 +1,7 @@
 <?php
 
+use Fotoweb\Authentication\LoginTokenGenerator;
+
 /**
  * MediaBrowserPlugin to embed the Fotoweb Selection Widget into Media.
  */
@@ -78,7 +80,7 @@ class FotowebBrowser extends MediaBrowserPlugin {
    */
   protected function getUserLoginToken($fotoweb_username) {
     $fotoweb_encryption_secret = variable_get('media_fotoweb_encryption_secret', '');
-    $token_generator = new FotowebLoginTokenGenerator($fotoweb_encryption_secret, TRUE);
+    $token_generator = new LoginTokenGenerator($fotoweb_encryption_secret, TRUE);
     return $token_generator->CreateLoginToken($fotoweb_username);
   }
 
