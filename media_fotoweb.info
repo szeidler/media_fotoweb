@@ -14,5 +14,6 @@ files[] = includes/FotowebStreamWrapper.inc
 files[] = includes/FotowebBrowser.inc
 
 files[] = tests/media_fotoweb.test
+files[] = tests/FotowebPreviewNegotiator.test
 
 configure = admin/config/media/fotoweb
