@@ -2,7 +2,7 @@
 
 use Fotoweb\Representation\Asset;
 
-class FotowebPreviewNegotiatorTest extends DrupalWebTestCase {
+class FotowebPreviewNegotiatorTest extends DrupalUnitTestCase {
 
   /**
    * Defines the simpletest.
@@ -13,13 +13,6 @@ class FotowebPreviewNegotiatorTest extends DrupalWebTestCase {
       'description' => 'Test the FotowebPreviewNegotiatorTest class.',
       'group' => 'Media Fotoweb',
     );
-  }
-
-  /**
-   * Sets up the fixture.
-   */
-  public function setUp() {
-    parent::setUp('media_fotoweb');
   }
 
   /**
