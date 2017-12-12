@@ -21,9 +21,14 @@ class FotowebClientFactory {
       $apiToken = variable_get('media_fotoweb_full_api_key');
     }
 
-    return new FotowebClient([
+    $config = [
       'baseUrl' => $baseUrl,
       'apiToken' => $apiToken,
-    ]);
+      'client_config' => ['allow_redirects' => FALSE],
+    ];
+
+    drupal_alter('media_fotoweb_guzzle_configuration', $config['client_config']);
+
+    return new FotowebClient($config);
   }
 }
