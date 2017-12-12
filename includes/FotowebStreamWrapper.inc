@@ -149,56 +149,31 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    */
   public function getLocalImageUri() {
     $local_path = $this->getLocalImagePath();
+    $resourceUrl = $this->getResourceUrlFromParameters();
+
     if (!file_exists($local_path)) {
       $dirname = drupal_dirname($local_path);
       file_prepare_directory($dirname, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
       // Return the original image url based on the sites storage type selection.
       $file_storage_type = variable_get('media_fotoweb_file_storage_type', 'original');
-      $client = FotowebClientFactory::create();
       switch ($file_storage_type) {
         case 'preview':
-          $url = $this->getPreviewImageUrl($client);
+          $image_fetcher = new FotowebPreviewImageFetcher($resourceUrl, $local_path);
           break;
         default:
-          $url = $this->getOriginalImageUrl($client);
+          $image_fetcher = new FotowebOriginalImageFetcher($resourceUrl, $local_path);
       }
+
+      $url = $image_fetcher->getImageUrl();
 
       // Request and store the fotoweb image.
       // If it fails return NULL.
-      if (!$this->storeImage($client, $url, $local_path)) {
+      if (!$image_fetcher->store($url)) {
         return NULL;
       }
     }
 
     return $local_path;
-  }
-
-  /**
-   * Fetches the fotoweb image and store it on the disk.
-   *
-   * @param $fotoweb
-   *   Fotoweb Handler.
-   * @param string $url
-   *   Remote URL of the fotoweb image.
-   * @param $local_path
-   *   Local path, where the image should be stored.
-   *
-   * @return bool
-   *   Status of the process was successful.
-   */
-  protected function storeImage($client, $url, $local_path) {
-    if (empty($url)) return FALSE;
-
-    $response = $client->getRendition($url);
-
-    if ($response && $response->getStatusCode() == 200) {
-      $this->stream_content = (string) $response->getBody();
-      if (!file_unmanaged_save_data($response->getBody(), $local_path, FILE_EXISTS_REPLACE)) {
-        return FALSE;
-      }
-    }
-
-    return FALSE;
   }
 
   /**
@@ -211,55 +186,6 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     $parameters = $this->get_parameters();
     $local_path = file_default_scheme() . '://media-fotoweb/images/' . $this->getLocalFileName($parameters['a']) . '.jpg';
     return $local_path;
-  }
-
-  /**
-   * Returns the original image url from the fotoweb asset resource.
-   *
-   * @return string|null
-   *   URL the original image can be fetched from.
-   */
-  public function getOriginalImageUrl($client) {
-    $resourceUrl = $this->getResourceUrlFromParameters();
-
-    try {
-      $asset = $client->getAsset(['href' => $resourceUrl]);
-      $rendition_resource = $asset->offsetGet('renditions')[0]['href'];
-      $rendition_request = $client->getRenditionRequest([
-        // TODO: Use variable_get for rendition service.
-        'rendition_service' => '/fotoweb/services/renditions',
-        'href' => $rendition_resource,
-      ]);
-      $url = $rendition_request->getHref();
-    } catch (Exception $e) {
-      watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_CRITICAL);
-      return NULL;
-    }
-    return $url;
-  }
-
-  /**
-   * Returns the preview image url from the fotoweb asset resource.
-   *
-   * @return string|null
-   *   URL the preview image can be fetched from.
-   */
-  public function getPreviewImageUrl($client) {
-    $url = '';
-    $resourceUrl = $this->getResourceUrlFromParameters();
-
-    $localFileThreshold = variable_get('media_fotoweb_local_file_size_threshold', 1500);
-    try {
-      $asset = $client->getAsset(['href' => $resourceUrl]);
-      $previewNegotiator = new FotowebPreviewNegotiator($asset, $localFileThreshold);
-      if ($bestFitImage = $previewNegotiator->getBestFitImagePath()) {
-        $url = $bestFitImage['href'];
-      }
-    } catch (Exception $e) {
-      watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_CRITICAL);
-      return NULL;
-    }
-    return $url;
   }
 
   /**
@@ -277,7 +203,10 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
     $client = FotowebClientFactory::create();
 
     try {
-      return $client->updateMetadata(['href' => $resourceUrl, 'metadata' => $metadata]);
+      return $client->updateMetadata([
+        'href' => $resourceUrl,
+        'metadata' => $metadata
+      ]);
     } catch (Exception $e) {
       watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_ERROR);
       return FALSE;
