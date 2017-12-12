@@ -138,6 +138,14 @@ function media_fotoweb_admin_settings_validate(array $form, array $form_state) {
   // Perform authentication and validate its response.
   try {
     $response = $client->getApiDescriptor();
+
+    // Store the rendition service in a variable. So we have an accurate value
+    // and don't need to fetch it on every rendition request.
+    $services = $response->offsetGet('services');
+    if (!empty($services['rendition_request'])) {
+      variable_set('media_fotoweb_rendition_service', $services['rendition_request']);
+    }
+
     // No errors and exceptions. Display a success message.
     drupal_set_message(t('The connection to the Fotoweb endpoint was established successfully.'));
   }

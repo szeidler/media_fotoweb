@@ -81,4 +81,5 @@ function media_fotoweb_uninstall() {
   variable_del('media_fotoweb_file_storage_type');
   variable_del('media_fotoweb_local_file_size_threshold');
   variable_del('media_fotoweb_asset_update_trigger');
+  variable_del('media_fotoweb_rendition_service');
 }
