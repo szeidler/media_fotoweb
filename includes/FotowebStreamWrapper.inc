@@ -220,8 +220,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *   URL the original image can be fetched from.
    */
   public function getOriginalImageUrl($client) {
-    $parts = $this->get_parameters();
-    $resourceUrl = check_plain($parts['a']);
+    $resourceUrl = $this->getResourceUrlFromParameters();
 
     try {
       $asset = $client->getAsset(['href' => $resourceUrl]);
@@ -247,8 +246,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    */
   public function getPreviewImageUrl($client) {
     $url = '';
-    $parts = $this->get_parameters();
-    $resourceUrl = check_plain($parts['a']);
+    $resourceUrl = $this->getResourceUrlFromParameters();
 
     $localFileThreshold = variable_get('media_fotoweb_local_file_size_threshold', 1500);
     try {
@@ -274,8 +272,7 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
    *   TRUE, if the metadata was successfully updated. FALSE if not.
    */
   public function update_metadata($metadata) {
-    $parts = $this->get_parameters();
-    $resourceUrl = check_plain($parts['a']);
+    $resourceUrl = $this->getResourceUrlFromParameters();
 
     $client = FotowebClientFactory::create();
 
@@ -285,6 +282,17 @@ class FotowebStreamWrapper extends MediaReadOnlyStreamWrapper {
       watchdog('media_fotoweb', $e->getMessage(), array(), WATCHDOG_ERROR);
       return FALSE;
     }
+  }
+
+  /**
+   * Returns the resource url of the asset based on the parameters.
+   *
+   * @return string
+   */
+  protected function getResourceUrlFromParameters() {
+    $parts = $this->get_parameters();
+    $resourceUrl = check_plain($parts['a']);
+    return $resourceUrl;
   }
 
   /**
