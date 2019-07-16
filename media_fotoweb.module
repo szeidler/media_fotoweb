@@ -2,149 +2,23 @@
 
 /**
  * @file
- * Primary hook implementations for Media Fotoweb.
+ * Contains media_fotoweb.module.
  */
 
-// Load media_fotoweb file formatters.
-require_once dirname(__FILE__) . '/includes/media_fotoweb.formatters.inc';
+use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
- * Implements hook_menu().
+ * Implements hook_help().
  */
-function media_fotoweb_menu() {
-  $items = array();
+function media_fotoweb_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the media_fotoweb module.
+    case 'help.page.media_fotoweb':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Integrates media with the digital asset management from fotoware.com') . '</p>';
+      return $output;
 
-  $items['admin/config/media/fotoweb'] = array(
-    'title' => 'Media Fotoweb settings',
-    'description' => 'Configure the Media Fotoweb settings.',
-    'page callback' => 'drupal_get_form',
-    'page arguments' => array('media_fotoweb_admin_settings'),
-    'access arguments' => array('administer media_fotoweb settings'),
-    'file' => 'includes/media_fotoweb.admin.inc',
-  );
-  $items['media-fotoweb/add/asset'] = array(
-    'page callback' => '_media_fotoweb_add_asset_from_fotoweb',
-    'access arguments' => array('create files'),
-    'type' => MENU_CALLBACK,
-    'file' => 'media_fotoweb.asset.inc',
-    'file path' => drupal_get_path('module', 'media_fotoweb') . '/includes',
-  );
-  $directory_path = file_stream_wrapper_get_instance_by_scheme('public')->getDirectoryPath();
-  $items[$directory_path . '/media-fotoweb/styles/%image_style'] = array(
-    'title' => 'Generate image style for fotoweb assets',
-    'page callback' => '_media_fotoweb_image_style_deliver',
-    'page arguments' => array(count(explode('/', $directory_path)) + 2),
-    'access callback' => TRUE,
-    'file' => 'media_fotoweb.helper.inc',
-    'file path' => drupal_get_path('module', 'media_fotoweb') . '/includes',
-  );
-
-  return $items;
-}
-
-/**
- * Implements hook_permission().
- */
-function media_fotoweb_permission() {
-  return array(
-    'administer media_fotoweb settings' => array(
-      'title' => t('Administer Media Fotoweb'),
-      'description' => t('Access Media Fotoweb settings.'),
-    ),
-  );
-}
-
-/**
- * Implements hook_stream_wrappers().
- */
-function media_fotoweb_stream_wrappers() {
-  return array(
-    'fotoweb' => array(
-      'name' => t('Fotoweb assets'),
-      'class' => 'FotowebStreamWrapper',
-      'description' => t('Assets provided by Fotoweb.'),
-      'type' => STREAM_WRAPPERS_READ_VISIBLE,
-    ),
-  );
-}
-
-/**
- * Implements hook_file_mimetype_mapping_alter().
- */
-function media_fotoweb_file_mimetype_mapping_alter(&$mapping) {
-  $mapping['mimetypes'][] = 'image/fotoweb';
-}
-
-/**
- * Implements hook_file_default_types_alter().
- */
-function media_fotoweb_file_default_types_alter(&$types) {
-  $types['image']->mimetypes[] = 'image/fotoweb';
-}
-
-/**
- * Implements hook_file_metadata_info().
- */
-function media_fotoweb_file_metadata_info() {
-  $info = array(
-    'created' => array(
-      'label' => t('Created'),
-      'type' => 'integer',
-    ),
-    'changed' => array(
-      'label' => t('Changed'),
-      'type' => 'integer',
-    ),
-    'asset_resource' => array(
-      'label' => t('Asset resource'),
-      'type' => 'string',
-    ),
-    'asset_metadata' => array(
-      'label' => t('Metadata'),
-      'type' => 'array',
-    ),
-  );
-
-  return $info;
-}
-
-/**
- * Implements hook_media_browser_plugin_info().
- */
-function media_fotoweb_media_browser_plugin_info() {
-  $info = array(
-    'fotoweb' => array(
-      'title' => t('Fotoweb Browser'),
-      'class' => 'FotowebBrowser',
-      'weight' => 50,
-    ),
-  );
-  return $info;
-}
-
-/**
- * Implements hook_media_parse().
- */
-function media_fotoweb_media_parse($fotoweb_resource) {
-  $handler = new FotowebHandler($fotoweb_resource);
-  return $handler->parse($fotoweb_resource);
-}
-
-/**
- * Implements hook_ctools_plugin_api().
- */
-function media_fotoweb_ctools_plugin_api($module, $api) {
-  if ($module == 'file_entity' && $api == 'file_default_displays') {
-    return array('version' => 1);
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function media_fotoweb_form_user_profile_form_alter(&$form, &$form_state, $form_id) {
-  // Hide the fotoweb username field in user profile, when not using SSO.
-  if (!variable_get('', FALSE)) {
-    $form['media_fotoweb_selection_widget_use_sso']['#access'] = FALSE;
+    default:
   }
 }

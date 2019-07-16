@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_fotoweb
+id: fotoweb
+label: Fotoweb
+description: ''
+source: fotoweb
+queue_thumbnail_downloads: false
+new_revision: false
+source_configuration:
+  source_field: field_fotoweb_identifier
+  local_image: field_fotoweb_image
+field_map:
+  filename: name
+  file: field_fotoweb_image
+  href: field_fotoweb_identifier

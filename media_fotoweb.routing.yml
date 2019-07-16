@@ -1,0 +1,7 @@
+media_fotoweb.settings:
+  path: '/admin/config/media/media-fotoweb'
+  defaults:
+    _form: '\Drupal\media_fotoweb\Form\FotowebSettingsForm'
+    _title: 'Media Fotoweb'
+  requirements:
+    _permission: 'administer media_fotoweb'

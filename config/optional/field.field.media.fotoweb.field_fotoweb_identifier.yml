@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.field_fotoweb_identifier
+    - media.type.fotoweb
+id: media.fotoweb.field_fotoweb_identifier
+field_name: field_fotoweb_identifier
+entity_type: media
+bundle: fotoweb
+label: Fotoweb
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

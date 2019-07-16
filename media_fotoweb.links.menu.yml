@@ -1,0 +1,5 @@
+media_fotoweb.settings:
+  title: 'Media Fotoweb'
+  parent: system.admin_config_services
+  description: 'Configure the Media Fotoweb module.'
+  route_name: media_fotoweb.settings

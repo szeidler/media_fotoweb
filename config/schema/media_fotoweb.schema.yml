@@ -1,0 +1,22 @@
+media_fotoweb.settings:
+  type: config_object
+  label: 'Media Fotoweb Settings'
+  mapping:
+    server:
+      type: string
+      label: 'Fotoweb server'
+    full_api_key:
+      type: string
+      label: 'Full API Key'
+    selection_widget_use_sso:
+      type: boolean
+      label: 'Use SSO for the asset selection widget?'
+    encryption_secret:
+      type: string
+      label: 'Encryption secret'
+    selection_widget_height:
+      type: integer
+      label: 'Selection Widget Height'
+    rendition_service:
+      type: string
+      label: 'Fotoweb rendition service'

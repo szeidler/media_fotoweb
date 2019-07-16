@@ -1,0 +1,5 @@
+selection_widget:
+  js:
+    js/fotoweb_selection_widget.js: {}
+  dependencies:
+    - core/drupalSettings

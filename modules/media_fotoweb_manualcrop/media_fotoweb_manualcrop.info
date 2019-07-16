@@ -1,7 +1,0 @@
-name = Media Fotoweb Manual Crop
-description = Make Manual Crop usuable for Fotoweb images
-core = 7.x
-package = Media
-
-dependencies[] = manualcrop
-dependencies[] = media_fotoweb
