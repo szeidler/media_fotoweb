@@ -13,7 +13,10 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaSourceBase;
 use Drupal\media\MediaTypeInterface;
 use Drupal\media\MediaInterface;
+use Drupal\media_fotoweb\Annotation\FotowebImageFetcher;
+use Drupal\media_fotoweb\ImageFetcherManager;
 use Drupal\media_fotoweb\OriginalImageFetcher;
+use Drupal\media_fotoweb\RenditionImageFetcher;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -56,6 +59,13 @@ class Fotoweb extends MediaSourceBase {
   protected $token;
 
   /**
+   * The Image Fetcher Plugin Manager.
+   *
+   * @var \Drupal\media_fotoweb\ImageFetcherManager
+   */
+  protected $imageFetcherManager;
+
+  /**
    * Constructs a new class instance.
    *
    * @param array $configuration
@@ -76,12 +86,15 @@ class Fotoweb extends MediaSourceBase {
    *   The file system service.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
+   * @param \Drupal\media_fotoweb\ImageFetcherManager $image_fetcher_manager
+   *   The Image Fetcher Plugin Manager
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, FieldTypePluginManagerInterface $field_type_manager, ConfigFactoryInterface $configFactory, FileSystemInterface $fileSystem, Token $token) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, FieldTypePluginManagerInterface $field_type_manager, ConfigFactoryInterface $configFactory, FileSystemInterface $fileSystem, Token $token, ImageFetcherManager $image_fetcher_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_field_manager, $field_type_manager, $configFactory);
     $this->configFactory = $configFactory;
     $this->fileSystem = $fileSystem;
     $this->token = $token;
+    $this->imageFetcherManager = $image_fetcher_manager;
   }
 
   /**
@@ -97,7 +110,8 @@ class Fotoweb extends MediaSourceBase {
       $container->get('plugin.manager.field.field_type'),
       $container->get('config.factory'),
       $container->get('file_system'),
-      $container->get('token')
+      $container->get('token'),
+      $container->get('plugin.manager.media_fotoweb.image_fetcher')
     );
   }
 
@@ -303,8 +317,9 @@ class Fotoweb extends MediaSourceBase {
     }
 
     // Get the file from Fotoweb.
-    $client = \Drupal::service('media_fotoweb.client');
-    $imageFetcher = new OriginalImageFetcher($client);
+    $config = $this->configFactory->get('media_fotoweb.settings');
+    $storageType = $config->get('file_storage_type');
+    $imageFetcher = $this->imageFetcherManager->createInstance($storageType);
     $resourceUrl = $this->getMetadata($media, 'href');
     $data = $imageFetcher->getImageByResourceUrl($resourceUrl);
     $file = file_save_data($data, $destination_path, $replace);

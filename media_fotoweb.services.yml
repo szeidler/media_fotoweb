@@ -6,3 +6,9 @@ services:
     class: Drupal\media_fotoweb\FotowebClient
     factory: Drupal\media_fotoweb\FotowebClientFactory::create
     arguments: ['@config.factory']
+  media_fotoweb.rendition_negotiator:
+    class: Drupal\media_fotoweb\RenditionNegotiator
+    arguments: ['@config.factory']
+  plugin.manager.media_fotoweb.image_fetcher:
+    class: Drupal\media_fotoweb\ImageFetcherManager
+    parent: default_plugin_manager

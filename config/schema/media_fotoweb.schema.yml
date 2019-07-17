@@ -20,6 +20,12 @@ media_fotoweb.settings:
     selection_widget_height:
       type: integer
       label: 'Selection Widget Height'
+    file_storage_type:
+      type: string
+      label: 'File storage type'
+    local_file_size_threshold:
+      type: string
+      label: 'Local file size threshold'
     rendition_service:
       type: string
       label: 'Fotoweb rendition service'

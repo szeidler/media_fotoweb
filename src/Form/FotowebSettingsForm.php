@@ -7,6 +7,8 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\media_fotoweb\ImageFetcherInterface;
+use Drupal\media_fotoweb\ImageFetcherManager;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -16,10 +18,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class FotowebSettingsForm extends ConfigFormBase {
 
   /**
-   * @var EntityFieldManagerInterface $entityfieldManager
-   *   The entity field manager.
+   * The entity field manager.
+   *
+   * @var EntityFieldManagerInterface
    */
   protected $entityFieldManager;
+
+  /**
+   * The Image Fetcher Manager.
+   *
+   * @var \Drupal\media_fotoweb\ImageFetcherManager
+   */
+  protected $imageFetcherManager;
 
   /**
    * Constructs a FotowebSettingsForm object.
@@ -28,10 +38,13 @@ class FotowebSettingsForm extends ConfigFormBase {
    *   The factory for configuration objects.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager.
+   * @param \Drupal\media_fotoweb\ImageFetcherManager $image_fetcher_manager
+   *   The image fetcher manager.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, EntityFieldManagerInterface $entity_field_manager) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityFieldManagerInterface $entity_field_manager, ImageFetcherManager $image_fetcher_manager) {
     $this->setConfigFactory($config_factory);
     $this->entityFieldManager = $entity_field_manager;
+    $this->imageFetcherManager = $image_fetcher_manager;
   }
 
   /**
@@ -40,7 +53,8 @@ class FotowebSettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('entity_field.manager')
+      $container->get('entity_field.manager'),
+      $container->get('plugin.manager.media_fotoweb.image_fetcher')
     );
   }
 
@@ -107,7 +121,7 @@ class FotowebSettingsForm extends ConfigFormBase {
     $form['sso_user_field'] = [
       '#type' => 'select',
       '#title' => $this->t('Fotoweb Username Field'),
-      '#description' => $this->t('Select the field, that stores the Fotoweb username for performing the Single Sign-on. If you find no appropriate field, create one on the <a href="@user_field_ui">user field configuration</a>.', ['@user_field_ui' => Url::fromRoute('entity.user.field_ui_fields')->toString()]),
+      '#description' => $this->t('Select the field, that stores your users Fotoweb username (used in the Fotoweb system) for performing the Single Sign-on. If you find no appropriate field, create one on the <a href="@user_field_ui">user field configuration</a>.', ['@user_field_ui' => Url::fromRoute('entity.user.field_ui_fields')->toString()]),
       '#options' => $this->getUserSingleSignOnFieldsAsOptions(),
       '#default_value' => $config->get('sso_user_field'),
       '#states' => [
@@ -119,10 +133,33 @@ class FotowebSettingsForm extends ConfigFormBase {
 
     $form['selection_widget_height'] = [
       '#type' => 'number',
-      '#title' => t('Selection Widget Height'),
+      '#title'=> $this->t('Selection Widget Height'),
       '#description' => $this->t('Specify the height of the selection widget in pixels.'),
       '#default_value' => $config->get('selection_widget_height'),
     ];
+
+    $form['file_storage_type'] = array(
+      '#type' => 'select',
+      '#title'=> $this->t('File storage type'),
+      '#description'=> $this->t('Original images from Fotoweb might be unnecessary big for your website usage. You can either store the original image or a smaller appropriate preview with your desired maximum width.'),
+      '#options' => $this->imageFetcherManager->getImageFetcherOptionList(),
+      '#default_value' => $config->get('file_storage_type'),
+    );
+
+    $form['local_file_size_threshold'] = array(
+      '#type' => 'textfield',
+      '#title'=> $this->t('Local file size threshold'),
+      '#description'=> $this->t('Define the minimal size for your locally stored images. The module will import the appropriate preview size from Fotoweb using the first preview, that matches the minimum threshold. Beware: The original image (and so the maximum) might be smaller than the threshold.'),
+      '#default_value' => $config->get('local_file_size_threshold'),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="file_storage_type"]' => array('value' => 'rendition_image'),
+        ),
+        'required' => array(
+          ':input[name="file_storage_type"]' => array('value' => 'rendition_image'),
+        ),
+      ),
+    );
 
     return parent::buildForm($form, $form_state);
   }
@@ -138,6 +175,8 @@ class FotowebSettingsForm extends ConfigFormBase {
     $config->set('encryption_secret', $form_state->getValue('encryption_secret'));
     $config->set('sso_user_field', $form_state->getValue('sso_user_field'));
     $config->set('selection_widget_height', $form_state->getValue('selection_widget_height'));
+    $config->set('file_storage_type', $form_state->getValue('file_storage_type'));
+    $config->set('local_file_size_threshold', $form_state->getValue('local_file_size_threshold'));
 
     /** @var \Drupal\media_fotoweb\FotowebClient $client */
     $client = \Drupal::service('media_fotoweb.client');
