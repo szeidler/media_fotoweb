@@ -179,11 +179,11 @@ class FotowebSettingsForm extends ConfigFormBase {
   protected function getUserSingleSignOnFieldsAsOptions() {
     // If there are existing fields to choose from, allow the user to reuse one.
     $options = [];
-    foreach ($this->entityFieldManager->getFieldStorageDefinitions('user') as $field_name => $field) {
+    foreach ($this->entityFieldManager->getFieldDefinitions('user', 'user') as $field_name => $field) {
       $allowed_type = in_array($field->getType(), $this->getAllowedSingleSignOnFieldTypes(), TRUE);
       // Provide only fields that are from an allowed field type, not a base
       // field or the name field.
-      if ($allowed_type && (!$field->isBaseField() || $field->getName() === 'name')) {
+      if ($allowed_type && (!$field->getFieldStorageDefinition()->isBaseField() || $field->getName() === 'name')) {
         $options[$field_name] = $field->getLabel();
       }
     }
