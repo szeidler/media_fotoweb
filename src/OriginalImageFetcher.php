@@ -13,7 +13,16 @@ class OriginalImageFetcher {
     $this->client = $client;
   }
 
-  public function getImageUrlByResourceUrl($resourceUrl) {
+  /**
+   * Returns the original image for a given resource URL.
+   *
+   * @param $resourceUrl
+   *   The given resource URL.
+   *
+   * @return string|null
+   *   The image file contents or NULL on failure.
+   */
+  public function getImageByResourceUrl($resourceUrl) {
     try {
       $asset = $this->client->getAsset(['href' => $resourceUrl]);
       $rendition_resource = $asset->offsetGet('renditions')[0]['href'];

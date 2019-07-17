@@ -306,7 +306,7 @@ class Fotoweb extends MediaSourceBase {
     $client = \Drupal::service('media_fotoweb.client');
     $imageFetcher = new OriginalImageFetcher($client);
     $resourceUrl = $this->getMetadata($media, 'href');
-    $data = $imageFetcher->getImageUrlByResourceUrl($resourceUrl);
+    $data = $imageFetcher->getImageByResourceUrl($resourceUrl);
     $file = file_save_data($data, $destination_path, $replace);
 
     return $file;
