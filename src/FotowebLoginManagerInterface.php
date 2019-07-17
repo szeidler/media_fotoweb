@@ -2,7 +2,7 @@
 
 namespace Drupal\media_fotoweb;
 
-use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 
 /**
  * Interface FotowebLoginManagerInterface.
@@ -10,14 +10,14 @@ use Drupal\Core\Session\AccountInterface;
 interface FotowebLoginManagerInterface {
 
   /**
-   * Returns the Fotoweb Login Token for a Drupal user.
+   * Returns the Fotoweb Login Token for a Drupal account.
    *
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user object.
+   * @param \Drupal\Core\Session\AccountProxyInterface $user
+   *   The user proxy object.
    *
    * @return string
    *   The Fotoweb Login Token.
    */
-  public function getLoginTokenFromUser(AccountInterface $user);
+  public function getLoginTokenFromAccount(AccountProxyInterface $user);
 
 }

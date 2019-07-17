@@ -1,7 +1,7 @@
 services:
   media_fotoweb.login_manager:
     class: Drupal\media_fotoweb\FotowebLoginManager
-    arguments: ['@config.factory', '@current_user']
+    arguments: ['@config.factory', '@entity_type.manager']
   media_fotoweb.client:
     class: Drupal\media_fotoweb\FotowebClient
     factory: Drupal\media_fotoweb\FotowebClientFactory::create

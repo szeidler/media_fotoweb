@@ -175,7 +175,7 @@ class FotowebSelection extends WidgetBase implements ContainerFactoryPluginInter
 
     // Generate user login token and append it to widget url, when using SSO.
     if ($config->get('selection_widget_use_sso')) {
-      if ($user_login_token = $this->loginManager->getLoginTokenFromUser($this->currentUser)) {
+      if ($user_login_token = $this->loginManager->getLoginTokenFromAccount($this->currentUser)) {
         $widget_url .= '?lt=' . $user_login_token;
       }
     }
