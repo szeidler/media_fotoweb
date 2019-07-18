@@ -29,6 +29,21 @@ class RenditionNegotiator {
   }
 
   /**
+   * @return int
+   */
+  public function getLocalFileThreshold() {
+    return $this->localFileThreshold;
+  }
+
+  /**
+   * @param int $localFileThreshold
+   */
+  public function setLocalFileThreshold($localFileThreshold) {
+    $this->localFileThreshold = $localFileThreshold;
+  }
+
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
@@ -40,7 +55,7 @@ class RenditionNegotiator {
   /**
    * Return the best fit asset image path from a asset resource.
    *
-   * @param array $asset
+   * @param \Fotoweb\Representation\Asset $asset
    *   The Fotoweb asset.
    *
    * @return string|null
@@ -52,7 +67,7 @@ class RenditionNegotiator {
     if ($previews = $asset->offsetGet('previews')) {
       $originalImageWidth = $asset->offsetGet('attributes')['imageattributes']['pixelwidth'];
 
-      $previews = $this->orderPreviewsDescendant($previews);
+      $previews = $this->orderPreviewsAscendant($previews);
 
       // Set initial bestFitImage.
       $bestFitImage = reset($previews);
@@ -70,6 +85,22 @@ class RenditionNegotiator {
   }
 
   /**
+   * Orders the previews in a ascendant size order.
+   *
+   * @param array $previews
+   *   Array of image previews properties.
+   *
+   * @return array
+   *   The ascendant ordered image previews.
+   */
+  public function orderPreviewsAscendant(array $previews) {
+    usort($previews, function ($a, $b) {
+      return ($a['width'] > $b['width']);
+    });
+    return $previews;
+  }
+
+  /**
    * Orders the previews in a descendant size order.
    *
    * @param array $previews
@@ -80,7 +111,7 @@ class RenditionNegotiator {
    */
   public function orderPreviewsDescendant(array $previews) {
     usort($previews, function ($a, $b) {
-      return strcmp($b['width'], $a['width']);
+      return ($a['width'] < $b['width']);
     });
     return $previews;
   }
@@ -107,9 +138,9 @@ class RenditionNegotiator {
     }
 
     // The current image is the bestFit, it is smaller or equal than
-    // the original image dimensions and bitter than the localFileThreshold.
+    // the original image dimensions and better than the localFileThreshold.
     if ($this->localFileThreshold) {
-      return ($currentImage['width'] > $this->localFileThreshold && $currentImage['width'] <= $originalImageWidth);
+      return ($bestFitImage['width'] < $this->localFileThreshold && $currentImage > $this->localFileThreshold && $currentImage['width'] <= $originalImageWidth);
     }
     // When no threshold was specified, the largest preview, that is not
     // exceeding the original dimensions is the better fit.
