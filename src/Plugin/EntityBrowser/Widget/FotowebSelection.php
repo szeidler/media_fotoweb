@@ -196,9 +196,11 @@ class FotowebSelection extends WidgetBase implements ContainerFactoryPluginInter
     $entity_type_id = 'fotoweb';
     $entities = [];
     $selected = json_decode($form_state->getValue('fotoweb_selected', []));
+
     /** @var \Drupal\media\MediaTypeInterface $media_type */
     $media_type = $this->entityTypeManager->getStorage('media_type')
       ->load($entity_type_id);
+    /** @var \Drupal\media_fotoweb\Plugin\media\Source\Fotoweb $plugin */
     $plugin = $media_type->getSource();
     $source_field = $plugin->getConfiguration()['source_field'];
 
@@ -208,12 +210,11 @@ class FotowebSelection extends WidgetBase implements ContainerFactoryPluginInter
         ->range(0, 1)
         ->execute();
       if ($mid) {
-        $media = $this->entityTypeManager->getStorage('media')
-          ->load(reset($mid));
-
+        $media = $this->loadAndSyncMedia($mid, $asset);
         $entities[] = $media;
       }
       else {
+        /** @var \Drupal\media\MediaInterface $media */
         $media = $this->entityTypeManager->getStorage('media')->create([
           'bundle' => $media_type->id(),
           $source_field => $asset->href,
@@ -228,6 +229,35 @@ class FotowebSelection extends WidgetBase implements ContainerFactoryPluginInter
     }
 
     return $entities;
+  }
+
+  /**
+   * Load and sync the existing media entity.
+   *
+   * @param int $mid
+   *   The media id.
+   * @param $asset
+   *   The Fotoweb asset.
+   *
+   * @return \Drupal\media\MediaInterface
+   *   The selected media entity.
+   */
+  protected function loadAndSyncMedia($mid, $asset) {
+    $config = $this->configFactory->get('media_fotoweb.settings');
+    $asset_update_type = $config->get('asset_update_type');
+
+    /** @var \Drupal\media\MediaInterface $media */
+    $media = $this->entityTypeManager->getStorage('media')
+      ->load(reset($mid));
+
+    // Resync the asset data from Fotoweb on selection, when "reuse" update
+    // type was set.
+    if ($asset_update_type === 'reused') {
+      $media->original_data = $asset;
+      $media->save();
+    }
+
+    return $media;
   }
 
 }

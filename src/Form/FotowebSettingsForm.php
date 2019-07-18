@@ -161,6 +161,17 @@ class FotowebSettingsForm extends ConfigFormBase {
       ),
     );
 
+    $form['asset_update_type'] = array(
+      '#type' => 'select',
+      '#title'=> $this->t('When should the asset be updated?'),
+      '#description'=> $this->t('Define, when the asset metadata should imported. <br><em>On new created assets:</em> Only when the asset was used the first time the metadata will be imported. <br><em>On every asset selection:</em> Whenever an user selects an asset the metadata will be updated. This option can have implications (changed metadata) on old articles, that are using the same asset.'),
+      '#options' => [
+        'new' => $this->t('On new created assets'),
+        'reused' => $this->t('On every asset selection'),
+      ],
+      '#default_value' => $config->get('asset_update_type'),
+    );
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -177,6 +188,7 @@ class FotowebSettingsForm extends ConfigFormBase {
     $config->set('selection_widget_height', $form_state->getValue('selection_widget_height'));
     $config->set('file_storage_type', $form_state->getValue('file_storage_type'));
     $config->set('local_file_size_threshold', $form_state->getValue('local_file_size_threshold'));
+    $config->set('asset_update_type', $form_state->getValue('asset_update_type'));
 
     /** @var \Drupal\media_fotoweb\FotowebClient $client */
     $client = \Drupal::service('media_fotoweb.client');

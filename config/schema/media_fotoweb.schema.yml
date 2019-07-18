@@ -26,6 +26,9 @@ media_fotoweb.settings:
     local_file_size_threshold:
       type: string
       label: 'Local file size threshold'
+    asset_update_type:
+      type: string
+      label: 'Asset update type'
     rendition_service:
       type: string
       label: 'Fotoweb rendition service'

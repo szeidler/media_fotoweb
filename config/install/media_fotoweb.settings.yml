@@ -6,4 +6,5 @@ sso_user_field: ''
 selection_widget_height: 800
 file_storage_type: 'original_image'
 local_file_size_threshold: ''
+asset_update_type: 'new'
 rendition_service: ''
