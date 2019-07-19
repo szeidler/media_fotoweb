@@ -30,7 +30,7 @@ class ImageFetcherManager extends DefaultPluginManager {
   }
 
   /**
-   * @inheritdoc
+   * {@inheritdoc}
    */
   protected function findDefinitions() {
     $definitions = parent::findDefinitions();

@@ -42,24 +42,24 @@ class RenditionNegotiatorTest extends UnitTestCase {
   /**
    * Tests the image is a better fit check.
    */
-  public function testIsImageABetterFit() {
+  public function testIsImageBetterFit() {
     $originalImageWidth = 4000;
 
     $currentImage = ['width' => 1600, 'square' => FALSE];
     $bestFitImage = ['width' => 1400, 'square' => FALSE];
-    $this->assertTrue($this->renditionNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+    $this->assertTrue($this->renditionNegotiator->isImageBetterFit($currentImage, $bestFitImage, $originalImageWidth));
 
     $currentImage = ['width' => 1601, 'square' => FALSE];
     $bestFitImage = ['width' => 1600, 'square' => FALSE];
-    $this->assertFalse($this->renditionNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+    $this->assertFalse($this->renditionNegotiator->isImageBetterFit($currentImage, $bestFitImage, $originalImageWidth));
 
     $currentImage = ['width' => 1700, 'square' => FALSE];
     $bestFitImage = ['width' => 1500, 'square' => FALSE];
-    $this->assertTrue($this->renditionNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+    $this->assertTrue($this->renditionNegotiator->isImageBetterFit($currentImage, $bestFitImage, $originalImageWidth));
 
     $currentImage = ['width' => 1700, 'square' => FALSE];
     $bestFitImage = ['width' => 1650, 'square' => FALSE];
-    $this->assertFalse($this->renditionNegotiator->isImageABetterFit($currentImage, $bestFitImage, $originalImageWidth));
+    $this->assertFalse($this->renditionNegotiator->isImageBetterFit($currentImage, $bestFitImage, $originalImageWidth));
   }
 
   /**

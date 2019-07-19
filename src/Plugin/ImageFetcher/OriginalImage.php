@@ -7,6 +7,8 @@ use Drupal\media_fotoweb\ImageFetcherBase;
 use Drupal\media_fotoweb\FotowebClient;
 
 /**
+ * Provides a Fotoweb Image Fetcher that loads the original asset image.
+ *
  * @FotowebImageFetcher(
  *  id = "original_image",
  *  label = @Translation("Original image"),

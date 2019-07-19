@@ -12,7 +12,7 @@ interface ImageFetcherInterface extends PluginInspectionInterface {
   /**
    * Returns the scaled down rendition image for a given resource URL.
    *
-   * @param $resourceUrl
+   * @param string $resourceUrl
    *   The given resource URL.
    *
    * @return string|null

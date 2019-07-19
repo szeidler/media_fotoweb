@@ -259,7 +259,7 @@ class Fotoweb extends MediaSourceBase {
     // If there is already a file on the media entity then we should use that.
     $file = $this->getExistingFile($media);
 
-    // TODO: Find out if it is an updated version -> comparing the modified timestamp.
+    // TODO: Find out if it is an updated version.
     $is_updated_version = FALSE;
 
     if (empty($file)) {
@@ -273,6 +273,8 @@ class Fotoweb extends MediaSourceBase {
   }
 
   /**
+   * Load an existing local file for the media.
+   *
    * @param \Drupal\media\MediaInterface $media
    *   The media entity to get the existing file ID from.
    *

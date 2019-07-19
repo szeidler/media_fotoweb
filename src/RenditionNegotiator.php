@@ -29,14 +29,20 @@ class RenditionNegotiator {
   }
 
   /**
+   * Returns the localFileThreshold.
+   *
    * @return int
+   *   The local file threshold.
    */
   public function getLocalFileThreshold() {
     return $this->localFileThreshold;
   }
 
   /**
+   * Sets the localFileThreshold.
+   *
    * @param int $localFileThreshold
+   *   The numeric local file threshold.
    */
   public function setLocalFileThreshold($localFileThreshold) {
     $this->localFileThreshold = $localFileThreshold;
@@ -73,7 +79,7 @@ class RenditionNegotiator {
 
       // Iterate over previews to find the bestFit.
       foreach ($previews as $currentPreviewImage) {
-        if ($this->isImageABetterFit($currentPreviewImage, $bestFitImage, $originalImageWidth)) {
+        if ($this->isImageBetterFit($currentPreviewImage, $bestFitImage, $originalImageWidth)) {
           $bestFitImage = $currentPreviewImage;
         }
       }
@@ -130,7 +136,7 @@ class RenditionNegotiator {
    * @return bool
    *   True if the current image is a better fit.
    */
-  public function isImageABetterFit(array $currentImage, array $bestFitImage, $originalImageWidth) {
+  public function isImageBetterFit(array $currentImage, array $bestFitImage, $originalImageWidth) {
     // Square previews cannot be a good fit, we need the original aspect ratio.
     if (isset($currentImage['square']) && $currentImage['square']) {
       return FALSE;

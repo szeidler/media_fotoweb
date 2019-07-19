@@ -5,14 +5,18 @@ namespace Drupal\media_fotoweb;
 use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
- * Class FotowebClientFactory.
+ * Factory that builds the FotowebClient.
  */
 class FotowebClientFactory {
 
   /**
+   * Creates the FotowebClient from configuration values.
+   *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    *
    * @return \Drupal\media_fotoweb\FotowebClient
+   *   The Fotoweb Client.
    */
   public static function create(ConfigFactoryInterface $config_factory) {
     $config = $config_factory->get('media_fotoweb.settings');

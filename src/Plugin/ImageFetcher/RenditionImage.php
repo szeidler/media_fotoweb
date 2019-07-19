@@ -8,6 +8,8 @@ use Drupal\media_fotoweb\FotowebClient;
 use Drupal\media_fotoweb\RenditionNegotiator;
 
 /**
+ * Provides a Fotoweb Image Fetcher that loads a matching rendition image.
+ *
  * @FotowebImageFetcher(
  *  id = "rendition_image",
  *  label = @Translation("Preview image"),

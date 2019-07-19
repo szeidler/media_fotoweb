@@ -69,7 +69,10 @@ class RenditionImageFetcherTest extends UnitTestCase {
    * Test getting a rendition image by Fotoweb resource URL.
    */
   public function testGetImageByResourceUrl() {
-    $responses = [new Response(200, [], file_get_contents(__DIR__ . '/fixtures/asset.json')), new Response(200, [], 'myimage contents')];
+    $responses = [
+      new Response(200, [], file_get_contents(__DIR__ . '/fixtures/asset.json')),
+      new Response(200, [], 'myimage contents'),
+    ];
     $mockHandler = $this->buildMockHandler($responses);
 
     // Use a history middleware to be able to verify which rendition image

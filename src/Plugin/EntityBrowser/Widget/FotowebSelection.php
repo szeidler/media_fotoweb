@@ -236,13 +236,13 @@ class FotowebSelection extends WidgetBase implements ContainerFactoryPluginInter
    *
    * @param int $mid
    *   The media id.
-   * @param $asset
+   * @param object $asset
    *   The Fotoweb asset.
    *
    * @return \Drupal\media\MediaInterface
    *   The selected media entity.
    */
-  protected function loadAndSyncMedia($mid, $asset) {
+  protected function loadAndSyncMedia($mid, object $asset) {
     $config = $this->configFactory->get('media_fotoweb.settings');
     $asset_update_type = $config->get('asset_update_type');
 
