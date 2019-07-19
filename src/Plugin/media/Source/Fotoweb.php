@@ -13,10 +13,7 @@ use Drupal\file\FileInterface;
 use Drupal\media\MediaSourceBase;
 use Drupal\media\MediaTypeInterface;
 use Drupal\media\MediaInterface;
-use Drupal\media_fotoweb\Annotation\FotowebImageFetcher;
 use Drupal\media_fotoweb\ImageFetcherManager;
-use Drupal\media_fotoweb\OriginalImageFetcher;
-use Drupal\media_fotoweb\RenditionImageFetcher;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -87,7 +84,7 @@ class Fotoweb extends MediaSourceBase {
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    * @param \Drupal\media_fotoweb\ImageFetcherManager $image_fetcher_manager
-   *   The Image Fetcher Plugin Manager
+   *   The Image Fetcher Plugin Manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, FieldTypePluginManagerInterface $field_type_manager, ConfigFactoryInterface $configFactory, FileSystemInterface $fileSystem, Token $token, ImageFetcherManager $image_fetcher_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_field_manager, $field_type_manager, $configFactory);
@@ -190,13 +187,13 @@ class Fotoweb extends MediaSourceBase {
     $bundle = $form_state->getFormObject()->getEntity();
 
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['local_image'] = array(
+    $form['local_image'] = [
       '#type' => 'select',
       '#title' => $this->t('Local image'),
       '#description' => $this->t('Field on media entity that stores Image file. You can create a bundle without selecting a value for this dropdown initially. This dropdown can be populated after adding fields to the bundle.'),
       '#default_value' => empty($this->configuration['local_image']) ? NULL : $this->configuration['local_image'],
       '#options' => $this->getLocalImageFieldOptions($bundle),
-    );
+    ];
 
     return $form;
   }
@@ -216,7 +213,7 @@ class Fotoweb extends MediaSourceBase {
 
     foreach ($this->entityFieldManager->getFieldDefinitions('media', $bundle->id()) as $field_name => $field) {
       if (in_array($field->getType(), $allowed_field_types) && !$field->getFieldStorageDefinition()
-          ->isBaseField()) {
+        ->isBaseField()) {
         $options[$field_name] = $field->getLabel();
       }
     }

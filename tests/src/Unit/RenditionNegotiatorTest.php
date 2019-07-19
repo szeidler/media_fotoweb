@@ -8,7 +8,7 @@ use Drupal\Tests\UnitTestCase;
 use Fotoweb\Representation\Asset;
 
 /**
- * Tests the RenditionNegotiator
+ * Tests the RenditionNegotiator.
  *
  * @group media_fotoweb
  */
@@ -38,7 +38,6 @@ class RenditionNegotiatorTest extends UnitTestCase {
 
     $this->renditionNegotiator = RenditionNegotiator::create($container);
   }
-
 
   /**
    * Tests the image is a better fit check.
@@ -130,8 +129,8 @@ class RenditionNegotiatorTest extends UnitTestCase {
     $data = [
       'attributes' => [
         'imageattributes' => [
-          'pixelwidth' => 3000
-        ]
+          'pixelwidth' => 3000,
+        ],
       ],
       'previews' => [
         ['width' => 500, 'square' => FALSE],
@@ -167,8 +166,8 @@ class RenditionNegotiatorTest extends UnitTestCase {
     $data = [
       'attributes' => [
         'imageattributes' => [
-          'pixelwidth' => 3000
-        ]
+          'pixelwidth' => 3000,
+        ],
       ],
       'previews' => [
         ['width' => 500],

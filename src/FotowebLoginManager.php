@@ -4,7 +4,6 @@ namespace Drupal\media_fotoweb;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\user\UserInterface;
 use Fotoweb\Authentication\LoginTokenGenerator;

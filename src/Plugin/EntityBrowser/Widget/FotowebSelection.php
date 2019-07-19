@@ -137,13 +137,13 @@ class FotowebSelection extends WidgetBase implements ContainerFactoryPluginInter
 
     $config = $this->configFactory->get('media_fotoweb.settings');
 
-    $form['selection_widget'] = array(
+    $form['selection_widget'] = [
       '#type' => 'markup',
       '#markup' => $this->buildEmbeddedSelectionWidget(),
-    );
-    $form['fotoweb_selected'] = array(
+    ];
+    $form['fotoweb_selected'] = [
       '#type' => 'hidden',
-    );
+    ];
 
     $form['selection_widget']['#attached']['library'] = ['media_fotoweb/selection_widget'];
     $form['selection_widget']['#attached']['drupalSettings']['media_fotoweb']['host'] = $config->get('server');

@@ -7,7 +7,6 @@ use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\media_fotoweb\ImageFetcherInterface;
 use Drupal\media_fotoweb\ImageFetcherManager;
 use GuzzleHttp\Exception\RequestException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,7 +19,7 @@ class FotowebSettingsForm extends ConfigFormBase {
   /**
    * The entity field manager.
    *
-   * @var EntityFieldManagerInterface
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
    */
   protected $entityFieldManager;
 
@@ -133,44 +132,44 @@ class FotowebSettingsForm extends ConfigFormBase {
 
     $form['selection_widget_height'] = [
       '#type' => 'number',
-      '#title'=> $this->t('Selection Widget Height'),
+      '#title' => $this->t('Selection Widget Height'),
       '#description' => $this->t('Specify the height of the selection widget in pixels.'),
       '#default_value' => $config->get('selection_widget_height'),
     ];
 
-    $form['file_storage_type'] = array(
+    $form['file_storage_type'] = [
       '#type' => 'select',
-      '#title'=> $this->t('File storage type'),
-      '#description'=> $this->t('Original images from Fotoweb might be unnecessary big for your website usage. You can either store the original image or a smaller appropriate preview with your desired maximum width.'),
+      '#title' => $this->t('File storage type'),
+      '#description' => $this->t('Original images from Fotoweb might be unnecessary big for your website usage. You can either store the original image or a smaller appropriate preview with your desired maximum width.'),
       '#options' => $this->imageFetcherManager->getImageFetcherOptionList(),
       '#default_value' => $config->get('file_storage_type'),
-    );
+    ];
 
-    $form['local_file_size_threshold'] = array(
+    $form['local_file_size_threshold'] = [
       '#type' => 'textfield',
-      '#title'=> $this->t('Local file size threshold'),
-      '#description'=> $this->t('Define the minimal size for your locally stored images. The module will import the appropriate preview size from Fotoweb using the first preview, that matches the minimum threshold. Beware: The original image (and so the maximum) might be smaller than the threshold.'),
+      '#title' => $this->t('Local file size threshold'),
+      '#description' => $this->t('Define the minimal size for your locally stored images. The module will import the appropriate preview size from Fotoweb using the first preview, that matches the minimum threshold. Beware: The original image (and so the maximum) might be smaller than the threshold.'),
       '#default_value' => $config->get('local_file_size_threshold'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="file_storage_type"]' => array('value' => 'rendition_image'),
-        ),
-        'required' => array(
-          ':input[name="file_storage_type"]' => array('value' => 'rendition_image'),
-        ),
-      ),
-    );
+      '#states' => [
+        'visible' => [
+          ':input[name="file_storage_type"]' => ['value' => 'rendition_image'],
+        ],
+        'required' => [
+          ':input[name="file_storage_type"]' => ['value' => 'rendition_image'],
+        ],
+      ],
+    ];
 
-    $form['asset_update_type'] = array(
+    $form['asset_update_type'] = [
       '#type' => 'select',
-      '#title'=> $this->t('When should the asset be updated?'),
-      '#description'=> $this->t('Define, when the asset metadata should imported. <br><em>On new created assets:</em> Only when the asset was used the first time the metadata will be imported. <br><em>On every asset selection:</em> Whenever an user selects an asset the metadata will be updated. This option can have implications (changed metadata) on old articles, that are using the same asset.'),
+      '#title' => $this->t('When should the asset be updated?'),
+      '#description' => $this->t('Define, when the asset metadata should imported. <br><em>On new created assets:</em> Only when the asset was used the first time the metadata will be imported. <br><em>On every asset selection:</em> Whenever an user selects an asset the metadata will be updated. This option can have implications (changed metadata) on old articles, that are using the same asset.'),
       '#options' => [
         'new' => $this->t('On new created assets'),
         'reused' => $this->t('On every asset selection'),
       ],
       '#default_value' => $config->get('asset_update_type'),
-    );
+    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -206,11 +205,13 @@ class FotowebSettingsForm extends ConfigFormBase {
         $this->messenger()
           ->addWarning($this->t('No rendition service found. Therefore you cannot fetch original images. You might need to check your Fotoweb server configuration.'));
       }
-    } catch (RequestException $e) {
+    }
+    catch (RequestException $e) {
       $errorMessage = $e->getMessage();
       $this->messenger()
         ->addError($this->t('There was an networking error: @error_message', ['@error_message' => $errorMessage]));
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $errorMessage = $e->getMessage();
       $this->messenger()
         ->addError($this->t('@error_message', ['@error_message' => $errorMessage]));

@@ -11,7 +11,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
  */
 class ImageFetcherManager extends DefaultPluginManager {
 
-
   /**
    * Constructs a new ImageFetcherManager object.
    *

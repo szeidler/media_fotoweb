@@ -63,7 +63,8 @@ class OriginalImage extends ImageFetcherBase {
         'href' => $rendition_resource,
       ]);
       $url = $rendition_request->getHref();
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       return NULL;
     }
     $response = $this->client->client->getRendition($url);

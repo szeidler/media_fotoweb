@@ -42,7 +42,6 @@ class RenditionNegotiator {
     $this->localFileThreshold = $localFileThreshold;
   }
 
-
   /**
    * {@inheritdoc}
    */

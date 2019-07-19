@@ -2,13 +2,9 @@
 
 namespace Drupal\media_fotoweb;
 
+use Fotoweb\FotowebClient;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Middleware;
-use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Response;
 
 /**
  * Class FotowebClient.
@@ -37,23 +33,37 @@ class FotowebClient {
     $this->createClientFromConfiguration($configuration);
   }
 
+  /**
+   *
+   */
   public function createClientFromConfiguration(array $configuration) {
-    $this->client = new \Fotoweb\FotowebClient($configuration);
+    $this->client = new FotowebClient($configuration);
   }
 
-
+  /**
+   *
+   */
   public function setRenditionService($rendition_service) {
     $this->renditionService = $rendition_service;
   }
 
+  /**
+   *
+   */
   public function getRenditionService() {
     return $this->renditionService;
   }
 
+  /**
+   *
+   */
   public function fetchApiDescriptor() {
     return $this->client->getApiDescriptor();
   }
 
+  /**
+   *
+   */
   public function fetchRenditionService() {
     $renditionService = NULL;
 
@@ -69,6 +79,9 @@ class FotowebClient {
     return $renditionService;
   }
 
+  /**
+   *
+   */
   public function __call($name, $arguments) {
     return call_user_func_array([$this->client, $name], $arguments);
   }

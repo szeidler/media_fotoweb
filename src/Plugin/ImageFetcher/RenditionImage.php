@@ -4,7 +4,6 @@ namespace Drupal\media_fotoweb\Plugin\ImageFetcher;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\media_fotoweb\ImageFetcherBase;
-use Drupal\media_fotoweb\Plugin\ImageFetcherInterface;
 use Drupal\media_fotoweb\FotowebClient;
 use Drupal\media_fotoweb\RenditionNegotiator;
 
@@ -73,7 +72,8 @@ class RenditionImage extends ImageFetcherBase {
       $asset = $this->client->getAsset(['href' => $resourceUrl]);
       $bestFitImage = $this->renditionNegotiator->getBestFitImagePath($asset);
       $url = $bestFitImage['href'];
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       return NULL;
     }
     $response = $this->client->client->getRendition($url);

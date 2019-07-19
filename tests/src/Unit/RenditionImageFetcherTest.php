@@ -14,7 +14,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 
 /**
- * Tests the RenditionImage ImageFetcher
+ * Tests the RenditionImage ImageFetcher.
  *
  * @group media_fotoweb
  */
@@ -50,7 +50,7 @@ class RenditionImageFetcherTest extends UnitTestCase {
    *
    * @param array $responses
    *   An array of mocked responses.
-   * @param \GuzzleHttp\Handler\MockHandler|NULL $mockHandler
+   * @param \GuzzleHttp\Handler\MockHandler|null $mockHandler
    *   The guzzle mock handler.
    *
    * @return \GuzzleHttp\Handler\MockHandler
