@@ -2,7 +2,7 @@
 
 namespace Drupal\media_fotoweb;
 
-use Fotoweb\FotowebClient;
+use Fotoweb\FotowebClient as FotowebAPIClient;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
@@ -45,7 +45,7 @@ class FotowebClient {
    *   A Fotoweb client configuration array.
    */
   public function createClientFromConfiguration(array $configuration) {
-    $this->client = new FotowebClient($configuration);
+    $this->client = new FotowebAPIClient($configuration);
   }
 
   /**
