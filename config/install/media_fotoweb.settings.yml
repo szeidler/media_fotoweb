@@ -1,4 +1,4 @@
-server: ''
+server: 'https://acme.fotoware.cloud/fotoweb'
 full_api_key: ''
 selection_widget_use_sso: ''
 encryption_secret: ''
