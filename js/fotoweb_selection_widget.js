@@ -11,14 +11,20 @@
         }
 
         // Post the retrieved asset data with an AJAX request.
-        var asset = event.data.asset;
+        var asset = event.data.asset
         if (event.data.event === 'assetSelected') {
           var asset_json = JSON.stringify([asset]);
           var selection_storage_fields = document.getElementsByName('fotoweb_selected');
           for (var i = 0; i < selection_storage_fields.length; i++) {
             selection_storage_fields[i].value = asset_json;
           }
-          document.getElementById('entity-browser-media-browser-form').submit();
+          var entity_browser_form_submit = document.querySelector('form.entity-browser-form #edit-submit');
+          if (entity_browser_form_submit) {
+            entity_browser_form_submit.click();
+          }
+          else {
+            console.error('No entity browser form found. Fotoweb asset could not be imported.')
+          }
         }
       }
 
