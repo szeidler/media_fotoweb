@@ -90,7 +90,7 @@ class FotowebLoginManager implements FotowebLoginManagerInterface {
    * @return string
    *   LoginToken to use for all HTTP requests.
    */
-  protected function getUserLoginTokenFromUsername($username) {
+  public function getUserLoginTokenFromUsername($username) {
     $config = $this->configFactory->get('media_fotoweb.settings');
 
     $encryption_secret = $config->get('encryption_secret');
