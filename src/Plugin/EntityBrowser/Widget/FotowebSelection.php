@@ -148,6 +148,9 @@ class FotowebSelection extends WidgetBase implements ContainerFactoryPluginInter
     $form['selection_widget']['#attached']['library'] = ['media_fotoweb/selection_widget'];
     $form['selection_widget']['#attached']['drupalSettings']['media_fotoweb']['host'] = $config->get('server');
 
+    // Visually hide submit button. The asset selection will happen on click.
+    $form['actions']['submit']['#attributes']['class'][] = 'visually-hidden';
+
     return $form;
   }
 
